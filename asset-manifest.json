@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/build/static/css/main.744e3859.css",
+    "main.js": "/build/static/js/main.1fc41d62.js",
+    "static/media/ONE Mobile Light.woff2": "/build/static/media/ONE Mobile Light.93761ec99a9285e04094.woff2",
+    "static/media/ONE Mobile Bold.woff2": "/build/static/media/ONE Mobile Bold.15286e5c20eec60f32af.woff2",
+    "static/media/ONE Mobile Regular.woff2": "/build/static/media/ONE Mobile Regular.8645151e026eb369967e.woff2",
+    "index.html": "/build/index.html",
+    "main.744e3859.css.map": "/build/static/css/main.744e3859.css.map",
+    "main.1fc41d62.js.map": "/build/static/js/main.1fc41d62.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.744e3859.css",
+    "static/js/main.1fc41d62.js"
+  ]
+}
