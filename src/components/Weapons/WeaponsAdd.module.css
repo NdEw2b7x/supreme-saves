@@ -1,0 +1,59 @@
+.container {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  @media (min-width: 40rem) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 60rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 80rem) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 100rem) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.card {
+  background-color: var(--theme-color-alpha-100);
+  display: flex;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  gap: 0.25rem;
+}
+.imgBox {
+  flex: 1;
+  background-color: var(--theme-color-alpha-100);
+
+  height: 5rem;
+  max-width: 5rem;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  img {
+    max-width: 100%;
+  }
+}
+.infoBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.name {
+  color: black;
+  font-weight: bolder;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+}
+.data {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  div {
+    padding: 0.5rem;
+    background-color: var(--theme-color-alpha-300);
+    border-radius: 0.25rem;
+  }
+}

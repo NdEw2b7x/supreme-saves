@@ -1,0 +1,37 @@
+footer {
+  position: fixed;
+  bottom: 0;
+  left: env(safe-area-inset-left);
+  right: env(safe-area-inset-right);
+
+  backdrop-filter: blur(1rem);
+
+  text-align: center;
+
+  nav {
+    display: flex;
+    div {
+      width: 100%;
+
+      div:first-child {
+        height: 0.25rem;
+      }
+      div:last-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 3rem;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
+
+    [data-selected='true'] {
+      div:first-child {
+        background-color: var(--theme-color);
+      }
+      div:last-child {
+        background-color: var(--theme-color-alpha-100);
+      }
+    }
+  }
+}

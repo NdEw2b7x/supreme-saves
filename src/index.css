@@ -1,0 +1,141 @@
+@import url(css/filters.css);
+@import url(css/main.css);
+@import url(css/footer.css);
+
+:root {
+  background-color: black;
+  color: white;
+
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+
+  --theme-color: #dab67d;
+
+  --theme-color-shade-100: color-mix(in srgb, var(--theme-color), black 10%);
+  --theme-color-shade-200: color-mix(in srgb, var(--theme-color), black 20%);
+  --theme-color-shade-300: color-mix(in srgb, var(--theme-color), black 30%);
+  --theme-color-shade-400: color-mix(in srgb, var(--theme-color), black 40%);
+  --theme-color-shade-500: color-mix(in srgb, var(--theme-color), black 50%);
+  --theme-color-shade-600: color-mix(in srgb, var(--theme-color), black 60%);
+  --theme-color-shade-700: color-mix(in srgb, var(--theme-color), black 70%);
+  --theme-color-shade-800: color-mix(in srgb, var(--theme-color), black 80%);
+  --theme-color-shade-900: color-mix(in srgb, var(--theme-color), black 90%);
+
+  --theme-color-light-100: color-mix(in srgb, var(--theme-color), white 10%);
+  --theme-color-light-200: color-mix(in srgb, var(--theme-color), white 20%);
+  --theme-color-light-300: color-mix(in srgb, var(--theme-color), white 30%);
+  --theme-color-light-400: color-mix(in srgb, var(--theme-color), white 40%);
+  --theme-color-light-500: color-mix(in srgb, var(--theme-color), white 50%);
+  --theme-color-light-600: color-mix(in srgb, var(--theme-color), white 60%);
+  --theme-color-light-700: color-mix(in srgb, var(--theme-color), white 70%);
+  --theme-color-light-800: color-mix(in srgb, var(--theme-color), white 80%);
+  --theme-color-light-900: color-mix(in srgb, var(--theme-color), white 90%);
+
+  --theme-color-alpha-100: color-mix(in srgb, var(--theme-color) 10%, transparent);
+  --theme-color-alpha-200: color-mix(in srgb, var(--theme-color) 20%, transparent);
+  --theme-color-alpha-300: color-mix(in srgb, var(--theme-color) 30%, transparent);
+  --theme-color-alpha-400: color-mix(in srgb, var(--theme-color) 40%, transparent);
+  --theme-color-alpha-500: color-mix(in srgb, var(--theme-color) 50%, transparent);
+  --theme-color-alpha-600: color-mix(in srgb, var(--theme-color) 60%, transparent);
+  --theme-color-alpha-700: color-mix(in srgb, var(--theme-color) 70%, transparent);
+  --theme-color-alpha-800: color-mix(in srgb, var(--theme-color) 80%, transparent);
+  --theme-color-alpha-900: color-mix(in srgb, var(--theme-color) 90%, transparent);
+
+  --element-응결: #41aefb;
+  --element-용융: #f0744e;
+  --element-전도: #b46bff;
+  --element-기류: #55ffb5;
+  --element-회절: #f8e56c;
+  --element-인멸: #e649a6;
+
+  --5-star: #f1dd60;
+  --4-star: #a065e5;
+  --3-star: #3badff;
+  --2-star: #7bdd42;
+  --1-star: #a7a7a7;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  word-break: keep-all;
+  font-family: 'One Mobile', -apple-system, sans-serif;
+  text-align: center;
+}
+
+div#root {
+  scroll-snap-type: y mandatory;
+  scroll-padding: 0.5rem;
+  overflow-x: scroll;
+  margin: auto;
+
+  height: 100dvh;
+}
+
+div#root,
+footer > nav {
+  max-width: 20rem;
+  margin: auto;
+}
+
+@media (min-width: 40rem) {
+  div#root,
+  footer > nav {
+    max-width: 40rem;
+  }
+  section[data-section='list'] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #ResonatorsAdd {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (min-width: 60rem) {
+  div#root,
+  footer > nav {
+    max-width: 60rem;
+  }
+  section[data-section='list'] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #ResonatorsAdd {
+    grid-template-columns: repeat(9, 1fr);
+  }
+}
+@media (min-width: 80rem) {
+  div#root,
+  footer > nav {
+    max-width: 80rem;
+  }
+  section[data-section='list'] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  #ResonatorsAdd {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+@media (min-width: 100rem) {
+  div#root,
+  footer > nav {
+    max-width: 100rem;
+  }
+  section[data-section='list'] {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  #ResonatorsAdd {
+    grid-template-columns: repeat(15, 1fr);
+  }
+}
+
+input,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  text-align-last: center;
+}
+
+hr {
+  margin: 0.5rem 0;
+  border-color: var(--theme-color-alpha-700);
+}
