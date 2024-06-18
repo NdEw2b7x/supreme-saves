@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { WeaponData, everyWeaponData } from '../../lib/Weapons';
+import { WeaponData, everyWeaponData, getWeaponSubOptionValue } from '../../lib/Weapons';
 import { EveryResonatorName, getWeaponName } from '../../types';
 import styles from './WeaponsList.module.css';
 import { everyResonatorData } from '../../lib/Resonators';
@@ -24,6 +24,8 @@ export default function WeaponsList() {
             const name = getWeaponName(code);
             const rarity = weaponData.rarity;
             const category = weaponData.category;
+            const atk1 = weaponData.atk1;
+            const subOption = weaponData.subOption;
             const thumbnail = (x: EveryResonatorName | '미장착') => {
               if (equip !== '미장착') {
                 return (
@@ -66,11 +68,11 @@ export default function WeaponsList() {
                       </div>
                       <div className={styles.atk}>
                         <span>공격력</span>
-                        <span>{weaponData.atk1}</span>
+                        <span>{atk1}</span>
                       </div>
                       <div className={styles.subOption}>
-                        <span>{weaponData.subOption}</span>
-                        <span>xx%</span>
+                        <span>{subOption}</span>
+                        <span>{getWeaponSubOptionValue(atk1, subOption).toFixed(3)}%</span>
                       </div>
                     </div>
                   </div>

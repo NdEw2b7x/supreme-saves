@@ -1,5 +1,5 @@
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
-import WeaponData from './WeaponData';
+import WeaponData, { getWeaponSubOptionValue } from './WeaponData';
 import w400100003 from './w400100003';
 import w400200001 from './w400200001';
 import w400200002 from './w400200002';
@@ -17,6 +17,7 @@ import w500400001 from './w500400001';
 import w500500001 from './w500500001';
 import w500500002 from './w500500002';
 
+export { getWeaponSubOptionValue };
 export { WeaponData };
 
 export type EveryWeaponSubOption =
