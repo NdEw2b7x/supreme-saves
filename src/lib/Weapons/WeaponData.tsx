@@ -1,9 +1,7 @@
 import { EveryWeaponSubOption } from '.';
-import { EveryRarity, EveryWeaponCategory } from '../../types';
+import { EveryRarity, EveryWeaponAtk1, EveryWeaponCategory } from '../../types';
 
-type EveryWeaponAtk1 = 24 | 26 | 27 | 31 | 33 | 40 | 47;
-
-export const getWeaponSubOptionValue = (atk1: EveryWeaponAtk1, sub: EveryWeaponSubOption) => {
+export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeaponSubOption) => {
   switch (atk1) {
     case 27:
       switch (sub) {

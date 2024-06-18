@@ -16,6 +16,7 @@ import {
 } from './everySkillType';
 import { EveryWeaponCode, getWeaponName, weaponPivot } from './everyWeaponCode';
 import { EveryWeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
+import { EveryWeaponAtk1 } from './everyWeapon';
 
 export const everyRasonanceChain = [0, 1, 2, 3, 4, 5, 6] as const;
 export type EveryRasonanceChain = (typeof everyRasonanceChain)[number];
@@ -42,6 +43,7 @@ export type {
   EveryResonatorNameWithoutRover,
   EverySkillLevel,
   EverySkillType,
+  EveryWeaponAtk1,
   EveryWeaponCode,
   EveryWeaponCategory,
   SkillSet,

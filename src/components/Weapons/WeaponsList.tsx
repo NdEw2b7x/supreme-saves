@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { WeaponData, everyWeaponData, getWeaponSubOptionValue } from '../../lib/Weapons';
+import { WeaponData, everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
 import { EveryResonatorName, getWeaponName } from '../../types';
 import styles from './WeaponsList.module.css';
 import { everyResonatorData } from '../../lib/Resonators';
-import { changeEquip } from '../../slice/weaponsSlice';
+import { changeEquip, changeWeaponLevel } from '../../slice/weaponsSlice';
+import { getWeaponAtk, getWeaponSubOptionValue, refine } from '../../lib/formula';
 
 export default function WeaponsList() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);
@@ -26,6 +27,14 @@ export default function WeaponsList() {
             const category = weaponData.category;
             const atk1 = weaponData.atk1;
             const subOption = weaponData.subOption;
+            const innerLevel = [];
+            for (let i = 1; i <= 90; i++) {
+              innerLevel.push(
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              );
+            }
             const thumbnail = (x: EveryResonatorName | '미장착') => {
               if (equip !== '미장착') {
                 return (
@@ -64,15 +73,36 @@ export default function WeaponsList() {
                     <div className={styles.infoBox}>
                       <div className={styles.level}>
                         <span>레벨</span>
-                        <span>{level}</span>
+                        <select
+                          name={id + '_Level'}
+                          id={id + '_Level'}
+                          defaultValue={level}
+                          onChange={(e) => {
+                            dispatch(
+                              changeWeaponLevel({
+                                id: id as `weapon_${number}`,
+                                level: Number(e.target.value),
+                              })
+                            );
+                          }}
+                        >
+                          {innerLevel}
+                        </select>
                       </div>
                       <div className={styles.atk}>
                         <span>공격력</span>
-                        <span>{atk1}</span>
+                        <span>{refine(getWeaponAtk(atk1)(level))}</span>
                       </div>
                       <div className={styles.subOption}>
                         <span>{subOption}</span>
-                        <span>{getWeaponSubOptionValue(atk1, subOption).toFixed(3)}%</span>
+                        <span>
+                          {refine(
+                            getWeaponSubOptionValue(getWeaponSubOptionValue1(atk1, subOption))(
+                              level
+                            )
+                          )}
+                          %
+                        </span>
                       </div>
                     </div>
                   </div>

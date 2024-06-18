@@ -43,6 +43,28 @@
   div {
     display: flex;
     justify-content: space-between;
+    span {
+      flex: 1;
+      padding: 0.25rem 0;
+    }
+    span:first-child {
+      text-align: left;
+    }
+    span:last-child {
+      text-align: right;
+    }
+  }
+}
+.level {
+  select {
+    flex: 1;
+    background-color: var(--theme-color-alpha-200);
+    border-radius: 0.25rem;
+    min-width: 2rem;
+    color: white;
+    font-size: 1rem;
+    padding: 0.25rem;
+    text-align-last: right;
   }
 }
 .imgBox {
@@ -58,7 +80,7 @@
   display: flex;
   gap: 0.25rem;
   span {
-    background-color: var(--theme-color-alpha-500);
+    background-color: var(--theme-color-alpha-600);
     padding: 0.75rem;
     border-radius: 0.25rem;
     align-content: center;
@@ -66,6 +88,7 @@
   select {
     width: 100%;
     border-radius: 0.25rem;
+    font-size: 1rem;
   }
   .thumbnail {
     max-width: 2.5rem;
@@ -73,7 +96,7 @@
     max-height: 2.5rem;
     border-radius: 100%;
     overflow: hidden;
-    background-color: var(--theme-color-alpha-500);
+    background-color: var(--theme-color-alpha-600);
     img {
       max-width: 100%;
     }

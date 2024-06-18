@@ -86,9 +86,6 @@ footer > nav {
   section[data-section='list'] {
     grid-template-columns: repeat(2, 1fr);
   }
-  #ResonatorsAdd {
-    grid-template-columns: repeat(6, 1fr);
-  }
 }
 @media (min-width: 60rem) {
   div#root,
@@ -97,9 +94,6 @@ footer > nav {
   }
   section[data-section='list'] {
     grid-template-columns: repeat(3, 1fr);
-  }
-  #ResonatorsAdd {
-    grid-template-columns: repeat(9, 1fr);
   }
 }
 @media (min-width: 80rem) {
@@ -110,9 +104,6 @@ footer > nav {
   section[data-section='list'] {
     grid-template-columns: repeat(4, 1fr);
   }
-  #ResonatorsAdd {
-    grid-template-columns: repeat(12, 1fr);
-  }
 }
 @media (min-width: 100rem) {
   div#root,
@@ -121,9 +112,6 @@ footer > nav {
   }
   section[data-section='list'] {
     grid-template-columns: repeat(5, 1fr);
-  }
-  #ResonatorsAdd {
-    grid-template-columns: repeat(15, 1fr);
   }
 }
 
