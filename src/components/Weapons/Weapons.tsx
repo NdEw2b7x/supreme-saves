@@ -1,9 +1,9 @@
-import { useSelector } from 'react-redux';
-import { changeSubPage, changefilter } from '../../slice/grobalSlice';
-import { State, dispatch } from '../../store';
-import { EveryRarity, everyWeaponCategory } from '../../types';
 import WeaponsAdd from './WeaponsAdd';
 import WeaponsList from './WeaponsList';
+import { useSelector } from 'react-redux';
+import { State, dispatch } from '../../store';
+import { changeSubPage, changefilter } from '../../slice/grobalSlice';
+import { EveryRarity, everyWeaponCategory } from '../../types';
 
 export default function Weapons() {
   const subPage = useSelector((state: State) => state.grobalSlice.subPage);
