@@ -1,11 +1,11 @@
 import { EveryWeaponSubOption, WeaponData } from '.';
 
-const code = '400500002';
-const atk1 = 33;
+const code = '300500002';
+const atk1 = 24;
 const subOption: EveryWeaponSubOption = 'HP';
 // const skill: WeaponSkill = {
-//   name: '빛의 비호',
-//   condition: [{ when: ['일반 공격', '강공격'], stat: '치료 효과 보너스', from: 3, to: 5 }],
+//   name: '필사의 결심',
+//   condition: [{ when: ['변주 스킬'], stat: '공격력', from: 8, to: 16 }],
 // };
 
 const result = new WeaponData({ code, atk1, subOption });

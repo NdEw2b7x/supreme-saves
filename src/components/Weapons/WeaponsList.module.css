@@ -26,10 +26,21 @@
   padding: 0.5rem;
   border-radius: 0.25rem;
   font-size: 1.25rem;
+  font-weight: bolder;
 }
 .body {
   display: flex;
   gap: 0.25rem;
+}
+.imgBox {
+  background-color: var(--theme-color-alpha-200);
+  max-width: 6rem;
+  min-width: 6rem;
+  max-height: 6rem;
+  border-radius: 0.25rem;
+  img {
+    max-width: 100%;
+  }
 }
 .infoBox {
   width: 100%;
@@ -65,15 +76,6 @@
     font-size: 1rem;
     padding: 0.25rem;
     text-align-last: right;
-  }
-}
-.imgBox {
-  background-color: var(--theme-color-alpha-200);
-  max-width: 6rem;
-  max-height: 6rem;
-  border-radius: 0.25rem;
-  img {
-    max-width: 100%;
   }
 }
 .equip {

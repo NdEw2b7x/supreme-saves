@@ -3,8 +3,36 @@ import { EveryRarity, EveryWeaponAtk1, EveryWeaponCategory } from '../../types';
 
 export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeaponSubOption) => {
   switch (atk1) {
+    case 24:
+      switch (sub) {
+        case '방어력':
+          return 0;
+        case '공명 효율':
+          return 0;
+        case '크리티컬 확률':
+          return 0;
+        case '크리티컬 피해':
+          return 0;
+        default:
+          return 6.75;
+      }
+    case 26:
+      switch (sub) {
+        case '방어력':
+          return 0;
+        case '공명 효율':
+          return 0;
+        case '크리티컬 확률':
+          return 0;
+        case '크리티컬 피해':
+          return 0;
+        default:
+          return 5.4;
+      }
     case 27:
       switch (sub) {
+        case '방어력':
+          return 13.675;
         case '공명 효율':
           return 11.52;
         case '크리티컬 확률':
@@ -16,6 +44,8 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeapon
       }
     case 31:
       switch (sub) {
+        case '방어력':
+          return 0;
         case '공명 효율':
           return 8.64;
         case '크리티컬 확률':
@@ -27,6 +57,8 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeapon
       }
     case 33:
       switch (sub) {
+        case '방어력':
+          return 0;
         case '공명 효율':
           return 7.2;
         case '크리티컬 확률':
@@ -38,6 +70,10 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeapon
       }
     case 40:
       switch (sub) {
+        case '방어력':
+          return 0;
+        case '공명 효율':
+          return 0;
         case '크리티컬 확률':
           return 8;
         case '크리티컬 피해':
@@ -47,6 +83,10 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeapon
       }
     case 47:
       switch (sub) {
+        case '방어력':
+          return 0;
+        case '공명 효율':
+          return 0;
         case '크리티컬 확률':
           return 5.4;
         case '크리티컬 피해':

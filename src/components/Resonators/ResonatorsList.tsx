@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EveryResonatorName } from '../../types';
+import { EveryResonatorName, EveryWeaponCode, weaponPivot } from '../../types';
 import { everyResonatorData } from '../../lib/Resonators';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { getATK, getDEF, getHP, refine } from '../../lib/formula';
@@ -14,6 +14,7 @@ export default function ResonatorsList() {
   const myResonatorsKeys = Object.keys(myResonators);
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
   const weaponMap = useSelector((state: State) => state.weaponsSlice['맵핑']);
+
   return (
     <section id='ResonatorsList' className={styles.container} data-section='list'>
       {myResonatorsKeys.map((i) => {
@@ -22,12 +23,22 @@ export default function ResonatorsList() {
         const resonatorData = everyResonatorData[i as EveryResonatorName];
         const element = resonatorData.element;
         const weaponCategory = resonatorData.weaponCatergory;
+        const weaponImg = (x?: EveryWeaponCode) => {
+          if (x) {
+            return (
+              <img
+                className={styles.img}
+                src={process.env.PUBLIC_URL + '/img/Weapons/' + x + '.png'}
+                alt={weaponPivot[x]}
+              />
+            );
+          }
+        };
         const getWeaponCode = (name: EveryResonatorName) => {
           const weaponId = weaponMap[name];
           if (weaponId) {
             return myWeapons[weaponId]?.코드;
           }
-          return null;
         };
         if (filterE[element] && filterW[weaponCategory]) {
           return (
@@ -56,13 +67,7 @@ export default function ResonatorsList() {
                   >
                     {i}
                   </div>
-                  <div className={styles.imgBox}>
-                    <img
-                      className={styles.img}
-                      src={process.env.PUBLIC_URL + '/img/Weapons/' + getWeaponCode(name) + '.png'}
-                      alt={'꼭두각시의 손.png'}
-                    />
-                  </div>
+                  <div className={styles.imgBox}>{weaponImg(getWeaponCode(name))}</div>
                 </div>
                 <div className={styles.stats}>
                   <div>
