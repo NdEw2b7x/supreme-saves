@@ -1,5 +1,5 @@
 .filterContainer {
-  background-color: var(--theme-color-alpha-100);
+  background-color: var(--theme-color-alpha-200);
   border-bottom-left-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
 
@@ -17,44 +17,43 @@
 
   display: flex;
   flex-wrap: wrap;
+}
+.filter .radio {
+  flex: 1;
 
-  .radio {
+  min-width: 19.5rem;
+  display: flex;
+  span {
+    padding: 0.5rem 0;
     flex: 1;
-
-    min-width: 19.5rem;
-    display: flex;
-    span {
-      padding: 0.5rem 0;
-      flex: 1;
-      border: 0.1rem solid var(--theme-color);
-      text-align: center;
-      border-right: none;
-    }
-    span[data-filter='true'] {
-      background-color: var(--theme-color);
-      color: black;
-    }
-    span:first-child {
-      border-top-left-radius: 0.25rem;
-      border-bottom-left-radius: 0.25rem;
-    }
-    span:last-child {
-      border-top-right-radius: 0.25rem;
-      border-bottom-right-radius: 0.25rem;
-      border-right: 1px solid var(--theme-color);
-    }
-  }
-  select {
-    flex: 1;
-    width: 100%;
-    background-color: var(--theme-color);
-    border-radius: 0.25rem;
-    font-size: 1rem;
-    padding: 0.5rem;
-    color: black;
+    border: 0.1rem solid var(--theme-color);
     text-align: center;
-    border: 1px solid var(--theme-color);
+    border-right: none;
   }
+  span[data-filter='true'] {
+    background-color: var(--theme-color);
+    color: black;
+  }
+  span:first-child {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+  span:last-child {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-right: 1px solid var(--theme-color);
+  }
+}
+.filter select {
+  flex: 1;
+  width: 100%;
+  background-color: var(--theme-color);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  color: black;
+  text-align: center;
+  border: 1px solid var(--theme-color);
 }
 
 .addBtn {

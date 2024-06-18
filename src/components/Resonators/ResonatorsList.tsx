@@ -7,11 +7,13 @@ import { getATK, getDEF, getHP, refine } from '../../lib/formula';
 import styles from './ResonatorsList.module.css';
 
 export default function ResonatorsList() {
-  const myResonators = useSelector((state: State) => state.resonatorsSlice.공명자);
   const filters = useSelector((state: State) => state.grobalSlice.filter);
   const filterE = filters.element;
   const filterW = filters.weaponCategory;
+  const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
   const myResonatorsKeys = Object.keys(myResonators);
+  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  const weaponMap = useSelector((state: State) => state.weaponsSlice['맵핑']);
   return (
     <section id='ResonatorsList' className={styles.container} data-section='list'>
       {myResonatorsKeys.map((i) => {
@@ -20,13 +22,19 @@ export default function ResonatorsList() {
         const resonatorData = everyResonatorData[i as EveryResonatorName];
         const element = resonatorData.element;
         const weaponCategory = resonatorData.weaponCatergory;
+        const getWeaponCode = (name: EveryResonatorName) => {
+          const weaponId = weaponMap[name];
+          if (weaponId) {
+            return myWeapons[weaponId]?.코드;
+          }
+          return null;
+        };
         if (filterE[element] && filterW[weaponCategory]) {
           return (
             <div
               style={{ order: Number(100 - myLevel) }}
               key={i}
               className={styles.card}
-              data-element={resonatorData.element}
               onClick={() => {
                 dispatch(selectDetail(name));
                 dispatch(changeSubPage('상세'));
@@ -42,11 +50,16 @@ export default function ResonatorsList() {
                       alt={i + '.png'}
                     />
                   </div>
-                  <div className={styles.name}>{i}</div>
+                  <div
+                    className={styles.name}
+                    style={{ backgroundColor: 'var(--element-' + element + ')' }}
+                  >
+                    {i}
+                  </div>
                   <div className={styles.imgBox}>
                     <img
                       className={styles.img}
-                      src={process.env.PUBLIC_URL + '/img/Weapons/꼭두각시의 손.png'}
+                      src={process.env.PUBLIC_URL + '/img/Weapons/' + getWeaponCode(name) + '.png'}
                       alt={'꼭두각시의 손.png'}
                     />
                   </div>

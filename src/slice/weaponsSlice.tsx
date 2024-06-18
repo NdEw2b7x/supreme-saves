@@ -22,15 +22,11 @@ if (myWeapons) {
   initialState['무기'] = JSON.parse(myWeapons) as MyWeapons;
 }
 
-let initMap: WeaponMapping = {};
-const savedWeapons = initialState['무기'];
-Object.keys(savedWeapons).forEach((i) => {
-  const savedWeapon = savedWeapons[i as WeaponId];
-  if (savedWeapon) {
-    initMap = { ...initMap, [savedWeapon.장착]: i as WeaponId };
+Object.entries(initialState['무기']).forEach(([id, weapon]) => {
+  if (weapon && weapon.장착 !== '미장착') {
+    initialState['맵핑'] = { ...initialState['맵핑'], [weapon.장착]: id };
   }
 });
-initialState['맵핑'] = initMap;
 
 const save = (state: InitialState) => {
   localStorage.setItem('무기', JSON.stringify(state['무기']));
@@ -74,26 +70,35 @@ const reducers = {
   },
   changeEquip: (
     state: InitialState,
-    action: { payload: { id: WeaponId; equip: EveryResonatorName } }
+    action: { payload: { id: WeaponId; equip: EveryResonatorName | '미장착' } }
   ) => {
-    const newOwnerName = action.payload.equip;
-    const newOwnerNowWeapon = state['맵핑'][newOwnerName];
-    const thisWeapon = state['무기'][action.payload.id];
-    const thisWeaponOldOwner = thisWeapon?.장착;
-    if (thisWeapon) {
-      thisWeapon.장착 = newOwnerName;
-    }
-    if (newOwnerNowWeapon) {
-      const thatWeapon = state['무기'][newOwnerNowWeapon];
-      if (thatWeapon) {
-        if (thisWeaponOldOwner) {
-          thatWeapon.장착 = thisWeaponOldOwner;
-        }
+    const id = action.payload.id;
+    const newOwner = action.payload.equip;
+    const targetWeapon = state['무기'][id] as MyWeapon;
+    if (newOwner === '미장착') {
+      state['무기'] = { ...state['무기'], [id]: { ...targetWeapon, 장착: '미장착' } };
+      state['맵핑'] = { ...state['맵핑'], [targetWeapon.장착]: undefined };
+    } else {
+      const oldOwner = targetWeapon.장착;
+      const oldWeaponId = state['맵핑'][newOwner];
+      if (oldWeaponId) {
+        const oldWeapon = state['무기'][oldWeaponId];
+        state['무기'] = {
+          ...state['무기'],
+          [id]: { ...targetWeapon, 장착: newOwner },
+          [oldWeaponId]: { ...oldWeapon, 장착: oldOwner },
+        };
+        state['맵핑'] = { ...state['맵핑'], [newOwner]: id, [oldOwner]: oldWeaponId };
+      } else {
+        state['무기'] = { ...state['무기'], [id]: { ...targetWeapon, 장착: newOwner } };
+        state['맵핑'] = { ...state['맵핑'], [newOwner]: id };
       }
     }
+    save(state);
+    window.location.reload();
   },
 };
 
 const weaponsSlice = createSlice({ initialState, reducers, name });
-export const { addWeapon, changeWeaponLevel, changeStack } = weaponsSlice.actions;
+export const { addWeapon, changeWeaponLevel, changeStack, changeEquip } = weaponsSlice.actions;
 export default weaponsSlice.reducer;

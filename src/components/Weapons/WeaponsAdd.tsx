@@ -2,10 +2,10 @@ import { useSelector } from 'react-redux';
 import { everyWeaponData } from '../../lib/Weapons';
 import { EveryWeaponCategory, weaponPivot } from '../../types';
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
-import styles from './WeaponsAdd.module.css';
 import { State, dispatch } from '../../store';
 import { addWeapon } from '../../slice/weaponsSlice';
 import { changeSubPage } from '../../slice/grobalSlice';
+import styles from './WeaponsAdd.module.css';
 
 export default function WeaponsAdd() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);

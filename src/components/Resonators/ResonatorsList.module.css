@@ -8,7 +8,7 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  background-color: var(--theme-color-alpha-100);
+  background-color: var(--theme-color-alpha-200);
   border-radius: 0.5rem;
   padding: 0.25rem;
 }
@@ -47,36 +47,6 @@
   font-weight: bolder;
   font-size: 1.25rem;
 }
-[data-element='응결'] {
-  .name {
-    background-color: var(--element-응결);
-  }
-}
-[data-element='용융'] {
-  .name {
-    background-color: var(--element-용융);
-  }
-}
-[data-element='전도'] {
-  .name {
-    background-color: var(--element-전도);
-  }
-}
-[data-element='기류'] {
-  .name {
-    background-color: var(--element-기류);
-  }
-}
-[data-element='회절'] {
-  .name {
-    background-color: var(--element-회절);
-  }
-}
-[data-element='인멸'] {
-  .name {
-    background-color: var(--element-인멸);
-  }
-}
 .body {
   display: flex;
   flex-direction: column;
@@ -85,6 +55,7 @@
 .imgBox {
   background-color: var(--theme-color-alpha-200);
   border-radius: 0.25rem;
+  min-height: 6rem;
   max-height: 6rem;
   overflow: hidden;
 }
@@ -98,7 +69,7 @@
   flex-direction: column;
   justify-content: space-between;
 
-  border: 0.2rem solid var(--theme-color-alpha-100);
+  border: 0.2rem solid var(--theme-color-alpha-200);
   border-radius: 0.25rem;
   padding: 0.5rem;
 
@@ -121,7 +92,7 @@
 .echoImgBox {
   height: 3.5rem;
   width: 3.5rem;
-  background-color: var(--theme-color-alpha-100);
+  background-color: var(--theme-color-alpha-200);
   border-radius: 100%;
   justify-content: center;
   align-content: center;
@@ -141,7 +112,7 @@
     border-radius: 0.25rem;
   }
   .sub {
-    background-color: var(--theme-color-alpha-100);
+    background-color: var(--theme-color-alpha-200);
     width: 100%;
     border-radius: 0.25rem;
     display: flex;
@@ -153,7 +124,7 @@
       border-radius: 0.25rem;
     }
     span:first-child {
-      background-color: var(--theme-color-alpha-300);
+      background-color: var(--theme-color-alpha-400);
     }
   }
 }
