@@ -1,18 +1,22 @@
-import { EveryElement, EveryResonatorName, EveryWeaponCategory } from '../../types';
+import { EveryElement } from '../../types';
 import ResonatorData from './ResonatorData';
 
-const name: EveryResonatorName = '방랑자';
 let element: EveryElement = '인멸';
-const weaponType: EveryWeaponCategory = '직검';
-const [hp, atk, def] = [866, 33, 103];
-// switch (defaultRoverElement) {
-//   case '회절':
-//     break;
+let [hp1, atk1, def1] = [0, 0, 0];
 
-//   default:
-//     break;
-// }
-
-const result = new ResonatorData(name, element, weaponType, [hp, atk, def]);
+const elementFromStorage = localStorage.getItem('방랑자_속성');
+if (elementFromStorage) {
+  switch (JSON.parse(elementFromStorage)) {
+    case '회절':
+      element = '회절';
+      [hp1, atk1, def1] = [912, 30, 112];
+      break;
+    case '인멸':
+      element = '인멸';
+      [hp1, atk1, def1] = [866, 33, 103];
+      break;
+  }
+}
+const result = new ResonatorData('방랑자', element, '직검', [hp1, atk1, def1]);
 
 export default result;

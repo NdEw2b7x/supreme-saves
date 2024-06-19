@@ -8,7 +8,7 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeapon
         case '방어력':
           return 0;
         case '공명 효율':
-          return 0;
+          return 7.2;
         case '크리티컬 확률':
           return 0;
         case '크리티컬 피해':

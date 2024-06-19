@@ -12,7 +12,7 @@ import {
 
 const name = 'resonatorsSlice';
 
-let roverElement: EveryElement = '회절';
+let roverElement: EveryElement = '인멸';
 const savedElement = localStorage.getItem('방랑자_속성');
 if (savedElement) {
   roverElement = JSON.parse(savedElement);
@@ -22,7 +22,7 @@ if (savedElement) {
 
 type ERNR = EveryResonatorName;
 
-interface MyResonator {
+export interface MyResonator {
   이름: ERNR;
   레벨: number;
   스킬: Record<EverySkillType, SkillSet>;
@@ -76,6 +76,10 @@ const reducers = {
     };
     state['공명자'] = { ...getResonators, [action.payload]: newResonator };
     save(state);
+  },
+  changeElement: (state: InitialState, action: { payload: EveryElement }) => {
+    localStorage.setItem('방랑자_속성', JSON.stringify(action.payload));
+    window.location.reload();
   },
   changeLevel: (state: InitialState, action: { payload: { name: ERNR; level: number } }) => {
     const getResonators = state['공명자'];
@@ -185,6 +189,7 @@ const reducers = {
 const resonatorsSlice = createSlice({ initialState, reducers, name });
 export const {
   addResonator,
+  changeElement,
   changeLevel,
   changeSkillLevel,
   toggleNode1,

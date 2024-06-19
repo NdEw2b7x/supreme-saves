@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EveryResonatorName, EveryWeaponCode, weaponPivot } from '../../types';
+import { EveryResonatorName, EveryWeaponAtk1, EveryWeaponCode, weaponPivot } from '../../types';
 import { everyResonatorData } from '../../lib/Resonators';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
-import { getATK, getDEF, getHP, refine } from '../../lib/formula';
+import { getATK, getDEF, getHP, getWeaponAtk, refine } from '../../lib/formula';
 import styles from './ResonatorsList.module.css';
+import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 
 export default function ResonatorsList() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);
@@ -19,7 +20,7 @@ export default function ResonatorsList() {
     <section id='ResonatorsList' className={styles.container} data-section='list'>
       {myResonatorsKeys.map((i) => {
         const name = i as EveryResonatorName;
-        const myLevel = myResonators[name]?.레벨 as number;
+        const resonatorLevel = myResonators[name]?.레벨 as number;
         const resonatorData = everyResonatorData[i as EveryResonatorName];
         const element = resonatorData.element;
         const weaponCategory = resonatorData.weaponCatergory;
@@ -34,16 +35,25 @@ export default function ResonatorsList() {
             );
           }
         };
-        const getWeaponCode = (name: EveryResonatorName) => {
+        const getMyWeapon = (name: EveryResonatorName) => {
           const weaponId = weaponMap[name];
           if (weaponId) {
-            return myWeapons[weaponId]?.코드;
+            return myWeapons[weaponId];
           }
         };
         if (filterE[element] && filterW[weaponCategory]) {
+          const myWeapon = getMyWeapon(name);
+          let myWeaponAtk1: EveryWeaponAtk1 = 24;
+          let myWeaponLevel = 0;
+          if (myWeapon) {
+            const myWeaponCode = myWeapon.코드 as EveryWeaponCode;
+            const weaponData = everyWeaponData[myWeaponCode] as WeaponData;
+            myWeaponAtk1 = weaponData.atk1;
+            myWeaponLevel = myWeapon.레벨;
+          }
           return (
             <div
-              style={{ order: Number(100 - myLevel) }}
+              style={{ order: Number(100 - resonatorLevel) }}
               key={i}
               className={styles.card}
               onClick={() => {
@@ -67,20 +77,25 @@ export default function ResonatorsList() {
                   >
                     {i}
                   </div>
-                  <div className={styles.imgBox}>{weaponImg(getWeaponCode(name))}</div>
+                  <div className={styles.imgBox}>{weaponImg(getMyWeapon(name)?.코드)}</div>
                 </div>
                 <div className={styles.stats}>
                   <div>
                     <span>HP</span>
-                    <span>{refine(getHP(resonatorData.hp, myLevel))}</span>
+                    <span>{refine(getHP(resonatorData.hp, resonatorLevel))}</span>
                   </div>
                   <div>
                     <span>공격력</span>
-                    <span>{refine(getATK(resonatorData.atk, myLevel))}</span>
+                    <span>
+                      {refine(
+                        getATK(resonatorData.atk, resonatorLevel) +
+                          getWeaponAtk(myWeaponAtk1)(myWeaponLevel)
+                      )}
+                    </span>
                   </div>
                   <div>
                     <span>방어력</span>
-                    <span>{refine(getDEF(resonatorData.def, myLevel))}</span>
+                    <span>{refine(getDEF(resonatorData.def, resonatorLevel))}</span>
                   </div>
                   <div>
                     <span>공명 효율</span>
@@ -197,7 +212,7 @@ export default function ResonatorsList() {
             </div>
           );
         }
-        return <></>;
+        return null;
       })}
     </section>
   );

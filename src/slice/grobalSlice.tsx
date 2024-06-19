@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { EveryElement, EveryRarity, EveryResonatorName, EveryWeaponCategory } from '../types';
 
+// localStorage.clear();
+// sessionStorage.clear();
+
 const name = 'grobalSlice';
 
 export const everyPage = ['공명자', '무기', '에코', '기타'] as const;

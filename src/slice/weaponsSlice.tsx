@@ -3,10 +3,10 @@ import { EveryResonatorName, EveryWeaponCode } from '../types';
 
 const name = 'weaponsSlice';
 
-interface MyWeapon {
+export interface MyWeapon {
   코드: EveryWeaponCode;
   레벨: number;
-  중첩: 1 | 2 | 3 | 4 | 5;
+  공진: 1 | 2 | 3 | 4 | 5;
   장착: EveryResonatorName | '미장착';
 }
 type WeaponId = `weapon_${number}`;
@@ -37,7 +37,7 @@ const reducers = {
     const newWeapon: MyWeapon = {
       코드: action.payload,
       레벨: 1,
-      중첩: 1,
+      공진: 1,
       장착: '미장착',
     };
     state['무기'] = {
@@ -57,14 +57,14 @@ const reducers = {
     }
     save(state);
   },
-  changeStack: (
+  changeSyntonize: (
     state: InitialState,
-    action: { payload: { id: WeaponId; stack: 1 | 2 | 3 | 4 | 5 } }
+    action: { payload: { id: WeaponId; rank: 1 | 2 | 3 | 4 | 5 } }
   ) => {
     const nowWeapons = state['무기'];
     const getWeapon = nowWeapons[action.payload.id];
     if (getWeapon) {
-      getWeapon['중첩'] = action.payload.stack;
+      getWeapon['공진'] = action.payload.rank;
     }
     save(state);
   },
@@ -100,5 +100,5 @@ const reducers = {
 };
 
 const weaponsSlice = createSlice({ initialState, reducers, name });
-export const { addWeapon, changeWeaponLevel, changeStack, changeEquip } = weaponsSlice.actions;
+export const { addWeapon, changeWeaponLevel, changeSyntonize, changeEquip } = weaponsSlice.actions;
 export default weaponsSlice.reducer;

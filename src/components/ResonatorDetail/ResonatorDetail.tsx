@@ -2,21 +2,35 @@ import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './ResonatorDetail.module.css';
-import { EveryResonatorName, everySkillLevel, everySkillType } from '../../types';
 import {
+  EveryResonatorName,
+  EveryWeaponAtk1,
+  everySkillLevel,
+  everySkillType,
+  weaponPivot,
+} from '../../types';
+import {
+  MyResonator,
+  changeElement,
   changeLevel,
   changeSkillLevel,
   toggleNode1,
   toggleNode2,
 } from '../../slice/resonatorsSlice';
+import { getATK, getDEF, getHP, getWeaponAtk, refine } from '../../lib/formula';
+import { MyWeapon } from '../../slice/weaponsSlice';
+import { everyWeaponData } from '../../lib/Weapons';
 
 export default function ResonatorDetail() {
-  const name = useSelector((state: State) => state.grobalSlice.detail) as EveryResonatorName;
+  const name = useSelector((state: State) => state.grobalSlice['detail']) as EveryResonatorName;
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
+  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  const weaponMapping = useSelector((state: State) => state.weaponsSlice['맵핑']);
 
-  const ResonatorData = everyResonatorData[name as EveryResonatorName];
-  const myResonator = myResonators[name as EveryResonatorName];
-
+  const resonatorData = everyResonatorData[name];
+  const myResonator = myResonators[name] as MyResonator;
+  const element = resonatorData.element;
+  const resonatorLevel = myResonator.레벨;
   const innerLevel = [];
   for (let i = 1; i <= 90; i++) {
     innerLevel.push(
@@ -25,14 +39,59 @@ export default function ResonatorDetail() {
       </option>
     );
   }
+  const equip = weaponMapping[name];
+  let myWeaponAtk1: EveryWeaponAtk1 = 24;
+  let myWeaponLevel = 0;
+  let weaponImg;
+  if (equip) {
+    const myWeapon = myWeapons[equip] as MyWeapon;
+    const myWeaponCode = myWeapon.코드;
+    const myWeaponName = weaponPivot[myWeaponCode];
+    myWeaponAtk1 = everyWeaponData[myWeapon.코드]?.atk1 as EveryWeaponAtk1;
+    myWeaponLevel = myWeapon.레벨;
 
-  // let changeElement
-  // if (name === '방랑자') {
-  //   changeElement = <ChangeElement />;
-  // }
+    weaponImg = (
+      <img src={`${process.env.PUBLIC_URL}/img/Weapons/${myWeaponCode}.png`} alt={myWeaponName} />
+    );
+  }
+
+  let changeElementSwitch;
+  if (name === '방랑자') {
+    changeElementSwitch = (
+      <section className={styles.changeElement}>
+        {['회절', '인멸'].map((i) => {
+          const current = localStorage.getItem('방랑자_속성');
+          let selected = false;
+          if (current) {
+            if (i === JSON.parse(current)) {
+              selected = true;
+            }
+          }
+          return (
+            <div
+              data-selected={selected}
+              onClick={() => {
+                switch (i) {
+                  case '회절':
+                  case '인멸':
+                    dispatch(changeElement(i));
+                    break;
+
+                  default:
+                    break;
+                }
+              }}
+            >
+              {i}
+            </div>
+          );
+        })}
+      </section>
+    );
+  }
   return (
     <>
-      <header className={styles.header} data-element={ResonatorData.element}>
+      <header className={styles.header}>
         <div className={styles.imgBox}>
           <img
             src={process.env.PUBLIC_URL + '/img/Resonators/' + name + '.png'}
@@ -40,7 +99,9 @@ export default function ResonatorDetail() {
           />
         </div>
         <div className={styles.infoBox}>
-          <div className={styles.name}>{name}</div>
+          <div className={styles.name} style={{ backgroundColor: `var(--element-${element})` }}>
+            {name}
+          </div>
           <div className={styles.levelBox}>
             <span>Lv.</span>
             <select
@@ -55,14 +116,45 @@ export default function ResonatorDetail() {
           </div>
         </div>
       </header>
+      {changeElementSwitch}
       <main id='ResonatorDetail' className={styles.detail}>
-        <section className='weapon'>
-          <div className={styles.weaponImgBox}>
-            <img
-              src={process.env.PUBLIC_URL + '/img/Weapons/금주의 수호.png'}
-              alt={name + '.png'}
-            />
+        <section className={styles.statistics}>
+          <div>
+            <span>HP</span>
+            <span>{refine(getHP(resonatorData.hp, resonatorLevel))}</span>
           </div>
+          <div>
+            <span>공격력</span>
+            <span>
+              {refine(
+                getATK(resonatorData.atk, resonatorLevel) +
+                  getWeaponAtk(myWeaponAtk1)(myWeaponLevel)
+              )}
+            </span>
+          </div>
+          <div>
+            <span>방어력</span>
+            <span>{refine(getDEF(resonatorData.def, resonatorLevel))}</span>
+          </div>
+          <div>
+            <span>공명 효율</span>
+            <span>100%</span>
+          </div>
+          <div>
+            <span>{resonatorData.element} 피해 보너스</span>
+            <span>0%</span>
+          </div>
+          <div>
+            <span>크리티컬 확률</span>
+            <span>5%</span>
+          </div>
+          <div>
+            <span>크리티컬 피해</span>
+            <span>150%</span>
+          </div>
+        </section>
+        <section className='weapon'>
+          <div className={styles.weaponImgBox}>{weaponImg}</div>
         </section>
         <section className='echoes'>echoes</section>
         <section className={styles.skill}>
@@ -148,7 +240,6 @@ export default function ResonatorDetail() {
           </div>
         </section>
         <section className='chain'>chain</section>
-        <section className='stat'>stat</section>
         <section className='damage'>damage</section>
         {/* {changeElement} */}
       </main>

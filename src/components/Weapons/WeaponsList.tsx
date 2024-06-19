@@ -4,7 +4,7 @@ import { WeaponData, everyWeaponData, getWeaponSubOptionValue1 } from '../../lib
 import { EveryResonatorName, getWeaponName } from '../../types';
 import styles from './WeaponsList.module.css';
 import { everyResonatorData } from '../../lib/Resonators';
-import { changeEquip, changeWeaponLevel } from '../../slice/weaponsSlice';
+import { changeEquip, changeSyntonize, changeWeaponLevel } from '../../slice/weaponsSlice';
 import { getWeaponAtk, getWeaponSubOptionValue, refine } from '../../lib/formula';
 
 export default function WeaponsList() {
@@ -21,6 +21,7 @@ export default function WeaponsList() {
             const code = weapon.코드;
             const level = weapon.레벨;
             const equip = weapon.장착;
+            const syntonize = weapon.공진;
             const weaponData = everyWeaponData[code] as WeaponData;
             const name = getWeaponName(code);
             const rarity = weaponData.rarity;
@@ -49,20 +50,11 @@ export default function WeaponsList() {
             if (filterR[rarity] && filterW[category]) {
               return (
                 <div
-                  data-category={category}
                   className={styles.card}
-                  style={{ order: (6 - rarity) * 10 + Number(code[4]) }}
                   key={id}
+                  data-category={category}
+                  style={{ order: (6 - rarity) * 1000 + Number(code[4]) * 100 + 100 - level }}
                 >
-                  <div
-                    className={styles.name}
-                    style={{
-                      backgroundColor: 'var(--' + rarity + '-star)',
-                      color: 'black',
-                    }}
-                  >
-                    {name}
-                  </div>
                   <div className={styles.body}>
                     <div className={styles.imgBox}>
                       <img
@@ -71,39 +63,70 @@ export default function WeaponsList() {
                       />
                     </div>
                     <div className={styles.infoBox}>
-                      <div className={styles.level}>
-                        <span>레벨</span>
-                        <select
-                          name={id + '_Level'}
-                          id={id + '_Level'}
-                          defaultValue={level}
-                          onChange={(e) => {
-                            dispatch(
-                              changeWeaponLevel({
-                                id: id as `weapon_${number}`,
-                                level: Number(e.target.value),
-                              })
-                            );
-                          }}
-                        >
-                          {innerLevel}
-                        </select>
+                      <div
+                        className={styles.name}
+                        style={{
+                          backgroundColor: 'var(--' + rarity + '-star)',
+                          color: 'black',
+                        }}
+                      >
+                        {name}
                       </div>
-                      <div className={styles.atk}>
-                        <span>공격력</span>
-                        <span>{refine(getWeaponAtk(atk1)(level))}</span>
+                      <div className={styles.change}>
+                        <div className={styles.level}>
+                          <span>레벨</span>
+                          <select
+                            name={id + '_Level'}
+                            id={id + '_Level'}
+                            defaultValue={level}
+                            onChange={(e) => {
+                              dispatch(
+                                changeWeaponLevel({
+                                  id: id as `weapon_${number}`,
+                                  level: Number(e.target.value),
+                                })
+                              );
+                            }}
+                          >
+                            {innerLevel}
+                          </select>
+                        </div>
+                        <div className={styles.syntonize}>
+                          <span>공진</span>
+                          <select
+                            name={id + '_Syntonize'}
+                            id={id + '_Syntonize'}
+                            defaultValue={syntonize}
+                            onChange={(e) => {
+                              dispatch(
+                                changeSyntonize({
+                                  id: id as `weapon_${number}`,
+                                  rank: Number(e.target.value) as 1 | 2 | 3 | 4 | 5,
+                                })
+                              );
+                            }}
+                          >
+                            {[1, 2, 3, 4, 5].map((i) => (
+                              <option value={i}>{i}단계</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
-                      <div className={styles.subOption}>
-                        <span>{subOption}</span>
-                        <span>
-                          {refine(
-                            getWeaponSubOptionValue(getWeaponSubOptionValue1(atk1, subOption))(
-                              level
-                            )
-                          )}
-                          %
-                        </span>
-                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.statistics}>
+                    <div className={styles.atk}>
+                      <span>공격력</span>
+                      <span>{refine(getWeaponAtk(atk1)(level))}</span>
+                    </div>
+                    <div className={styles.subOption}>
+                      <span>{subOption}</span>
+                      <span>
+                        {refine(
+                          getWeaponSubOptionValue(getWeaponSubOptionValue1(atk1, subOption))(level)
+                        )}
+                        %
+                      </span>
                     </div>
                   </div>
                   <div className={styles.equip}>
