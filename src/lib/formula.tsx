@@ -1,4 +1,5 @@
 import { EveryWeaponAtk1 } from '../types';
+import { EveryWeaponSubOption, getWeaponSubOptionValue1 } from './Weapons';
 
 const getAscension = (level: number) => {
   if (level > 80) {
@@ -54,7 +55,8 @@ export const getWeaponAtk = (atk1: EveryWeaponAtk1) => {
     return atk1 * (1 + (7.5 * (level - 1)) / 89 + getAscension(level) * (2 / 3));
   };
 };
-export const getWeaponSubOptionValue = (sub1: number) => {
+export const getWeaponSubOptionValue = (atk1: EveryWeaponAtk1, sub: EveryWeaponSubOption) => {
+  const sub1 = getWeaponSubOptionValue1(atk1, sub);
   return (level: number) => {
     return (sub1 * Math.floor((1 + (3.5 * Math.floor(level / 5)) / 18) * 1000)) / 1000;
     // return sub1 * (1 + (3.5 * Math.floor(level / 5)) / 18);

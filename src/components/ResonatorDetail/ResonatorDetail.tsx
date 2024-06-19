@@ -6,7 +6,6 @@ import {
   EveryResonatorName,
   EverySkillType,
   EveryStatistics,
-  EveryWeaponAtk1,
   SkillSet,
   everySkillLevel,
   everySkillType,
@@ -20,25 +19,25 @@ import {
   toggleNode1,
   toggleNode2,
 } from '../../slice/resonatorsSlice';
-import { getATK, getDEF, getHP, getWeaponAtk, refine } from '../../lib/formula';
+import { getATK, getDEF, getHP, refine } from '../../lib/formula';
 import { MyWeapon } from '../../slice/weaponsSlice';
-import { everyWeaponData } from '../../lib/Weapons';
+import { genByWeapon } from '../Resonators/ResonatorsList';
 
-export const getMinorForte = (skill: Record<EverySkillType, SkillSet>) => {
+export const getMinorForteValue = (skill: Record<EverySkillType, SkillSet>) => {
   return (stat: EveryStatistics) => {
-    let trueCheckS: number = 0;
-    let trueCheckL: number = 0;
-    let max: number = 0;
+    let trueCheck3 = 0;
+    let trueCheck7 = 0;
+    let max = 12;
     switch (stat) {
       case 'HP':
       case '공격력':
       case '방어력':
-        trueCheckS = [skill['공명 스킬'][1], skill['공명 해방'][1]].filter((i) => i).length;
-        trueCheckL = [skill['공명 스킬'][2], skill['공명 해방'][2]].filter((i) => i).length;
+        trueCheck3 = [skill['공명 스킬'][1], skill['공명 해방'][1]].filter((i) => i).length;
+        trueCheck7 = [skill['공명 스킬'][2], skill['공명 해방'][2]].filter((i) => i).length;
         break;
       default:
-        trueCheckS = [skill['일반 공격'][1], skill['변주 스킬'][1]].filter((i) => i).length;
-        trueCheckL = [skill['일반 공격'][2], skill['변주 스킬'][2]].filter((i) => i).length;
+        trueCheck3 = [skill['일반 공격'][1], skill['변주 스킬'][1]].filter((i) => i).length;
+        trueCheck7 = [skill['일반 공격'][2], skill['변주 스킬'][2]].filter((i) => i).length;
         break;
     }
     switch (stat) {
@@ -51,14 +50,24 @@ export const getMinorForte = (skill: Record<EverySkillType, SkillSet>) => {
       case '크리티컬 피해':
         max = 16;
         break;
-      default:
-        max = 12;
-        break;
     }
-    return (max * (trueCheckS * 3 + trueCheckL * 7)) / 20;
+    return (max * (trueCheck3 * 3 + trueCheck7 * 7)) / 20;
   };
 };
-
+export const byMinorForte: Record<Exclude<EveryStatistics, '공명 효율'>, number> = {
+  HP: 0,
+  공격력: 0,
+  방어력: 0,
+  '크리티컬 확률': 0,
+  '크리티컬 피해': 0,
+  '응결 피해 보너스': 0,
+  '용융 피해 보너스': 0,
+  '전도 피해 보너스': 0,
+  '기류 피해 보너스': 0,
+  '회절 피해 보너스': 0,
+  '인멸 피해 보너스': 0,
+  '치료 효과 보너스': 0,
+};
 export default function ResonatorDetail() {
   const name = useSelector((state: State) => state.grobalSlice['detail']) as EveryResonatorName;
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
@@ -71,21 +80,8 @@ export default function ResonatorDetail() {
   const element = resonatorData.element;
   const resonatorLevel = myResonator.레벨;
 
-  const getMyMinorForte = getMinorForte(myResonator.스킬);
-  const byMinorForte: Record<Exclude<EveryStatistics, '공명 효율'>, number> = {
-    HP: 0,
-    공격력: 0,
-    방어력: 0,
-    '크리티컬 확률': 0,
-    '크리티컬 피해': 0,
-    '응결 피해 보너스': 0,
-    '용융 피해 보너스': 0,
-    '전도 피해 보너스': 0,
-    '기류 피해 보너스': 0,
-    '회절 피해 보너스': 0,
-    '인멸 피해 보너스': 0,
-    '치료 효과 보너스': 0,
-  };
+  const getMyMinorForte = getMinorForteValue(myResonator.스킬);
+
   const minorForte = resonatorData.minorForte;
   byMinorForte[minorForte[0]] = getMyMinorForte(minorForte[0]);
   byMinorForte[minorForte[1]] = getMyMinorForte(minorForte[1]);
@@ -98,64 +94,54 @@ export default function ResonatorDetail() {
       </option>
     );
   }
-  const equip = weaponMapping[name];
-  let myWeaponAtk1: EveryWeaponAtk1 = 24;
-  let myWeaponLevel = 0;
+  const weaponId = weaponMapping[name];
   let weaponImg;
-  if (equip) {
-    const myWeapon = myWeapons[equip] as MyWeapon;
+  const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(weaponId);
+  if (weaponId) {
+    const myWeapon = myWeapons[weaponId] as MyWeapon;
     const myWeaponCode = myWeapon.코드;
     const myWeaponName = weaponPivot[myWeaponCode];
-    myWeaponAtk1 = everyWeaponData[myWeapon.코드]?.atk1 as EveryWeaponAtk1;
-    myWeaponLevel = myWeapon.레벨;
-
     weaponImg = (
       <img src={`${process.env.PUBLIC_URL}/img/Weapons/${myWeaponCode}.png`} alt={myWeaponName} />
     );
   }
-
-  let changeElementSwitch;
-  if (name === '방랑자') {
-    changeElementSwitch = (
-      <section className={styles.changeElement}>
-        {['회절', '인멸'].map((i) => {
-          const current = localStorage.getItem('방랑자_속성');
-          let selected = false;
-          if (current) {
-            if (i === JSON.parse(current)) {
-              selected = true;
-            }
-          }
-          return (
-            <div
-              data-selected={selected}
-              onClick={() => {
-                switch (i) {
-                  case '회절':
-                  case '인멸':
-                    dispatch(changeElement(i));
-                    break;
-
-                  default:
-                    break;
+  const changeElementSwitch = (name: EveryResonatorName) => {
+    if (name === '방랑자') {
+      return (
+        <section className={styles.changeElement}>
+          {['회절', '인멸'].map((i) => {
+            switch (i) {
+              case '회절':
+              case '인멸':
+                const current = localStorage.getItem('방랑자_속성');
+                let selected = false;
+                if (current) {
+                  if (i === JSON.parse(current)) {
+                    selected = true;
+                  }
                 }
-              }}
-            >
-              {i}
-            </div>
-          );
-        })}
-      </section>
-    );
-  }
+                return (
+                  <div
+                    data-selected={selected}
+                    onClick={() => {
+                      dispatch(changeElement(i));
+                    }}
+                  >
+                    {i}
+                  </div>
+                );
+            }
+            return null;
+          })}
+        </section>
+      );
+    }
+  };
   return (
     <>
       <header className={styles.header}>
         <div className={styles.imgBox}>
-          <img
-            src={process.env.PUBLIC_URL + '/img/Resonators/' + name + '.png'}
-            alt={name + '.png'}
-          />
+          <img src={`${process.env.PUBLIC_URL}/img/Resonators/${name}.png`} alt={name} />
         </div>
         <div className={styles.infoBox}>
           <div className={styles.name} style={{ backgroundColor: `var(--element-${element})` }}>
@@ -175,22 +161,24 @@ export default function ResonatorDetail() {
           </div>
         </div>
       </header>
-      {changeElementSwitch}
+      {changeElementSwitch(name)}
       <main id='ResonatorDetail' className={styles.detail}>
         <section className={styles.statistics}>
           <div>
             <span>HP</span>
             <span>
-              {refine(getHP(resonatorData.hp1, resonatorLevel) * (1 + byMinorForte['HP'] / 100))}
+              {refine(
+                getHP(resonatorData.hp1, resonatorLevel) *
+                  (1 + (byWeapon['HP'] + byMinorForte['HP']) / 100)
+              )}
             </span>
           </div>
           <div>
             <span>공격력</span>
             <span>
               {refine(
-                (getATK(resonatorData.atk1, resonatorLevel) +
-                  getWeaponAtk(myWeaponAtk1)(myWeaponLevel)) *
-                  (1 + byMinorForte['공격력'] / 100)
+                (getATK(resonatorData.atk1, resonatorLevel) + weaponAtk) *
+                  (1 + (byWeapon['공격력'] + byMinorForte['공격력']) / 100)
               )}
             </span>
           </div>
@@ -198,13 +186,14 @@ export default function ResonatorDetail() {
             <span>방어력</span>
             <span>
               {refine(
-                getDEF(resonatorData.def1, resonatorLevel) * (1 + byMinorForte['방어력'] / 100)
+                getDEF(resonatorData.def1, resonatorLevel) *
+                  (1 + (byWeapon['방어력'] + byMinorForte['방어력']) / 100)
               )}
             </span>
           </div>
           <div>
             <span>공명 효율</span>
-            <span>100%</span>
+            <span>{refine(100 + byWeapon['공명 효율'])}%</span>
           </div>
           <div>
             <span>{element} 피해 보너스</span>
@@ -212,11 +201,13 @@ export default function ResonatorDetail() {
           </div>
           <div>
             <span>크리티컬 확률</span>
-            <span>{refine(5 + byMinorForte['크리티컬 확률'])}%</span>
+            <span>{refine(5 + (byWeapon['크리티컬 확률'] + byMinorForte['크리티컬 확률']))}%</span>
           </div>
           <div>
             <span>크리티컬 피해</span>
-            <span>{refine(150 + byMinorForte['크리티컬 피해'])}%</span>
+            <span>
+              {refine(150 + (byWeapon['크리티컬 피해'] + byMinorForte['크리티컬 피해']))}%
+            </span>
           </div>
         </section>
         <section className='weapon'>

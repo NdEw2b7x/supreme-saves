@@ -9,8 +9,8 @@ export interface MyWeapon {
   공진: 1 | 2 | 3 | 4 | 5;
   장착: EveryResonatorName | '미장착';
 }
-type WeaponId = `weapon_${number}`;
-type MyWeapons = Partial<Record<WeaponId, MyWeapon>>;
+export type WeaponId = `weapon_${number}`;
+export type MyWeapons = Partial<Record<WeaponId, MyWeapon>>;
 
 type WeaponMapping = Partial<Record<EveryResonatorName, WeaponId>>;
 

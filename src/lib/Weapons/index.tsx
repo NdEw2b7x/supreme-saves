@@ -1,9 +1,13 @@
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
 import WeaponData, { getWeaponSubOptionValue1 } from './WeaponData';
+import w300100001 from './w300100001';
 import w300200001 from './w300200001';
 import w300200003 from './w300200003';
+import w300300001 from './w300300001';
+import w300400001 from './w300400001';
 import w300500001 from './w300500001';
 import w300500002 from './w300500002';
+import w300500003 from './w300500003';
 import w400100001 from './w400100001';
 import w400100002 from './w400100002';
 import w400100003 from './w400100003';
@@ -85,8 +89,12 @@ export const everyWeaponData: Partial<Record<EveryWeaponCode, WeaponData>> = {
   w400500004,
   w400500005,
 
+  w300100001,
   w300200001,
   w300200003,
+  w300300001,
+  w300400001,
   w300500001,
   w300500002,
+  w300500003,
 } as const;

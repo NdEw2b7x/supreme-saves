@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { WeaponData, everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
+import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 import { EveryResonatorName, getWeaponName } from '../../types';
 import styles from './WeaponsList.module.css';
 import { everyResonatorData } from '../../lib/Resonators';
@@ -107,7 +107,9 @@ export default function WeaponsList() {
                             }}
                           >
                             {[1, 2, 3, 4, 5].map((i) => (
-                              <option value={i}>{i}단계</option>
+                              <option value={i} key={i}>
+                                {i}단계
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -121,12 +123,7 @@ export default function WeaponsList() {
                     </div>
                     <div className={styles.subOption}>
                       <span>{subOption}</span>
-                      <span>
-                        {refine(
-                          getWeaponSubOptionValue(getWeaponSubOptionValue1(atk1, subOption))(level)
-                        )}
-                        %
-                      </span>
+                      <span>{refine(getWeaponSubOptionValue(atk1, subOption)(level))}%</span>
                     </div>
                   </div>
                   <div className={styles.equip}>

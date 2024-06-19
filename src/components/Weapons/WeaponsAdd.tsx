@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { everyWeaponData } from '../../lib/Weapons';
-import { EveryWeaponCategory, weaponPivot } from '../../types';
+import { EveryWeaponSubOption, everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
+import { EveryWeaponAtk1, EveryWeaponCategory, weaponPivot } from '../../types';
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
 import { State, dispatch } from '../../store';
 import { addWeapon } from '../../slice/weaponsSlice';
@@ -14,38 +14,50 @@ export default function WeaponsAdd() {
   return (
     <section id='WeaponAdd' className={styles.container}>
       {Object.entries(weaponPivot).map(([code, name]) => {
-        const weaponData = everyWeaponData[code as EveryWeaponCode];
         const rarity = Number(code[1]) as 5 | 4 | 3;
         const type = Number(code[4]);
-        const category = weaponData?.category as EveryWeaponCategory;
-        const atk1 = weaponData?.atk1;
-        const subOption = weaponData?.subOption;
-        if (filterR[rarity] && filterW[category]) {
-          return (
-            <div
-              className={styles.card}
-              style={{ order: (6 - rarity) * 10 + type }}
-              key={code}
-              onClick={() => {
-                dispatch(addWeapon(code as EveryWeaponCode));
-                dispatch(changeSubPage(''));
-              }}
-            >
-              <div className={styles.imgBox}>
-                <img src={process.env.PUBLIC_URL + '/img/Weapons/' + code + '.png'} alt={name} />
-              </div>
-              <div className={styles.infoBox}>
+        const weaponData = everyWeaponData[code as EveryWeaponCode];
+        if (weaponData) {
+          const category: EveryWeaponCategory = weaponData.category;
+          const atk1: EveryWeaponAtk1 = weaponData.atk1;
+          const subOption: EveryWeaponSubOption = weaponData.subOption;
+          const subOption1 = getWeaponSubOptionValue1(atk1, subOption);
+          if (filterR[rarity] && filterW[category]) {
+            return (
+              <div
+                className={styles.card}
+                style={{ order: (6 - rarity) * 10 + type }}
+                key={code}
+                onClick={() => {
+                  dispatch(addWeapon(code as EveryWeaponCode));
+                  dispatch(changeSubPage(''));
+                }}
+              >
                 <div className={styles.name} style={{ backgroundColor: `var(--${rarity}-star)` }}>
                   {name}
                 </div>
-                <div className={styles.data}>
-                  <div>{category}</div>
-                  <div>공격력 {atk1}</div>
-                  <div>{subOption}</div>
+                <div className={styles.body}>
+                  <div className={styles.imgBox}>
+                    <img src={`${process.env.PUBLIC_URL}/img/Weapons/${code}.png`} alt={name} />
+                  </div>
+                  <div className={styles.infoBox}>
+                    <div>
+                      <span>공격력</span>
+                      <span>
+                        {atk1} ~ {atk1 * 12.5}
+                      </span>
+                    </div>
+                    <div>
+                      <span>{subOption}</span>
+                      <span>
+                        {subOption1.toFixed(2)}% ~ {(subOption1 * 4.5).toFixed(2)}%
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
+            );
+          }
         }
         return null;
       })}

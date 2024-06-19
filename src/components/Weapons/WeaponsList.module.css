@@ -87,15 +87,21 @@
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
-    gap: 0.25rem;
     border-radius: 0.25rem;
-    border: 0.1rem solid var(--theme-color-alpha-200);
     span {
       flex-grow: 1;
-      padding: 0.25rem;
+      padding: 0.75rem 0;
+      align-content: center;
     }
     span:first-child {
-      background-color: var(--theme-color-alpha-200);
+      background-color: var(--theme-color-alpha-400);
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+    span:last-child {
+      border: 0.1rem solid var(--theme-color-alpha-400);
+      border-top-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
     }
   }
 }
@@ -103,7 +109,7 @@
   display: flex;
   gap: 0.25rem;
   span {
-    background-color: var(--theme-color-alpha-600);
+    background-color: var(--theme-color-alpha-400);
     padding: 0.75rem;
     border-radius: 0.25rem;
     align-content: center;

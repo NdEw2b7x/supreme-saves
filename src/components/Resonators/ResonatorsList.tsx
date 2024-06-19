@@ -1,105 +1,162 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EveryResonatorName, EveryWeaponAtk1, EveryWeaponCode, weaponPivot } from '../../types';
-import { everyResonatorData } from '../../lib/Resonators';
+import {
+  EveryElement,
+  EveryResonatorName,
+  EveryStatistics,
+  EveryWeaponAtk1,
+  EveryWeaponCode,
+  weaponPivot,
+} from '../../types';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
-import { getATK, getDEF, getHP, getWeaponAtk, refine } from '../../lib/formula';
-import styles from './ResonatorsList.module.css';
+import { everyResonatorData } from '../../lib/Resonators';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
+import {
+  getATK,
+  getDEF,
+  getHP,
+  getWeaponAtk,
+  getWeaponSubOptionValue,
+  refine,
+} from '../../lib/formula';
+import styles from './ResonatorsList.module.css';
+import { MyWeapon, MyWeapons, WeaponId } from '../../slice/weaponsSlice';
+
+export const genByWeapon = (myWeapons: MyWeapons) => {
+  return (id?: WeaponId) => {
+    let weaponAtk = 0;
+    const byWeapon: Record<
+      Exclude<EveryStatistics, `${EveryElement} 피해 보너스` | '치료 효과 보너스'>,
+      number
+    > = {
+      HP: 0,
+      공격력: 0,
+      방어력: 0,
+      '공명 효율': 0,
+      '크리티컬 확률': 0,
+      '크리티컬 피해': 0,
+    };
+    if (id) {
+      const target = myWeapons[id];
+      if (target) {
+        const data = everyWeaponData[target.코드] as WeaponData;
+        const level = target.레벨;
+        const atk1: EveryWeaponAtk1 = data.atk1;
+        const sub = data.subOption;
+        weaponAtk = getWeaponAtk(atk1)(level);
+        byWeapon[sub] = getWeaponSubOptionValue(atk1, sub)(level);
+      }
+    }
+    return [weaponAtk, byWeapon] as const;
+  };
+};
 
 export default function ResonatorsList() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);
   const filterE = filters.element;
   const filterW = filters.weaponCategory;
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
-  const myResonatorsKeys = Object.keys(myResonators);
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
   const weaponMap = useSelector((state: State) => state.weaponsSlice['맵핑']);
-
   return (
     <section id='ResonatorsList' className={styles.container} data-section='list'>
-      {myResonatorsKeys.map((i) => {
-        const name = i as EveryResonatorName;
-        const resonatorLevel = myResonators[name]?.레벨 as number;
-        const resonatorData = everyResonatorData[i as EveryResonatorName];
+      {Object.entries(myResonators).map(([key, info]) => {
+        // resonator
+        const resonatorName = key as EveryResonatorName;
+        const resonatorData = everyResonatorData[resonatorName];
+        const resonatorLevel = info.레벨;
         const element = resonatorData.element;
         const weaponCategory = resonatorData.weaponCatergory;
-        const weaponImg = (x?: EveryWeaponCode) => {
-          if (x) {
+        // weapon
+        const getMyWeapon = (name: EveryResonatorName) => {
+          const weaponId = weaponMap[name];
+          if (weaponId) {
+            const myWeapon = myWeapons[weaponId] as MyWeapon;
+            const data = everyWeaponData[myWeapon.코드] as WeaponData;
+            return { ...myWeapon, ...data };
+          }
+        };
+        const weaponImg = (code?: EveryWeaponCode) => {
+          if (code) {
             return (
               <img
-                className={styles.img}
-                src={process.env.PUBLIC_URL + '/img/Weapons/' + x + '.png'}
-                alt={weaponPivot[x]}
+                src={`${process.env.PUBLIC_URL}/img/Weapons/${code}.png`}
+                alt={weaponPivot[code]}
               />
             );
           }
         };
-        const getMyWeapon = (name: EveryResonatorName) => {
-          const weaponId = weaponMap[name];
-          if (weaponId) {
-            return myWeapons[weaponId];
-          }
-        };
         if (filterE[element] && filterW[weaponCategory]) {
-          const myWeapon = getMyWeapon(name);
+          const myWeapon = getMyWeapon(resonatorName);
+
+          let myWeaponCode = myWeapon?.코드;
           let myWeaponAtk1: EveryWeaponAtk1 = 24;
           let myWeaponLevel = 0;
           if (myWeapon) {
-            const myWeaponCode = myWeapon.코드 as EveryWeaponCode;
-            const weaponData = everyWeaponData[myWeaponCode] as WeaponData;
-            myWeaponAtk1 = weaponData.atk1;
+            myWeaponAtk1 = myWeapon.atk1;
             myWeaponLevel = myWeapon.레벨;
           }
+          const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(weaponMap[resonatorName]);
+
+          console.log(resonatorName, weaponAtk, byWeapon);
+
           return (
             <div
               style={{ order: Number(100 - resonatorLevel) }}
-              key={i}
+              key={resonatorName}
               className={styles.card}
               onClick={() => {
-                dispatch(selectDetail(name));
+                dispatch(selectDetail(resonatorName));
                 dispatch(changeSubPage('상세'));
               }}
             >
               <div className={styles.top}>
                 <div className={styles.intro}>
-                  <div className={styles.lvBadge}>Lv.{myResonators[name]?.레벨}</div>
+                  <div className={styles.lvBadge}>Lv.{info.레벨}</div>
                   <div className={styles.imgBox}>
                     <img
                       className={styles.img}
-                      src={process.env.PUBLIC_URL + '/img/Resonators/' + i + '.png'}
-                      alt={i + '.png'}
+                      src={process.env.PUBLIC_URL + '/img/Resonators/' + resonatorName + '.png'}
+                      alt={resonatorName}
                     />
                   </div>
                   <div
                     className={styles.name}
                     style={{ backgroundColor: 'var(--element-' + element + ')' }}
                   >
-                    {i}
+                    {resonatorName}
                   </div>
-                  <div className={styles.imgBox}>{weaponImg(getMyWeapon(name)?.코드)}</div>
+                  <div className={styles.imgBox}>{weaponImg(myWeaponCode)}</div>
                 </div>
                 <div className={styles.stats}>
                   <div>
                     <span>HP</span>
-                    <span>{refine(getHP(resonatorData.hp1, resonatorLevel))}</span>
+                    <span>
+                      {refine(
+                        getHP(resonatorData.hp1, resonatorLevel) * (1 + byWeapon['HP'] / 100)
+                      )}
+                    </span>
                   </div>
                   <div>
                     <span>공격력</span>
                     <span>
                       {refine(
-                        getATK(resonatorData.atk1, resonatorLevel) +
-                          getWeaponAtk(myWeaponAtk1)(myWeaponLevel)
+                        (getATK(resonatorData.atk1, resonatorLevel) + weaponAtk) *
+                          (1 + byWeapon['공격력'] / 100)
                       )}
                     </span>
                   </div>
                   <div>
                     <span>방어력</span>
-                    <span>{refine(getDEF(resonatorData.def1, resonatorLevel))}</span>
+                    <span>
+                      {refine(
+                        getDEF(resonatorData.def1, resonatorLevel) * (1 + byWeapon['방어력'] / 100)
+                      )}
+                    </span>
                   </div>
                   <div>
                     <span>공명 효율</span>
-                    <span>100%</span>
+                    <span>{(100 + byWeapon['공명 효율']).toFixed(2)}%</span>
                   </div>
                   <div>
                     <span>{resonatorData.element} 피해 보너스</span>
@@ -107,11 +164,11 @@ export default function ResonatorsList() {
                   </div>
                   <div>
                     <span>크리티컬 확률</span>
-                    <span>5%</span>
+                    <span>{(5 + byWeapon['크리티컬 확률']).toFixed(2)}%</span>
                   </div>
                   <div>
                     <span>크리티컬 피해</span>
-                    <span>150%</span>
+                    <span>{(150 + byWeapon['크리티컬 피해']).toFixed(2)}%</span>
                   </div>
                 </div>
               </div>
@@ -211,8 +268,9 @@ export default function ResonatorsList() {
               </div>
             </div>
           );
+        } else {
+          return null;
         }
-        return null;
       })}
     </section>
   );
