@@ -2,13 +2,7 @@ import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './ResonatorDetail.module.css';
-import {
-  EveryResonatorName,
-  EveryStatistics,
-  everySkillLevel,
-  everySkillType,
-  weaponPivot,
-} from '../../types';
+import { EveryResonatorName, EveryStatistics, everySkillLevel, everySkillType } from '../../types';
 import {
   MyResonator,
   MyResonators,
@@ -19,8 +13,8 @@ import {
   toggleNode2,
 } from '../../slice/resonatorsSlice';
 import { getATK, getDEF, getHP, refine } from '../../lib/formula';
-import { MyWeapon } from '../../slice/weaponsSlice';
 import { genByWeapon } from '../Resonators/ResonatorsList';
+import ResonatorDetailWeapon from './ResonatorDetailWeapon';
 
 export const genByMinorForte = (myResonators: MyResonators) => {
   const byMinorForte: Record<Exclude<EveryStatistics, '공명 효율'>, number> = {
@@ -93,17 +87,9 @@ export default function ResonatorDetail() {
     );
   }
   const weaponId = weaponMapping[name];
-  let weaponImg;
   const [minorForte, byMinorForte] = genByMinorForte(myResonators)(name);
   const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(weaponId);
-  if (weaponId) {
-    const myWeapon = myWeapons[weaponId] as MyWeapon;
-    const myWeaponCode = myWeapon.코드;
-    const myWeaponName = weaponPivot[myWeaponCode];
-    weaponImg = (
-      <img src={`${process.env.PUBLIC_URL}/img/Weapons/${myWeaponCode}.png`} alt={myWeaponName} />
-    );
-  }
+
   const changeElementSwitch = (name: EveryResonatorName) => {
     if (name === '방랑자') {
       return (
@@ -221,8 +207,8 @@ export default function ResonatorDetail() {
             </span>
           </div>
         </section>
-        <section className='weapon'>
-          <div className={styles.weaponImgBox}>{weaponImg}</div>
+        <section className={styles.weapon}>
+          <ResonatorDetailWeapon id={weaponId} />
         </section>
         <section className='echoes'>echoes</section>
         <section className={styles.skill}>

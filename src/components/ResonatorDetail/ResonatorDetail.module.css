@@ -16,7 +16,7 @@
   flex: 1;
   border-radius: 0.25rem;
   overflow: hidden;
-  background-color: var(--theme-color-alpha-200);
+  background-color: var(--theme-color-alpha-400);
   max-width: 6rem;
   margin: -0.5rem;
 
@@ -104,7 +104,7 @@
     scroll-snap-align: start;
     scroll-margin-top: 6rem;
     width: 100%;
-    background-color: var(--theme-color-alpha-200);
+    background-color: var(--theme-color-alpha-400);
     border-radius: 0.5rem;
     padding: 0.25rem;
   }
@@ -120,15 +120,46 @@
     }
   }
 }
-.weaponImgBox {
-  align-self: flex-end;
-  border-radius: 0.25rem;
-  overflow: hidden;
-  width: 5rem;
-  max-height: 5rem;
-  img {
-    background-color: var(--theme-color-alpha-200);
-    width: 100%;
+.weapon {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .body {
+    display: flex;
+    gap: 0.25rem;
+    .weaponImg {
+      align-self: flex-end;
+      border-radius: 0.25rem;
+      overflow: hidden;
+      max-height: 7.5rem;
+      width: 7.5rem;
+      background-color: var(--theme-color-alpha-400);
+    }
+    .info {
+      padding: 1.5rem 1rem;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      border: 0.1rem solid var(--theme-color-alpha-400);
+      border-radius: 0.25rem;
+
+      div {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+  .ability {
+    border: 0.1rem solid var(--theme-color-alpha-400);
+    border-radius: 0.25rem;
+    height: 100%;
+
+    padding: 0.5rem;
+
+    text-align: justify;
   }
 }
 
@@ -142,7 +173,7 @@
   justify-content: space-between;
 }
 .skillLine {
-  background-color: var(--theme-color-alpha-200);
+  background-color: var(--theme-color-alpha-400);
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
@@ -159,10 +190,10 @@
   justify-content: center;
   align-items: center;
 
-  background-color: var(--theme-color-alpha-200);
+  background-color: var(--theme-color-alpha-400);
   select {
     border: 10px solid transparent;
-    background-color: var(--theme-color-alpha-200);
+    background-color: var(--theme-color-alpha-400);
     height: 3rem;
     width: 3rem;
     border-radius: 100%;
@@ -190,7 +221,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: var(--theme-color-alpha-200);
+    background-color: var(--theme-color-alpha-400);
     border-radius: 0.25rem;
     span {
       border-radius: 0.25rem;
@@ -199,7 +230,7 @@
     span:first-child {
       margin: 0.25rem;
       margin-bottom: 0;
-      background-color: var(--theme-color-alpha-200);
+      background-color: var(--theme-color-alpha-400);
     }
   }
 }
