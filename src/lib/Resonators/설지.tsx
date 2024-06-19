@@ -11,7 +11,7 @@ const result = new ResonatorData({
   element,
   weaponCategory,
   basic: [hp1, atk1, def1],
-  minorForte: ['공격력', '공격력'],
+  minorForte: ['HP', '치료 효과 보너스'],
 });
 
 export default result;

@@ -24,7 +24,7 @@ export default class ResonatorData {
     element: EveryElement;
     weaponCategory: EveryWeaponCategory;
     basic: [number, number, number];
-    minorForte: [EveryStatistics, EveryStatistics];
+    minorForte: [Exclude<EveryStatistics, '공명 효율'>, Exclude<EveryStatistics, '공명 효율'>];
   }) {
     this.name = name;
     this.element = element;

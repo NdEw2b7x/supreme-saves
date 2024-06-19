@@ -183,3 +183,23 @@
 .skillNode[data-selected='true'] {
   background-color: var(--theme-color-alpha-800);
 }
+.skill .minorForte {
+  display: flex;
+  gap: 0.25rem;
+  div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--theme-color-alpha-200);
+    border-radius: 0.25rem;
+    span {
+      border-radius: 0.25rem;
+      padding: 0.25rem;
+    }
+    span:first-child {
+      margin: 0.25rem;
+      margin-bottom: 0;
+      background-color: var(--theme-color-alpha-200);
+    }
+  }
+}
