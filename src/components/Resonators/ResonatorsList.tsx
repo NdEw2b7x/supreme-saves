@@ -21,6 +21,7 @@ import {
 } from '../../lib/formula';
 import styles from './ResonatorsList.module.css';
 import { MyWeapon, MyWeapons, WeaponId } from '../../slice/weaponsSlice';
+import { genByMinorForte } from '../ResonatorDetail/ResonatorDetail';
 
 export const genByWeapon = (myWeapons: MyWeapons) => {
   return (id?: WeaponId) => {
@@ -88,18 +89,9 @@ export default function ResonatorsList() {
         };
         if (filterE[element] && filterW[weaponCategory]) {
           const myWeapon = getMyWeapon(resonatorName);
-
           let myWeaponCode = myWeapon?.코드;
-          let myWeaponAtk1: EveryWeaponAtk1 = 24;
-          let myWeaponLevel = 0;
-          if (myWeapon) {
-            myWeaponAtk1 = myWeapon.atk1;
-            myWeaponLevel = myWeapon.레벨;
-          }
           const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(weaponMap[resonatorName]);
-
-          console.log(resonatorName, weaponAtk, byWeapon);
-
+          const minorForte = genByMinorForte(myResonators)(resonatorName);
           return (
             <div
               style={{ order: Number(100 - resonatorLevel) }}
@@ -133,7 +125,8 @@ export default function ResonatorsList() {
                     <span>HP</span>
                     <span>
                       {refine(
-                        getHP(resonatorData.hp1, resonatorLevel) * (1 + byWeapon['HP'] / 100)
+                        getHP(resonatorData.hp1, resonatorLevel) *
+                          (1 + (byWeapon['HP'] + minorForte[1]['HP']) / 100)
                       )}
                     </span>
                   </div>
@@ -142,7 +135,7 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         (getATK(resonatorData.atk1, resonatorLevel) + weaponAtk) *
-                          (1 + byWeapon['공격력'] / 100)
+                          (1 + (byWeapon['공격력'] + minorForte[1]['공격력']) / 100)
                       )}
                     </span>
                   </div>
@@ -150,7 +143,8 @@ export default function ResonatorsList() {
                     <span>방어력</span>
                     <span>
                       {refine(
-                        getDEF(resonatorData.def1, resonatorLevel) * (1 + byWeapon['방어력'] / 100)
+                        getDEF(resonatorData.def1, resonatorLevel) *
+                          (1 + (byWeapon['방어력'] + minorForte[1]['방어력']) / 100)
                       )}
                     </span>
                   </div>
@@ -159,16 +153,23 @@ export default function ResonatorsList() {
                     <span>{(100 + byWeapon['공명 효율']).toFixed(2)}%</span>
                   </div>
                   <div>
-                    <span>{resonatorData.element} 피해 보너스</span>
-                    <span>0%</span>
+                    <span>{element} 피해 보너스</span>
+                    <span>{minorForte[1][`${element} 피해 보너스`]}%</span>
                   </div>
                   <div>
                     <span>크리티컬 확률</span>
-                    <span>{(5 + byWeapon['크리티컬 확률']).toFixed(2)}%</span>
+                    <span>
+                      {(5 + byWeapon['크리티컬 확률'] + minorForte[1]['크리티컬 확률']).toFixed(2)}%
+                    </span>
                   </div>
                   <div>
                     <span>크리티컬 피해</span>
-                    <span>{(150 + byWeapon['크리티컬 피해']).toFixed(2)}%</span>
+                    <span>
+                      {(150 + byWeapon['크리티컬 피해'] + minorForte[1]['크리티컬 피해']).toFixed(
+                        2
+                      )}
+                      %
+                    </span>
                   </div>
                 </div>
               </div>

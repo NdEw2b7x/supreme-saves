@@ -45,7 +45,7 @@ const defaultRover = {
   ...defaultResonator,
 } as MyResonator;
 
-type MyResonators = Partial<Record<ERNR, MyResonator>>;
+export type MyResonators = Partial<Record<ERNR, MyResonator>>;
 
 let initialState: { 공명자: MyResonators } = { 공명자: { 방랑자: defaultRover } };
 type InitialState = typeof initialState;
