@@ -17,11 +17,13 @@ import {
 import { EveryWeaponCode, getWeaponName, weaponPivot } from './everyWeaponCode';
 import { EveryWeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
 import { EveryWeaponAtk1 } from './everyWeapon';
+import { EveryStatistics, everyStatistics } from './everyStatistics';
 
 export const everyRasonanceChain = [0, 1, 2, 3, 4, 5, 6] as const;
 export type EveryRasonanceChain = (typeof everyRasonanceChain)[number];
 
 export {
+  everyStatistics,
   everyChain,
   everyElement,
   everyHarmory,
@@ -35,6 +37,7 @@ export {
   getWeaponName,
 };
 export type {
+  EveryStatistics,
   EveryChain,
   EveryElement,
   EveryHarmory,

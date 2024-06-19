@@ -17,6 +17,13 @@ if (elementFromStorage) {
       break;
   }
 }
-const result = new ResonatorData('방랑자', element, '직검', [hp1, atk1, def1]);
+
+const result = new ResonatorData({
+  name: '방랑자',
+  element,
+  weaponCategory: '직검',
+  basic: [hp1, atk1, def1],
+  minorForte: ['공격력', '인멸 피해 보너스'],
+});
 
 export default result;

@@ -121,20 +121,20 @@ export default function ResonatorDetail() {
         <section className={styles.statistics}>
           <div>
             <span>HP</span>
-            <span>{refine(getHP(resonatorData.hp, resonatorLevel))}</span>
+            <span>{refine(getHP(resonatorData.hp1, resonatorLevel))}</span>
           </div>
           <div>
             <span>공격력</span>
             <span>
               {refine(
-                getATK(resonatorData.atk, resonatorLevel) +
+                getATK(resonatorData.atk1, resonatorLevel) +
                   getWeaponAtk(myWeaponAtk1)(myWeaponLevel)
               )}
             </span>
           </div>
           <div>
             <span>방어력</span>
-            <span>{refine(getDEF(resonatorData.def, resonatorLevel))}</span>
+            <span>{refine(getDEF(resonatorData.def1, resonatorLevel))}</span>
           </div>
           <div>
             <span>공명 효율</span>

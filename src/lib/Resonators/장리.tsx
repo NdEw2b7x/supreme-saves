@@ -4,9 +4,15 @@ import ResonatorData from './ResonatorData';
 const name: EveryResonatorName = '능양';
 // const name: EveryResonatorName = '장리';
 const element: EveryElement = '용융';
-const weaponType: EveryWeaponCategory = '직검';
-const [hp, atk, def] = [831, 37, 90];
+const weaponCategory: EveryWeaponCategory = '직검';
+const [hp1, atk1, def1] = [831, 37, 90];
 
-const result = new ResonatorData(name, element, weaponType, [hp, atk, def]);
+const result = new ResonatorData({
+  name,
+  element,
+  weaponCategory,
+  basic: [hp1, atk1, def1],
+  minorForte: ['공격력', '공격력'],
+});
 
 export default result;

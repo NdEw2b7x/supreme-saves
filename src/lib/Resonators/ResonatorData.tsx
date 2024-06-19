@@ -1,23 +1,37 @@
-import { EveryElement, EveryResonatorName, EveryWeaponCategory } from '../../types';
+import {
+  EveryElement,
+  EveryResonatorName,
+  EveryStatistics,
+  EveryWeaponCategory,
+} from '../../types';
 
 export default class ResonatorData {
   name;
   element;
   weaponCatergory;
-  hp;
-  atk;
-  def;
-  constructor(
-    name: EveryResonatorName,
-    element: EveryElement,
-    weaponCategory: EveryWeaponCategory,
-    [hp1, atk1, def1]: [number, number, number]
-  ) {
+  hp1;
+  atk1;
+  def1;
+  minorForte;
+  constructor({
+    name,
+    element,
+    weaponCategory,
+    basic: [hp1, atk1, def1],
+    minorForte,
+  }: {
+    name: EveryResonatorName;
+    element: EveryElement;
+    weaponCategory: EveryWeaponCategory;
+    basic: [number, number, number];
+    minorForte: [EveryStatistics, EveryStatistics];
+  }) {
     this.name = name;
     this.element = element;
     this.weaponCatergory = weaponCategory;
-    this.hp = hp1;
-    this.atk = atk1;
-    this.def = def1;
+    this.hp1 = hp1;
+    this.atk1 = atk1;
+    this.def1 = def1;
+    this.minorForte = minorForte;
   }
 }
