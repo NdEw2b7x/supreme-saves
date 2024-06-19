@@ -29,9 +29,9 @@
 }
 .imgBox {
   background-color: var(--theme-color-alpha-200);
-  max-width: 8rem;
-  min-width: 8rem;
-  max-height: 8rem;
+  max-width: 7rem;
+  min-width: 7rem;
+  max-height: 7rem;
   border-radius: 0.25rem;
   img {
     max-width: 100%;
@@ -44,7 +44,7 @@
   gap: 0.25rem;
 }
 .name {
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   border-radius: 0.25rem;
   font-weight: bolder;
   text-align: center;

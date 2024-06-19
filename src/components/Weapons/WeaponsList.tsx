@@ -55,6 +55,15 @@ export default function WeaponsList() {
                   data-category={category}
                   style={{ order: (6 - rarity) * 1000 + Number(code[4]) * 100 + 100 - level }}
                 >
+                  <div
+                    className={styles.name}
+                    style={{
+                      backgroundColor: 'var(--' + rarity + '-star)',
+                      color: 'black',
+                    }}
+                  >
+                    {name}
+                  </div>
                   <div className={styles.body}>
                     <div className={styles.imgBox}>
                       <img
@@ -63,15 +72,6 @@ export default function WeaponsList() {
                       />
                     </div>
                     <div className={styles.infoBox}>
-                      <div
-                        className={styles.name}
-                        style={{
-                          backgroundColor: 'var(--' + rarity + '-star)',
-                          color: 'black',
-                        }}
-                      >
-                        {name}
-                      </div>
                       <div className={styles.change}>
                         <div className={styles.level}>
                           <span>레벨</span>
