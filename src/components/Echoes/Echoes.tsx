@@ -1,12 +1,24 @@
-import { everyHarmory } from '../../types';
+import EchoesAdd from './EchoesAdd';
+import { useSelector } from 'react-redux';
+import { everyHarmony } from '../../types';
+import type { EchoCost } from '../../types';
+import { State, dispatch } from '../../store';
+import { changeSubPage } from '../../slice/grobalSlice';
 
 export default function Echoes() {
+  const subPage = useSelector((state: State) => state.grobalSlice['subPage']);
+  let contents;
+  if (subPage === '추가') {
+    contents = <EchoesAdd />;
+  } else {
+    // contents = <EchosList />;
+  }
   return (
     <main id='Echoes'>
       <div className='filterContainer'>
         <div className='filter'>
           <select name='filterHarmory' id='FilterHarmory'>
-            {everyHarmory.map((i) => {
+            {everyHarmony.map((i) => {
               return (
                 <option key={i} value={i}>
                   {i}
@@ -15,7 +27,7 @@ export default function Echoes() {
             })}
           </select>
           <div className='radio'>
-            {[4, 3, 1].map((i) => {
+            {([4, 3, 1] as EchoCost[]).map((i) => {
               return (
                 <span key={i} data-filter='true'>
                   {i} COST
@@ -24,15 +36,17 @@ export default function Echoes() {
             })}
           </div>
         </div>
-        <div className='addBtn'>
+        <div
+          className='addBtn'
+          onClick={() => {
+            dispatch(changeSubPage('추가'));
+          }}
+        >
           <span>에코 추가</span>
         </div>
       </div>
       <hr />
-      <div>
-        <div>echo_{Math.floor((9 * Math.random() + 1) * 100000000)}</div>
-        <div>list</div>
-      </div>
+      {contents}
     </main>
   );
 }

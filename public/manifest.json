@@ -1,5 +1,5 @@
 {
-  "name": "명조: Supreme Saves",
+  "name": "명조 | Supreme Saves",
   "short_name": "SuSa",
   "id": "/supreme-saves/",
   "icons": [
@@ -43,10 +43,11 @@
     {
       "src": "screenshots/desktop.png",
       "form_factor": "wide",
-      "sizes": "2880x1744"
+      "sizes": "3840x2160"
     },
     {
       "src": "screenshots/mobile.png",
+      "form_factor": "narrow",
       "sizes": "1179x2556"
     }
   ]
