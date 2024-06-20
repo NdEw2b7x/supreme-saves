@@ -31,7 +31,7 @@ export default function ResonatorDetailWeapon({ id }: { id?: WeaponId }) {
           <div className={styles.info}>
             <div>
               <span>공격력</span>
-              <span>{weaponAtk.toFixed(3)}</span>
+              <span>{weaponAtk}</span>
             </div>
             <div>
               <span>{sub}</span>

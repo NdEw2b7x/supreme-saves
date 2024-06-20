@@ -53,7 +53,7 @@ export const getDEF = (def0: number) => {
 
 export const getWeaponAtk = (atk1: EveryWeaponAtk1) => {
   return (level: number) => {
-    return atk1 * (1 + (7.5 * (level - 1)) / 89 + getAscension(level) * (2 / 3));
+    return Math.floor(atk1 * (1 + (7.5 * (level - 1)) / 89 + getAscension(level) * (2 / 3)));
   };
 };
 export const getWeaponSubOptionValue = (atk1: EveryWeaponAtk1, sub: EveryWeaponSubOption) => {

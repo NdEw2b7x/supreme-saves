@@ -119,7 +119,7 @@ export default function WeaponsList() {
                   <div className={styles.statistics}>
                     <div className={styles.atk}>
                       <span>공격력</span>
-                      <span>{refine(getWeaponAtk(atk1)(level))}</span>
+                      <span>{getWeaponAtk(atk1)(level)}</span>
                     </div>
                     <div className={styles.subOption}>
                       <span>{subOption}</span>
