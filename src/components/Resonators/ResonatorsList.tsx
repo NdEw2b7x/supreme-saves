@@ -125,7 +125,7 @@ export default function ResonatorsList() {
                     <span>HP</span>
                     <span>
                       {refine(
-                        getHP(resonatorData.hp1, resonatorLevel) *
+                        getHP(resonatorData.hp1)(resonatorLevel) *
                           (1 + (byWeapon['HP'] + minorForte[1]['HP']) / 100)
                       )}
                     </span>
@@ -134,7 +134,7 @@ export default function ResonatorsList() {
                     <span>공격력</span>
                     <span>
                       {refine(
-                        (getATK(resonatorData.atk1, resonatorLevel) + weaponAtk) *
+                        (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
                           (1 + (byWeapon['공격력'] + minorForte[1]['공격력']) / 100)
                       )}
                     </span>
@@ -143,7 +143,7 @@ export default function ResonatorsList() {
                     <span>방어력</span>
                     <span>
                       {refine(
-                        getDEF(resonatorData.def1, resonatorLevel) *
+                        getDEF(resonatorData.def1)(resonatorLevel) *
                           (1 + (byWeapon['방어력'] + minorForte[1]['방어력']) / 100)
                       )}
                     </span>

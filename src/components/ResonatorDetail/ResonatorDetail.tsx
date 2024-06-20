@@ -153,39 +153,53 @@ export default function ResonatorDetail() {
             <span>HP</span>
             <span>
               {refine(
-                getHP(resonatorData.hp1, resonatorLevel) *
+                getHP(resonatorData.hp1)(resonatorLevel) *
                   (1 + (byWeapon['HP'] + byMinorForte['HP']) / 100)
               )}
-              &nbsp;({Math.floor(getHP(resonatorData.hp1, resonatorLevel))}+
-              {Math.floor(
-                getHP(resonatorData.hp1, resonatorLevel) *
-                  ((byWeapon['HP'] + byMinorForte['HP']) / 100)
-              )}
-              )
+              <span style={{ fontSize: 'smaller' }}>
+                &nbsp;({Math.floor(getHP(resonatorData.hp1)(resonatorLevel))}&nbsp;+&nbsp;
+                {Math.floor(
+                  getHP(resonatorData.hp1)(resonatorLevel) *
+                    ((byWeapon['HP'] + byMinorForte['HP']) / 100)
+                )}
+                )
+              </span>
             </span>
           </div>
           <div>
             <span>공격력</span>
             <span>
               {refine(
-                (getATK(resonatorData.atk1, resonatorLevel) + weaponAtk) *
+                (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
                   (1 + (byWeapon['공격력'] + byMinorForte['공격력']) / 100)
               )}
-              &nbsp;({Math.floor(getATK(resonatorData.atk1, resonatorLevel) + weaponAtk)}+
-              {Math.floor(
-                (getATK(resonatorData.atk1, resonatorLevel) + weaponAtk) *
-                  ((byWeapon['공격력'] + byMinorForte['공격력']) / 100)
-              )}
-              )
+              <span style={{ fontSize: 'smaller' }}>
+                &nbsp;({Math.floor(getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk)}
+                &nbsp;+&nbsp;
+                {Math.floor(
+                  (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
+                    ((byWeapon['공격력'] + byMinorForte['공격력']) / 100)
+                )}
+                )
+              </span>
             </span>
           </div>
           <div>
             <span>방어력</span>
             <span>
               {refine(
-                getDEF(resonatorData.def1, resonatorLevel) *
+                getDEF(resonatorData.def1)(resonatorLevel) *
                   (1 + (byWeapon['방어력'] + byMinorForte['방어력']) / 100)
               )}
+              <span style={{ fontSize: 'smaller' }}>
+                &nbsp;({Math.floor(getDEF(resonatorData.def1)(resonatorLevel))}
+                &nbsp;+&nbsp;
+                {Math.floor(
+                  getDEF(resonatorData.def1)(resonatorLevel) *
+                    ((byWeapon['방어력'] + byMinorForte['방어력']) / 100)
+                )}
+                )
+              </span>
             </span>
           </div>
           <div>
