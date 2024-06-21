@@ -2,10 +2,10 @@ import { Harmony } from '../../types';
 import { EchoDangerous } from '../../types/everyEcho';
 import { EchoData } from '.';
 
-const code = 'S09';
-const name = '분열 암괴';
-const dangerous: EchoDangerous = '경파';
-const harmony: Harmony[] = ['떠오르는 구름', '울려퍼지는 뇌음', '찬란한 광휘'];
+const code = 'X53';
+const name = '경전차 로봇';
+const dangerous: EchoDangerous = '거랑';
+const harmony: Harmony[] = ['야밤의 서리', '빛나는 별'];
 
 const result = new EchoData({ code, name, dangerous, harmony });
 

@@ -30,7 +30,7 @@ export default function EchoesAdd() {
     return undefined;
   };
   return (
-    <form className={styles.container}>
+    <form className={styles.container} style={{ maxWidth: '20rem', margin: 'auto' }}>
       <div className={styles.dropdown}>
         <div className={styles.harmony}>
           <span>화음</span>

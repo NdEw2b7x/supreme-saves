@@ -8,6 +8,7 @@ import G04 from './G04';
 import H01 from './H01';
 import H02 from './H02';
 import H05 from './H05';
+import H06 from './H06';
 import H08 from './H08';
 import H09 from './H09';
 import H11 from './H11';
@@ -21,6 +22,8 @@ import H15 from './H15';
 import H19 from './H19';
 import H41 from './H41';
 import H42 from './H42';
+import H46 from './H46';
+import H48 from './H48';
 import H49 from './H49';
 import H51 from './H51';
 import H71 from './H71';
@@ -40,7 +43,20 @@ import S05 from './S05';
 import S06 from './S06';
 import S08 from './S08';
 import S09 from './S09';
+import S55 from './S55';
+import W25 from './W25';
+import W26 from './W26';
+import W27 from './W27';
+import W30 from './W30';
+import W31 from './W31';
+import W60 from './W60';
+import W61 from './W61';
+import W62 from './W62';
+import W63 from './W63';
+import W75 from './W75';
+import W76 from './W76';
 import W77 from './W77';
+import X53 from './X53';
 import X54 from './X54';
 
 export { EchoData };
@@ -56,6 +72,7 @@ export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {
   H01,
   H02,
   H05,
+  H06,
   H08,
   H09,
   // H10,
@@ -70,6 +87,8 @@ export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {
   H19,
   H41,
   H42,
+  H46,
+  H48,
   H49,
   H51,
   H71,
@@ -89,7 +108,20 @@ export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {
   S06,
   S08,
   S09,
+  S55,
+  W25,
+  W26,
+  W27,
+  W30,
+  W31,
+  W60,
+  W61,
+  W62,
+  W63,
+  W75,
+  W76,
   W77,
+  X53,
   X54,
 } as const;
 

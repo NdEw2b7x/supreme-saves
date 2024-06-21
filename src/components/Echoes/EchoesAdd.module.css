@@ -61,7 +61,7 @@
 .echoCard {
   background-color: var(--theme-color-alpha-400);
   border-radius: 0.25rem;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem;
   gap: 0.5rem;
 
   display: flex;
