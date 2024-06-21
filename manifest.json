@@ -43,10 +43,15 @@
     {
       "src": "screenshots/desktop.png",
       "form_factor": "wide",
-      "sizes": "3840x2160"
+      "sizes": "1920x1080"
     },
     {
       "src": "screenshots/mobile.png",
+      "form_factor": "narrow",
+      "sizes": "1179x2556"
+    },
+    {
+      "src": "screenshots/mobile.jpeg",
       "form_factor": "narrow",
       "sizes": "1179x2556"
     }
