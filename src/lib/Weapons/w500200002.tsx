@@ -2,7 +2,7 @@ import { EveryWeaponSubOption, WeaponData } from '.';
 
 const code = '500200002';
 const atk1 = 47;
-const subOption: EveryWeaponSubOption = '공격력';
+const subOption: EveryWeaponSubOption = '공격력%';
 
 // const skill = {
 //   name: '불사조의 깃털',

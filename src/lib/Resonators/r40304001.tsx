@@ -1,17 +1,17 @@
 import { EveryElement, EveryResonatorName, EveryWeaponCategory } from '../../types';
 import ResonatorData from './ResonatorData';
 
-const name: EveryResonatorName = '음림';
+const name: EveryResonatorName = '연무';
 const element: EveryElement = '전도';
-const weaponCategory: EveryWeaponCategory = '증폭기';
-const [hp1, atk1, def1] = [880, 32, 105];
+const weaponCategory: EveryWeaponCategory = '권갑';
+const [hp1, atk1, def1] = [682, 18, 134];
 
 const result = new ResonatorData({
   name,
   element,
   weaponCategory,
-  basic: [hp1, atk1, def1],
-  minorForte: ['공격력', '크리티컬 확률'],
+  base: [hp1, atk1, def1],
+  minorFortes: ['방어력%', '전도 피해 보너스'],
 });
 
 export default result;

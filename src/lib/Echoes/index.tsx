@@ -1,5 +1,4 @@
-import { EchoCost, Harmony, everyHarmony } from '../../types';
-import { getCost } from '../../types/everyEcho';
+import { EchoCode, EchoCost, Harmony, everyHarmony } from '../../types';
 import EchoData from './EchoData';
 import G01 from './G01';
 import G02 from './G02';
@@ -60,9 +59,6 @@ import X53 from './X53';
 import X54 from './X54';
 
 export { EchoData };
-
-type n = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type EchoCode = `${'G' | 'H' | 'N' | 'R' | 'S' | 'W' | 'X'}${n}${n}`;
 
 export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {
   G01,
@@ -144,7 +140,7 @@ everyHarmony.forEach((harmony) => {
   Object.values(everyEchoData).forEach((data) => {
     data.harmony.forEach((i) => {
       if (i === harmony) {
-        const cost = getCost(data.dangerous);
+        const cost = data.cost;
         everyEchoInvertHarmony[harmony][cost] = {
           ...everyEchoInvertHarmony[harmony][cost],
           [data.code]: data,

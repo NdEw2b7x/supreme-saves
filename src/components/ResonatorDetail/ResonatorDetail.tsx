@@ -2,7 +2,12 @@ import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './ResonatorDetail.module.css';
-import { EveryResonatorName, EveryStatistics, everySkillLevel, everySkillType } from '../../types';
+import {
+  EchoPrimaryMainStats,
+  EveryResonatorName,
+  everySkillLevel,
+  everySkillType,
+} from '../../types';
 import {
   MyResonator,
   MyResonators,
@@ -17,39 +22,39 @@ import { genByWeapon } from '../Resonators/ResonatorsList';
 import ResonatorDetailWeapon from './ResonatorDetailWeapon';
 
 export const genByMinorForte = (myResonators: MyResonators) => {
-  const byMinorForte: Record<Exclude<EveryStatistics, '공명 효율'>, number> = {
-    HP: 0,
-    공격력: 0,
-    방어력: 0,
-    '크리티컬 확률': 0,
-    '크리티컬 피해': 0,
+  const byMinorFortes: Record<Exclude<EchoPrimaryMainStats, '공명 효율'>, number> = {
+    'HP%': 0,
+    '공격력%': 0,
+    '방어력%': 0,
     '응결 피해 보너스': 0,
     '용융 피해 보너스': 0,
     '전도 피해 보너스': 0,
     '기류 피해 보너스': 0,
     '회절 피해 보너스': 0,
     '인멸 피해 보너스': 0,
+    '크리티컬 확률': 0,
+    '크리티컬 피해': 0,
     '치료 효과 보너스': 0,
   };
   return (name: EveryResonatorName) => {
     const info = myResonators[name];
-    const minorForte = everyResonatorData[name].minorForte;
+    const minorFortes = everyResonatorData[name].minorFortes;
     if (info) {
       const skill = info.스킬;
-      minorForte.forEach((i) => {
+      minorFortes.forEach((i) => {
         let trueCheck3 = [skill['일반 공격'][1], skill['변주 스킬'][1]].filter((i) => i).length;
         let trueCheck7 = [skill['일반 공격'][2], skill['변주 스킬'][2]].filter((i) => i).length;
         let max = 12;
         switch (i) {
-          case 'HP':
-          case '공격력':
-          case '방어력':
+          case 'HP%':
+          case '공격력%':
+          case '방어력%':
             trueCheck3 = [skill['공명 스킬'][1], skill['공명 해방'][1]].filter((i) => i).length;
             trueCheck7 = [skill['공명 스킬'][2], skill['공명 해방'][2]].filter((i) => i).length;
             break;
         }
         switch (i) {
-          case '방어력':
+          case '방어력%':
             max = 15.2;
             break;
           case '크리티컬 확률':
@@ -59,10 +64,10 @@ export const genByMinorForte = (myResonators: MyResonators) => {
             max = 16;
             break;
         }
-        byMinorForte[i] = (max * (trueCheck3 * 3 + trueCheck7 * 7)) / 20;
+        byMinorFortes[i] = (max * (trueCheck3 * 3 + trueCheck7 * 7)) / 20;
       });
     }
-    return [minorForte, byMinorForte] as const;
+    return [minorFortes, byMinorFortes] as const;
   };
 };
 
@@ -154,13 +159,13 @@ export default function ResonatorDetail() {
             <span>
               {refine(
                 getHP(resonatorData.hp1)(resonatorLevel) *
-                  (1 + (byWeapon['HP'] + byMinorForte['HP']) / 100)
+                  (1 + (byWeapon['HP%'] + byMinorForte['HP%']) / 100)
               )}
               <span style={{ fontSize: 'smaller' }}>
                 &nbsp;({Math.floor(getHP(resonatorData.hp1)(resonatorLevel))}&nbsp;+&nbsp;
                 {Math.floor(
                   getHP(resonatorData.hp1)(resonatorLevel) *
-                    ((byWeapon['HP'] + byMinorForte['HP']) / 100)
+                    ((byWeapon['HP%'] + byMinorForte['HP%']) / 100)
                 )}
                 )
               </span>
@@ -171,14 +176,14 @@ export default function ResonatorDetail() {
             <span>
               {refine(
                 (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
-                  (1 + (byWeapon['공격력'] + byMinorForte['공격력']) / 100)
+                  (1 + (byWeapon['공격력%'] + byMinorForte['공격력%']) / 100)
               )}
               <span style={{ fontSize: 'smaller' }}>
                 &nbsp;({Math.floor(getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk)}
                 &nbsp;+&nbsp;
                 {Math.floor(
                   (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
-                    ((byWeapon['공격력'] + byMinorForte['공격력']) / 100)
+                    ((byWeapon['공격력%'] + byMinorForte['공격력%']) / 100)
                 )}
                 )
               </span>
@@ -189,14 +194,14 @@ export default function ResonatorDetail() {
             <span>
               {refine(
                 getDEF(resonatorData.def1)(resonatorLevel) *
-                  (1 + (byWeapon['방어력'] + byMinorForte['방어력']) / 100)
+                  (1 + (byWeapon['방어력%'] + byMinorForte['방어력%']) / 100)
               )}
               <span style={{ fontSize: 'smaller' }}>
                 &nbsp;({Math.floor(getDEF(resonatorData.def1)(resonatorLevel))}
                 &nbsp;+&nbsp;
                 {Math.floor(
                   getDEF(resonatorData.def1)(resonatorLevel) *
-                    ((byWeapon['방어력'] + byMinorForte['방어력']) / 100)
+                    ((byWeapon['방어력%'] + byMinorForte['방어력%']) / 100)
                 )}
                 )
               </span>

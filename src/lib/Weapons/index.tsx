@@ -45,9 +45,9 @@ export { getWeaponSubOptionValue1 };
 export { WeaponData };
 
 export type EveryWeaponSubOption =
-  | 'HP'
-  | '공격력'
-  | '방어력'
+  | 'HP%'
+  | '공격력%'
+  | '방어력%'
   | '공명 효율'
   | '크리티컬 확률'
   | '크리티컬 피해';

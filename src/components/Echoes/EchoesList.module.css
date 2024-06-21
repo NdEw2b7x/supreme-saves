@@ -1,0 +1,82 @@
+.container {
+  display: grid;
+  gap: 0.5rem;
+  @media (min-width: 40rem) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 60rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 80rem) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 100rem) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.card,
+.body,
+.main,
+.sub {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.card {
+  background-color: var(--theme-color-alpha-200);
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+
+  .header {
+    display: flex;
+    gap: 0.25rem;
+    .thumbnail {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 0.25rem;
+      overflow: hidden;
+    }
+    .info {
+      padding: 0.25rem;
+      flex: 1;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .name {
+      font-size: 1.5rem;
+      font-weight: bolder;
+    }
+    .cost {
+      background-color: black;
+      padding: 0.5rem 1rem;
+      border: 0.1rem solid var(--theme-color-alpha-400);
+      border-radius: 0.25rem;
+    }
+    .level {
+      display: flex;
+      border-radius: 0.25rem;
+      overflow: hidden;
+      span {
+        align-content: center;
+        padding: 0.5rem 1rem;
+        background-color: white;
+        color: black;
+      }
+      :first-child,
+      :last-child {
+        background-color: var(--theme-color-alpha-400);
+        color: white;
+      }
+    }
+  }
+}
+.main div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--theme-color-alpha-200);
+  border-radius: 2rem;
+}

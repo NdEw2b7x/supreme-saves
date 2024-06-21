@@ -1,6 +1,5 @@
-import { EchoCode } from '.';
 import { Harmony } from '../../types';
-import { EchoDangerous } from '../../types/everyEcho';
+import { EchoCode, EchoCost, EchoDangerous } from '../../types/everyEcho';
 
 export default class EchoData {
   constructor({
@@ -9,8 +8,8 @@ export default class EchoData {
     dangerous,
     harmony,
   }: {
-    name: string;
     code: EchoCode;
+    name: string;
     dangerous: EchoDangerous;
     harmony: Array<Harmony>;
   }) {
@@ -23,4 +22,15 @@ export default class EchoData {
   name;
   dangerous;
   harmony;
+
+  get cost(): EchoCost {
+    switch (this.dangerous) {
+      case '경파':
+        return 1;
+      case '거랑':
+        return 3;
+      default:
+        return 4;
+    }
+  }
 }

@@ -2,7 +2,7 @@ import { EveryWeaponSubOption, WeaponData } from '.';
 
 const code = '400400002';
 const atk1 = 33;
-const subOption: EveryWeaponSubOption = '공격력';
+const subOption: EveryWeaponSubOption = '공격력%';
 // const skill: WeaponSkill = {
 //   name: '전사의 충정',
 //   afterSkill: [

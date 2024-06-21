@@ -1,16 +1,9 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import {
-  EveryElement,
-  EveryResonatorName,
-  EveryStatistics,
-  EveryWeaponAtk1,
-  EveryWeaponCode,
-  weaponPivot,
-} from '../../types';
+import { EveryResonatorName, EveryWeaponAtk1, EveryWeaponCode, weaponPivot } from '../../types';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { everyResonatorData } from '../../lib/Resonators';
-import { WeaponData, everyWeaponData } from '../../lib/Weapons';
+import { EveryWeaponSubOption, WeaponData, everyWeaponData } from '../../lib/Weapons';
 import {
   getATK,
   getDEF,
@@ -26,22 +19,19 @@ import { genByMinorForte } from '../ResonatorDetail/ResonatorDetail';
 export const genByWeapon = (myWeapons: MyWeapons) => {
   return (id?: WeaponId) => {
     let weaponAtk = 0;
-    const byWeapon: Record<
-      Exclude<EveryStatistics, `${EveryElement} 피해 보너스` | '치료 효과 보너스'>,
-      number
-    > = {
-      HP: 0,
-      공격력: 0,
-      방어력: 0,
+    const byWeapon: Record<EveryWeaponSubOption, number> = {
+      'HP%': 0,
+      '공격력%': 0,
+      '방어력%': 0,
       '공명 효율': 0,
       '크리티컬 확률': 0,
       '크리티컬 피해': 0,
     };
     if (id) {
-      const target = myWeapons[id];
-      if (target) {
-        const data = everyWeaponData[target.코드] as WeaponData;
-        const level = target.레벨;
+      const myWeapon = myWeapons[id];
+      if (myWeapon) {
+        const data = everyWeaponData[myWeapon['코드']] as WeaponData;
+        const level = myWeapon['레벨'];
         const atk1: EveryWeaponAtk1 = data.atk1;
         const sub = data.subOption;
         weaponAtk = getWeaponAtk(atk1)(level);
@@ -91,7 +81,7 @@ export default function ResonatorsList() {
           const myWeapon = getMyWeapon(resonatorName);
           let myWeaponCode = myWeapon?.코드;
           const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(weaponMap[resonatorName]);
-          const minorForte = genByMinorForte(myResonators)(resonatorName);
+          const minorFortes = genByMinorForte(myResonators)(resonatorName);
           return (
             <div
               style={{ order: Number(100 - resonatorLevel) }}
@@ -126,7 +116,7 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         getHP(resonatorData.hp1)(resonatorLevel) *
-                          (1 + (byWeapon['HP'] + minorForte[1]['HP']) / 100)
+                          (1 + (byWeapon?.['HP%'] + minorFortes[1]['HP%']) / 100)
                       )}
                     </span>
                   </div>
@@ -135,7 +125,7 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
-                          (1 + (byWeapon['공격력'] + minorForte[1]['공격력']) / 100)
+                          (1 + (byWeapon['공격력%'] + minorFortes[1]['공격력%']) / 100)
                       )}
                     </span>
                   </div>
@@ -144,7 +134,7 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         getDEF(resonatorData.def1)(resonatorLevel) *
-                          (1 + (byWeapon['방어력'] + minorForte[1]['방어력']) / 100)
+                          (1 + (byWeapon['방어력%'] + minorFortes[1]['방어력%']) / 100)
                       )}
                     </span>
                   </div>
@@ -154,18 +144,19 @@ export default function ResonatorsList() {
                   </div>
                   <div>
                     <span>{element} 피해 보너스</span>
-                    <span>{minorForte[1][`${element} 피해 보너스`]}%</span>
+                    <span>{minorFortes[1][`${element} 피해 보너스`]}%</span>
                   </div>
                   <div>
                     <span>크리티컬 확률</span>
                     <span>
-                      {(5 + byWeapon['크리티컬 확률'] + minorForte[1]['크리티컬 확률']).toFixed(2)}%
+                      {(5 + byWeapon['크리티컬 확률'] + minorFortes[1]['크리티컬 확률']).toFixed(2)}
+                      %
                     </span>
                   </div>
                   <div>
                     <span>크리티컬 피해</span>
                     <span>
-                      {(150 + byWeapon['크리티컬 피해'] + minorForte[1]['크리티컬 피해']).toFixed(
+                      {(150 + byWeapon['크리티컬 피해'] + minorFortes[1]['크리티컬 피해']).toFixed(
                         2
                       )}
                       %

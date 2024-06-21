@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EveryElement, EveryRarity, EveryResonatorName, EveryWeaponCategory } from '../types';
+import {
+  EchoCost,
+  EveryElement,
+  EveryRarity,
+  EveryResonatorName,
+  EveryWeaponCategory,
+} from '../types';
 
 // localStorage.clear();
 // sessionStorage.clear();
@@ -15,6 +21,7 @@ interface InitialFilter {
   element: Record<EveryElement, boolean>;
   rarity: Record<EveryRarity, boolean>;
   weaponCategory: Record<EveryWeaponCategory, boolean>;
+  cost: Record<EchoCost, boolean>;
 }
 interface InitialState {
   page: EveryPage;
@@ -23,10 +30,11 @@ interface InitialState {
   filter: InitialFilter;
 }
 const initialFilter: InitialFilter = {
+  element: { 응결: true, 용융: true, 전도: true, 기류: true, 회절: true, 인멸: true },
   rarity: { 5: true, 4: true, 3: true },
   weaponCategory: { 대검: true, 직검: true, 권총: true, 권갑: true, 증폭기: true },
-  element: { 응결: true, 용융: true, 전도: true, 기류: true, 회절: true, 인멸: true },
-};
+  cost: { 4: true, 3: true, 1: true },
+} as const;
 const initialState: InitialState = { page: '공명자', subPage: '', filter: initialFilter };
 
 const modeFromStorage = sessionStorage.getItem('page');
@@ -54,8 +62,8 @@ const reducers = {
     state: InitialState,
     action: {
       payload: {
-        filter: 'rarity' | 'element' | 'weaponCategory';
-        item: EveryRarity | EveryWeaponCategory | EveryElement;
+        filter: keyof InitialFilter;
+        item: EveryRarity | EveryWeaponCategory | EveryElement | EchoCost;
       };
     }
   ) => {
@@ -64,24 +72,47 @@ const reducers = {
       case 5:
       case 4:
       case 3:
-        const filterR = state.filter.rarity;
-        const nowR = filterR[item];
-        const countTrueR = Object.values(filterR).filter((i) => i === true).length;
-        if (countTrueR === 3) {
-          Object.entries(filterR).forEach(([rarity]) => {
-            filterR[Number(rarity) as EveryRarity] = false;
-          });
-          filterR[item] = true;
-        } else if (countTrueR === 1) {
-          if (filterR[item]) {
+      case 1:
+        if (action.payload.filter === 'rarity' && item !== 1) {
+          const filterR = state.filter.rarity;
+          const nowR = filterR[item];
+          const countTrueR = Object.values(filterR).filter((i) => i === true).length;
+          if (countTrueR === 3) {
             Object.entries(filterR).forEach(([rarity]) => {
-              filterR[Number(rarity) as EveryRarity] = true;
+              filterR[Number(rarity) as EveryRarity] = false;
             });
+            filterR[item] = true;
+          } else if (countTrueR === 1) {
+            if (filterR[item]) {
+              Object.entries(filterR).forEach(([rarity]) => {
+                filterR[Number(rarity) as EveryRarity] = true;
+              });
+            } else {
+              filterR[item] = !nowR;
+            }
           } else {
             filterR[item] = !nowR;
           }
-        } else {
-          filterR[item] = !nowR;
+        } else if (item !== 5) {
+          const filterC = state.filter.cost;
+          const nowC = filterC[item];
+          const countTrueC = Object.values(filterC).filter((i) => i === true).length;
+          if (countTrueC === 3) {
+            Object.entries(filterC).forEach(([cost]) => {
+              filterC[Number(cost) as EchoCost] = false;
+            });
+            filterC[item] = true;
+          } else if (countTrueC === 1) {
+            if (filterC[item]) {
+              Object.entries(filterC).forEach(([cost]) => {
+                filterC[Number(cost) as EchoCost] = true;
+              });
+            } else {
+              filterC[item] = !nowC;
+            }
+          } else {
+            filterC[item] = !nowC;
+          }
         }
         break;
       case '대검':

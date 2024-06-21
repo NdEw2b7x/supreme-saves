@@ -1,22 +1,22 @@
 import { EveryResonatorName } from '../../types';
 import ResonatorData from './ResonatorData';
-import 감심 from './감심';
-import 기염 from './기염';
-import 능양 from './능양';
-import 단근 from './단근';
-import 도기 from './도기';
-import 모르테피 from './모르테피';
-import 방랑자 from './방랑자';
-import 벨리나 from './벨리나';
-import 산화 from './산화';
-import 설지 from './설지';
-import 알토 from './알토';
-import 앙코 from './앙코';
-import 양양 from './양양';
-import 연무 from './연무';
-import 음림 from './음림';
-import 치샤 from './치샤';
-import 카카루 from './카카루';
+import 감심 from './r50404001';
+import 기염 from './r50401001';
+import 능양 from './r50104001';
+import 단근 from './r40602001';
+import 도기 from './r40601000';
+import 모르테피 from './r40203002';
+import 방랑자 from './r50602001';
+import 벨리나 from './r50505001';
+import 산화 from './r40102001';
+import 설지 from './r40105001';
+import 알토 from './r40403001';
+import 앙코 from './r50205001';
+import 양양 from './r40402001';
+import 연무 from './r40304001';
+import 음림 from './r50305001';
+import 치샤 from './r40203001';
+import 카카루 from './r50301001';
 
 export const everyResonatorData: Record<EveryResonatorName, ResonatorData> = {
   감심,
