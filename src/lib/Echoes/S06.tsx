@@ -1,6 +1,6 @@
 import { Harmony } from '../../types';
 import { EchoDangerous } from '../../types/everyEcho';
-import EchoData from './EchoData';
+import { EchoData } from '.';
 
 const code = 'S06';
 const name = '가시장미버섯(성체)';

@@ -1,3 +1,4 @@
+import { EchoCode } from '.';
 import { Harmony } from '../../types';
 import { EchoDangerous } from '../../types/everyEcho';
 
@@ -9,7 +10,7 @@ export default class EchoData {
     harmony,
   }: {
     name: string;
-    code: string;
+    code: EchoCode;
     dangerous: EchoDangerous;
     harmony: Array<Harmony>;
   }) {

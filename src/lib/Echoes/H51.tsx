@@ -1,6 +1,6 @@
 import { Harmony } from '../../types';
 import { EchoDangerous } from '../../types/everyEcho';
-import EchoData from './EchoData';
+import { EchoData } from '.';
 
 const code = 'H51';
 const name = '까부는 원숭이';

@@ -179,8 +179,8 @@ export default function ResonatorsList() {
                     <div className={styles.echoImgBox}>
                       <img
                         className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/무망자.png'}
-                        alt={'무망자.png'}
+                        src={process.env.PUBLIC_URL + '/img/Echoes/H80.png'}
+                        alt={'크라운리스'}
                       />
                     </div>
                     <div className={styles.echoOpt}>
@@ -193,7 +193,7 @@ export default function ResonatorsList() {
                     <div className={styles.echoImgBox}>
                       <img
                         className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/무망자.png'}
+                        src={process.env.PUBLIC_URL + '/img/Echoes/H41.png'}
                         alt={'무망자.png'}
                       />
                     </div>
@@ -207,7 +207,7 @@ export default function ResonatorsList() {
                     <div className={styles.echoImgBox}>
                       <img
                         className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/후슈슈.png'}
+                        src={process.env.PUBLIC_URL + '/img/Echoes/H42.png'}
                         alt={'후슈슈.png'}
                       />
                     </div>
@@ -221,7 +221,7 @@ export default function ResonatorsList() {
                     <div className={styles.echoImgBox}>
                       <img
                         className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/아즈즈.png'}
+                        src={process.env.PUBLIC_URL + '/img/Echoes/G01.png'}
                         alt={'아즈즈.png'}
                       />
                     </div>
@@ -235,7 +235,7 @@ export default function ResonatorsList() {
                     <div className={styles.echoImgBox}>
                       <img
                         className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/칵찰찰.png'}
+                        src={process.env.PUBLIC_URL + '/img/Echoes/G02.png'}
                         alt={'칵찰찰.png'}
                       />
                     </div>
