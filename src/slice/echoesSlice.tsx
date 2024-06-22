@@ -72,13 +72,27 @@ const reducers = {
       if (level >= 0 && level <= rarity) {
         getEcho.레벨 = action.payload.level;
       }
+      if (level < 25) {
+        getEcho['서브 스텟'][Math.ceil((level + 1) / 5) as 1 | 2 | 3 | 4 | 5] = undefined;
+      }
     }
     save(state);
   },
-  changeSyntonize: (
+  changeSubStat: (
     state: InitialState,
-    action: { payload: { id: EchoId; rank: 1 | 2 | 3 | 4 | 5 } }
+    action: { payload: { id: EchoId; slot: 1 | 2 | 3 | 4 | 5; stat: EchoSubStats; value: number } }
   ) => {
+    const id = action.payload.id;
+    state['에코'] = {
+      ...state['에코'],
+      [id]: {
+        ...state['에코'][id],
+        '서브 스텟': {
+          ...state['에코'][id]?.['서브 스텟'],
+          [action.payload.slot]: { stat: action.payload.stat, value: action.payload.value },
+        },
+      },
+    };
     save(state);
   },
   changeEquip: (
@@ -98,5 +112,5 @@ const reducers = {
 };
 
 const echoesSlice = createSlice({ initialState, reducers, name });
-export const { addEcho, changeEchoLevel, changeSyntonize, changeEquip } = echoesSlice.actions;
+export const { addEcho, changeEchoLevel, changeSubStat, changeEquip } = echoesSlice.actions;
 export default echoesSlice.reducer;

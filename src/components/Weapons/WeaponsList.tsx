@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { WeaponData, everyWeaponData } from '../../lib/Weapons';
-import { EveryResonatorName, getWeaponName } from '../../types';
-import styles from './WeaponsList.module.css';
-import { everyResonatorData } from '../../lib/Resonators';
 import { changeEquip, changeSyntonize, changeWeaponLevel } from '../../slice/weaponsSlice';
+import { EveryResonatorName, getStatsName, getWeaponName } from '../../types';
 import { getWeaponAtk, getWeaponSubOptionValue, refine } from '../../lib/formula';
+import { everyResonatorData } from '../../lib/Resonators';
+import { WeaponData, everyWeaponData } from '../../lib/Weapons';
+import styles from './WeaponsList.module.css';
 
 export default function WeaponsList() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);
@@ -122,7 +122,7 @@ export default function WeaponsList() {
                       <span>{getWeaponAtk(atk1)(level)}</span>
                     </div>
                     <div className={styles.subOption}>
-                      <span>{subOption}</span>
+                      <span>{getStatsName(subOption)}</span>
                       <span>{refine(getWeaponSubOptionValue(atk1, subOption)(level))}%</span>
                     </div>
                   </div>

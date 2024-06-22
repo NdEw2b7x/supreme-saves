@@ -1,21 +1,24 @@
 import { useState } from 'react';
 import { dispatch } from '../../store';
 import { changeSubPage } from '../../slice/grobalSlice';
+import { addEcho } from '../../slice/echoesSlice';
 import {
   EchoCode,
   EchoCost,
   EchoRarity,
   Stats,
   Harmony,
-  everyEchoMainStatistics1cost,
-  everyEchoMainStatistics3cost,
-  everyEchoMainStatistics4cost,
   everyHarmony,
   EchoPrimaryMainStats,
+  getStatsName,
 } from '../../types';
+import {
+  everyCost1EchoPrimaryMainStats,
+  everyCost3EchoPrimaryMainStats,
+  everyCost4EchoPrimaryMainStats,
+} from '../../types/everyEcho';
 import { everyEchoData, everyEchoInvertHarmony } from '../../lib/Echoes';
 import styles from './EchoesAdd.module.css';
-import { addEcho } from '../../slice/echoesSlice';
 
 export default function EchoesAdd() {
   const [rarity, setRarity] = useState<EchoRarity>(5);
@@ -50,11 +53,11 @@ export default function EchoesAdd() {
   const mainStats = (x: EchoCost) => {
     switch (x) {
       case 4:
-        return everyEchoMainStatistics4cost;
+        return everyCost4EchoPrimaryMainStats;
       case 3:
-        return everyEchoMainStatistics3cost;
+        return everyCost3EchoPrimaryMainStats;
       default:
-        return everyEchoMainStatistics1cost;
+        return everyCost1EchoPrimaryMainStats;
     }
   };
   const submitBtn = (code?: EchoCode, main?: Stats) => {
@@ -200,7 +203,7 @@ export default function EchoesAdd() {
               {mainStats(cost).map((i) => {
                 return (
                   <option value={i} key={i}>
-                    {i}
+                    {getStatsName(i)}
                   </option>
                 );
               })}
@@ -209,9 +212,6 @@ export default function EchoesAdd() {
         </div>
       </section>
       {submitBtn(code, main)}
-      {/* <div>
-        <div>echo_{Math.floor((9 * Math.random() + 1) * 100000000)}</div>
-      </div> */}
     </form>
   );
 }

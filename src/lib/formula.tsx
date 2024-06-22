@@ -69,7 +69,7 @@ export const refine: (x: number) => string = (x) => {
 };
 
 export const getPercent = (x: number) => {
-  return (y: 2 | 3) => {
+  return (y: 1 | 2 | 3) => {
     return ((x * 100000) / 1000).toFixed(y) + '%';
   };
 };

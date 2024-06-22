@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { State } from '../../store';
-import { weaponPivot } from '../../types';
+import { getStatsName, weaponPivot } from '../../types';
 import { MyWeapon, WeaponId } from '../../slice/weaponsSlice';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 import { genByWeapon } from '../Resonators/ResonatorsList';
@@ -34,7 +34,7 @@ export default function ResonatorDetailWeapon({ id }: { id?: WeaponId }) {
               <span>{weaponAtk}</span>
             </div>
             <div>
-              <span>{sub}</span>
+              <span>{getStatsName(sub)}</span>
               <span>{byWeapon[sub].toFixed(3)}%</span>
             </div>
           </div>

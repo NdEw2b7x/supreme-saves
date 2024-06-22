@@ -18,20 +18,25 @@ import { EveryWeaponCode, getWeaponName, weaponPivot } from './everyWeaponCode';
 import { EveryWeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
 import { EveryWeaponAtk1 } from './everyWeapon';
 import {
+  EchoMainStats,
   EchoPrimaryMainStats,
   EchoSecondaryMainStats,
   EchoSubStats,
   Stats,
   WeaponSubStats,
+  getElementMap,
+  getStatsName,
 } from './everyStatistics';
 import {
   EchoCode,
   EchoCost,
   EchoRarity,
-  everyEchoMainStatistics1cost,
-  everyEchoMainStatistics3cost,
-  everyEchoMainStats4cost,
+  everyCost4EchoPrimaryMainStats,
+  everyCost3EchoPrimaryMainStats,
+  everyCost1EchoPrimaryMainStats,
 } from './everyEcho';
+
+export type Name = string;
 
 export const everyRasonanceChain = [0, 1, 2, 3, 4, 5, 6] as const;
 export type EveryRasonanceChain = (typeof everyRasonanceChain)[number];
@@ -47,9 +52,11 @@ export {
   everySkillType,
   everyWeaponCategory,
   weaponPivot,
-  everyEchoMainStats4cost as everyEchoMainStatistics4cost,
-  everyEchoMainStatistics3cost,
-  everyEchoMainStatistics1cost,
+  everyCost4EchoPrimaryMainStats,
+  everyCost3EchoPrimaryMainStats,
+  everyCost1EchoPrimaryMainStats,
+  getStatsName,
+  getElementMap,
   getWeaponName,
 };
 export type {
@@ -57,6 +64,7 @@ export type {
   WeaponSubStats,
   EchoPrimaryMainStats,
   EchoSecondaryMainStats,
+  EchoMainStats,
   EchoSubStats,
   EveryChain,
   EveryElement,

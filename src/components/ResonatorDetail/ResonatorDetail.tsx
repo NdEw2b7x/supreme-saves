@@ -2,7 +2,13 @@ import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './ResonatorDetail.module.css';
-import { EveryResonatorName, everySkillLevel, everySkillType } from '../../types';
+import {
+  EveryResonatorName,
+  everySkillLevel,
+  everySkillType,
+  getElementMap,
+  getStatsName,
+} from '../../types';
 import {
   MyResonator,
   MyResonators,
@@ -15,7 +21,6 @@ import {
 import { getATK, getDEF, getHP, refine } from '../../lib/formula';
 import { genByWeapon } from '../Resonators/ResonatorsList';
 import ResonatorDetailWeapon from './ResonatorDetailWeapon';
-import { getElementMap } from '../../types/everyStatistics';
 import { MinorForte } from '../../lib/Resonators/ResonatorData';
 
 export const genByMinorForte = (myResonators: MyResonators) => {
@@ -307,18 +312,17 @@ export default function ResonatorDetail() {
           </div>
           <div className={styles.minorForte}>
             <div>
-              <span>{minorForte[0]}</span>
+              <span>{getStatsName(minorForte[0])}</span>
               <span>+{byMinorForte[minorForte[0]]}%</span>
             </div>
             <div>
-              <span>{minorForte[1]}</span>
+              <span>{getStatsName(minorForte[1])}</span>
               <span>+{byMinorForte[minorForte[1]]}%</span>
             </div>
           </div>
         </section>
         <section className='chain'>chain</section>
         <section className='damage'>damage</section>
-        {/* {changeElement} */}
       </main>
     </>
   );

@@ -1,23 +1,38 @@
-import { EchoData, echoMainStatsValue0, everyEchoData } from '../../lib/Echoes';
+import { EchoData, getEchoMainValue0, everyEchoData } from '../../lib/Echoes';
 import { State, dispatch } from '../../store';
 import { useSelector } from 'react-redux';
-import { EchoCost, EchoPrimaryMainStats, EchoSecondaryMainStats, Harmony } from '../../types';
-import styles from './EchoesList.module.css';
-import { EchoId, EchoSubStatsNumber, MyEcho, changeEchoLevel } from '../../slice/echoesSlice';
+import {
+  EchoCost,
+  EchoMainStats,
+  EchoSecondaryMainStats,
+  EchoSubStats,
+  Harmony,
+  getStatsName,
+} from '../../types';
+import {
+  EchoId,
+  EchoSubStatsNumber,
+  MyEcho,
+  changeEchoLevel,
+  changeSubStat,
+} from '../../slice/echoesSlice';
 import { getPercent } from '../../lib/formula';
 import { useState } from 'react';
 import { ModalBox } from '..';
+import styles from './EchoesList.module.css';
 
-export const getSecondaryMainStats = (cost: EchoCost) => {
+export const getSecondaryMainStats: (cost: EchoCost) => EchoSecondaryMainStats = (
+  cost: EchoCost
+) => {
   if (cost === 1) {
-    return 'HP';
+    return 'flatHp';
   } else {
-    return '공격력';
+    return 'flatAtk';
   }
 };
 
 export const genByEcho = (info?: MyEcho) => {
-  const byEchoPrimaryMain: Record<EchoPrimaryMainStats, number> = {
+  const byEchoMain: Record<EchoMainStats, number> = {
     hp: 0,
     atk: 0,
     def: 0,
@@ -31,28 +46,22 @@ export const genByEcho = (info?: MyEcho) => {
     cRate: 0,
     cDmg: 0,
     heal: 0,
-  };
-  const byEchoSecondaryMain: Record<EchoSecondaryMainStats, number> = {
-    HP: 0,
-    공격력: 0,
+    flatHp: 0,
+    flatAtk: 0,
   };
   if (info) {
-    const secondaryDataTable = { 5: { 4: 30, 3: 20, 1: 456 }, 4: { 4: 22, 3: 15, 1: 228 } };
-    let primary0 = 1;
-    let secondary0 = 1;
-    const level = info['레벨'];
-    const primary = info['메인 스텟'];
-    const rarity = info['희귀'];
+    const lv = info['레벨'];
+    const p = info['메인 스텟'];
+    const r = info['희귀'];
     const data = everyEchoData[info['코드']];
     if (data) {
-      const cost = data.cost;
-      primary0 = echoMainStatsValue0[rarity][cost][primary] as number;
-      secondary0 = secondaryDataTable[rarity][cost];
-      byEchoPrimaryMain[primary] = primary0 * (1 + 0.16 * level);
-      byEchoSecondaryMain[getSecondaryMainStats(cost)] = secondary0 * (1 + 0.16 * level);
+      const c = data.cost;
+      const [p0, s0] = getEchoMainValue0(r)(c)(p);
+      byEchoMain[p] = p0 * (1 + 0.16 * lv);
+      byEchoMain[getSecondaryMainStats(c)] = s0 * (1 + 0.16 * lv);
     }
   }
-  return [byEchoPrimaryMain, byEchoSecondaryMain] as const;
+  return byEchoMain;
 };
 
 export default function EchoesList({ selected }: { selected: Harmony }) {
@@ -61,30 +70,137 @@ export default function EchoesList({ selected }: { selected: Harmony }) {
   const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
 
   const [subAddMode, setSubAddMode] = useState<boolean>(false);
-  const [echoId, setEchoId] = useState<EchoId>();
+  const [echoId, setEchoId] = useState<EchoId>('echo_0');
+  const [subSlot, setSubSlot] = useState<1 | 2 | 3 | 4 | 5>(1);
+  const [selectedSubStat, setSelectdSubStat] = useState<EchoSubStats>('hp');
+  const [selectedSubValue, setSelectdSubValue] = useState<number>(0);
+
+  const getSubValues = (x: EchoSubStats) => {
+    switch (x) {
+      case 'flatHp':
+        return [320, 360, 390, 430, 470, 510, 540, 580];
+      case 'flatAtk':
+        return [30, 40, 50];
+      case 'flatDef':
+        return [40, 50, 60];
+      case 'def':
+        return [0.081, 0.09, 0.1, 0.109, 0.118, 0.128, 0.138, 0.147];
+      case 'energy':
+        return [0.068, 0.076, 0.084, 0.092, 0.1, 0.108, 0.116, 0.124];
+      case 'cRate':
+        return [0.063, 0.069, 0.075, 0.081, 0.087, 0.093, 0.099, 0.105];
+      case 'cDmg':
+        return [0.126, 0.138, 0.15, 0.162, 0.174, 0.186, 0.198, 0.21];
+      default:
+        return [0.064, 0.071, 0.079, 0.086, 0.094, 0.101, 0.109, 0.116];
+    }
+  };
 
   const subAdd = (x: boolean) => {
     if (x) {
+      if (echoId) {
+      }
       return (
         <ModalBox>
-          <div className={styles.container}>
-            {echoId}
-            <input
-              className={styles.cancel}
-              type='button'
-              value='취소'
-              onClick={() => {
-                setSubAddMode(false);
-              }}
-            />
-            <input
-              className={styles.save}
-              type='button'
-              value='저장'
-              onClick={() => {
-                setSubAddMode(false);
-              }}
-            />
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>{subSlot}번 서브 속성</div>
+            <div className={styles.modalBody}>
+              <div className={styles.statsBox}>
+                {(
+                  [
+                    ['flatHp', 'flatAtk', 'flatDef'],
+                    ['hp', 'atk', 'def'],
+                    ['energy', 'cRate', 'cDmg'],
+                    ['normal', 'heavy'],
+                    ['skill', 'burst'],
+                  ] as EchoSubStats[][]
+                ).map((r) => {
+                  return (
+                    <div className={styles.statsBoxRow} key={r[0] + '~' + r[-1]}>
+                      {r.map((stat) => {
+                        const defaultcheck = (x: EchoSubStats) => {
+                          if (selectedSubStat === x) {
+                            return true;
+                          } else {
+                            return false;
+                          }
+                        };
+                        return (
+                          <label htmlFor={'new' + stat} key={stat}>
+                            <span>{getStatsName(stat)}</span>
+                            <input
+                              type='radio'
+                              name='newSub'
+                              id={'new' + stat}
+                              defaultChecked={defaultcheck(stat)}
+                              value={stat}
+                              onChange={(e) => {
+                                setSelectdSubStat(e.target.value as EchoSubStats);
+                              }}
+                            />
+                          </label>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={styles.valueBox}>
+                <span>값</span>
+                <select
+                  onChange={(e) => {
+                    setSelectdSubValue(Number(e.target.value));
+                  }}
+                >
+                  <option value=''>-</option>
+                  {getSubValues(selectedSubStat).map((i) => {
+                    const n = Number(i);
+                    if (n > 1) {
+                      return (
+                        <option value={i} key={i}>
+                          {n}
+                        </option>
+                      );
+                    }
+                    return (
+                      <option value={i} key={i}>
+                        {getPercent(i)(1)}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+            <div className={styles.modalFooter}>
+              <input
+                className={styles.cancel}
+                type='button'
+                value='취소'
+                onClick={() => {
+                  setSubAddMode(false);
+                }}
+              />
+              <input
+                className={styles.save}
+                type='button'
+                value='저장'
+                onClick={() => {
+                  if (selectedSubValue > 0) {
+                    dispatch(
+                      changeSubStat({
+                        id: echoId,
+                        slot: subSlot,
+                        stat: selectedSubStat,
+                        value: selectedSubValue,
+                      })
+                    );
+                    setSubAddMode(false);
+                  } else {
+                    alert('값을 선택해주세요.');
+                  }
+                }}
+              />
+            </div>
           </div>
         </ModalBox>
       );
@@ -105,38 +221,7 @@ export default function EchoesList({ selected }: { selected: Harmony }) {
             const secondary = getSecondaryMainStats(cost);
             const name = info['이름'];
             const harmony = info['화음'];
-            const [byEchoPrimaryMain, byEchoSecondaryMain] = genByEcho(info);
-
-            let innerSub = ([1, 2, 3, 4, 5] as EchoSubStatsNumber[]).map((i) => {
-              let innerDiv = <span>&nbsp;</span>;
-              if (i <= Math.floor(level / 5)) {
-                const subItem = sub[i];
-                if (subItem) {
-                  innerDiv = (
-                    <>
-                      <span>· {subItem.stat}</span>
-                      <span>{subItem.value}%</span>
-                    </>
-                  );
-                } else {
-                  innerDiv = (
-                    <input
-                      type='button'
-                      value='+ 속성 추가'
-                      onClick={() => {
-                        setEchoId(id as EchoId);
-                        setSubAddMode(true);
-                      }}
-                    />
-                  );
-                }
-              }
-              return (
-                <div className={styles.subItem} key={i}>
-                  {innerDiv}
-                </div>
-              );
-            });
+            const byEcho = genByEcho(info);
 
             if (harmony === selected && filterCost[cost]) {
               return (
@@ -175,15 +260,57 @@ export default function EchoesList({ selected }: { selected: Harmony }) {
                   <div className={styles.body}>
                     <div className={styles.main}>
                       <div>
-                        <span>{main}</span>
-                        <span>{getPercent(byEchoPrimaryMain[main])(2)}</span>
+                        <span>{getStatsName(main)}</span>
+                        <span>{getPercent(byEcho[main])(2)}</span>
                       </div>
                       <div>
-                        <span>{secondary}</span>
-                        <span>{byEchoSecondaryMain[secondary].toFixed(1)}</span>
+                        <span>{getStatsName(secondary)}</span>
+                        <span>{byEcho[secondary].toFixed(1)}</span>
                       </div>
                     </div>
-                    <div className={styles.sub}>{innerSub}</div>
+                    <div className={styles.sub}>
+                      {([1, 2, 3, 4, 5] as EchoSubStatsNumber[]).map((i) => {
+                        let innerDiv = <span>&nbsp;</span>;
+                        if (i <= Math.floor(level / 5)) {
+                          const subItem = sub[i];
+                          if (subItem) {
+                            const value = subItem.value;
+                            let resultV;
+                            if (value > 1) {
+                              resultV = value;
+                            } else {
+                              resultV = getPercent(value)(1);
+                            }
+                            innerDiv = (
+                              <>
+                                <span>· {getStatsName(subItem.stat)}</span>
+                                <span>{resultV}</span>
+                              </>
+                            );
+                          } else {
+                            innerDiv = (
+                              <>
+                                <span
+                                  className={styles.addSubBtn}
+                                  onClick={() => {
+                                    setEchoId(id as EchoId);
+                                    setSubSlot(i);
+                                    setSubAddMode(true);
+                                  }}
+                                >
+                                  + 속성 추가
+                                </span>
+                              </>
+                            );
+                          }
+                        }
+                        return (
+                          <div className={styles.subItem} key={i}>
+                            {innerDiv}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                   <div className={styles.footer}>
                     <span>장착</span>

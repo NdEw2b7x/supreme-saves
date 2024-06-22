@@ -1,3 +1,5 @@
+import { EchoPrimaryMainStats } from './everyStatistics';
+
 type n = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type EchoCode = `${'G' | 'H' | 'N' | 'R' | 'S' | 'W' | 'X'}${n}${n}`;
 
@@ -10,27 +12,18 @@ export type EchoCost = (typeof everyEchoCost)[number];
 export const everyEchoDangerous = ['해일', '노도', '거랑', '경파'] as const;
 export type EchoDangerous = (typeof everyEchoDangerous)[number];
 
-export const everyEchoMainStats4cost = [
-  'HP%',
-  '공격력%',
-  '방어력%',
-  '크리티컬 확률',
-  '크리티컬 피해',
-  '치료 효과 보너스',
-] as const;
-export const everyEchoMainStatistics3cost = [
-  'HP%',
-  '공격력%',
-  '방어력%',
-  '공명 효율',
-  '응결 피해 보너스',
-  '용융 피해 보너스',
-  '전도 피해 보너스',
-  '기류 피해 보너스',
-  '회절 피해 보너스',
-  '인멸 피해 보너스',
-] as const;
-export const everyEchoMainStatistics1cost = ['HP%', '공격력%', '방어력%'] as const;
-export type EchoMainStatistics4cost = (typeof everyEchoMainStats4cost)[number];
-export type EchoMainStatistics3cost = (typeof everyEchoMainStatistics3cost)[number];
-export type EchoMainStatistics1cost = (typeof everyEchoMainStatistics1cost)[number];
+export const everyCost4EchoPrimaryMainStats: Array<
+  Exclude<EchoPrimaryMainStats, 'energy' | 'ice' | 'fire' | 'electro' | 'wind' | 'light' | 'dark'>
+> = ['hp', 'atk', 'def', 'cRate', 'cDmg', 'heal'];
+export const everyCost3EchoPrimaryMainStats: Array<
+  Exclude<EchoPrimaryMainStats, 'cRate' | 'cDmg' | 'heal'>
+> = ['hp', 'atk', 'def', 'energy', 'ice', 'fire', 'electro', 'wind', 'light', 'dark'];
+export const everyCost1EchoPrimaryMainStats: Array<
+  Exclude<
+    EchoPrimaryMainStats,
+    'energy' | 'ice' | 'fire' | 'electro' | 'wind' | 'light' | 'dark' | 'cRate' | 'cDmg' | 'heal'
+  >
+> = ['hp', 'atk', 'def'];
+export type Cost4EchoPrimaryMainStats = (typeof everyCost4EchoPrimaryMainStats)[number];
+export type Cost3EchoPrimaryMainStats = (typeof everyCost3EchoPrimaryMainStats)[number];
+export type Cost1EchoPrimaryMainStats = (typeof everyCost1EchoPrimaryMainStats)[number];
