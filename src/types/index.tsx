@@ -21,7 +21,7 @@ import {
   EchoPrimaryMainStats,
   EchoSecondaryMainStats,
   EchoSubStats,
-  Statistics,
+  Stats,
   WeaponSubStats,
 } from './everyStatistics';
 import {
@@ -53,7 +53,7 @@ export {
   getWeaponName,
 };
 export type {
-  Statistics,
+  Stats,
   WeaponSubStats,
   EchoPrimaryMainStats,
   EchoSecondaryMainStats,

@@ -6,6 +6,7 @@ import { EchoPrimaryMainStats, EchoSubStats } from '../types/everyStatistics';
 const name = 'echoesSlice';
 
 type EchoSlot = 1 | 2 | 3 | 4 | 5;
+export type EchoSubStatsNumber = 1 | 2 | 3 | 4 | 5;
 export interface MyEcho {
   코드: EchoCode;
   이름: string;
@@ -13,11 +14,7 @@ export interface MyEcho {
   레벨: number;
   '메인 스텟': EchoPrimaryMainStats;
   '서브 스텟': {
-    1?: { stat: EchoSubStats; value: number };
-    2?: { stat: EchoSubStats; value: number };
-    3?: { stat: EchoSubStats; value: number };
-    4?: { stat: EchoSubStats; value: number };
-    5?: { stat: EchoSubStats; value: number };
+    [x in EchoSubStatsNumber]?: { stat: EchoSubStats; value: number };
   };
   화음: Harmony;
   장착?: [EveryResonatorName, EchoSlot];
@@ -68,11 +65,12 @@ const reducers = {
     save(state);
   },
   changeEchoLevel: (state: InitialState, action: { payload: { id: EchoId; level: number } }) => {
-    const findEcho = state['에코'][action.payload.id];
+    const getEcho = state['에코'][action.payload.id];
     const level = action.payload.level;
-    if (findEcho) {
-      if (level >= 0 && level <= 25) {
-        findEcho.레벨 = action.payload.level;
+    if (getEcho) {
+      const rarity = getEcho['희귀'] * 5;
+      if (level >= 0 && level <= rarity) {
+        getEcho.레벨 = action.payload.level;
       }
     }
     save(state);

@@ -1,8 +1,9 @@
-import { EveryWeaponSubOption, WeaponData } from '.';
+import { WeaponSubStats } from '../../types';
+import { WeaponData } from '.';
 
 const code = '400500003';
 const atk1 = 27;
-const subOption: EveryWeaponSubOption = '공명 효율';
+const subOption: WeaponSubStats = 'energy';
 
 // const skill: WeaponSkill = {
 //   name: '끝없는 메아리',

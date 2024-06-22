@@ -1,8 +1,9 @@
-import { EveryWeaponSubOption, WeaponData } from '.';
+import { WeaponSubStats } from '../../types';
+import { WeaponData } from '.';
 
 const code = '400500004';
 const atk1 = 33;
-const subOption: EveryWeaponSubOption = '크리티컬 확률';
+const subOption: WeaponSubStats = 'cRate';
 
 // const skill: WeaponSkill = {
 //   name: '끝없는 메아리',

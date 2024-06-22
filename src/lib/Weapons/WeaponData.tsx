@@ -1,95 +1,94 @@
-import { EveryWeaponSubOption } from '.';
-import { EveryRarity, EveryWeaponAtk1, EveryWeaponCategory } from '../../types';
+import { EveryRarity, EveryWeaponAtk1, EveryWeaponCategory, WeaponSubStats } from '../../types';
 
-export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: EveryWeaponSubOption) => {
+export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: WeaponSubStats) => {
   switch (atk1) {
     case 24:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 0;
-        case '공명 효율':
+        case 'energy':
           return 7.2;
-        case '크리티컬 확률':
+        case 'cRate':
           return 0;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 0;
         default:
           return 6.75;
       }
     case 26:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 0;
-        case '공명 효율':
+        case 'energy':
           return 0;
-        case '크리티컬 확률':
+        case 'cRate':
           return 0;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 0;
         default:
           return 5.4;
       }
     case 27:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 13.675;
-        case '공명 효율':
+        case 'energy':
           return 11.52;
-        case '크리티컬 확률':
+        case 'cRate':
           return 7.2;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 14.4;
         default:
           return 10.8;
       }
     case 31:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 0;
-        case '공명 효율':
+        case 'energy':
           return 8.64;
-        case '크리티컬 확률':
+        case 'cRate':
           return 5.4;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 10.8;
         default:
           return 8.1;
       }
     case 33:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 0;
-        case '공명 효율':
+        case 'energy':
           return 7.2;
-        case '크리티컬 확률':
+        case 'cRate':
           return 4.5;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 9.0;
         default:
           return 6.75;
       }
     case 40:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 0;
-        case '공명 효율':
+        case 'energy':
           return 0;
-        case '크리티컬 확률':
+        case 'cRate':
           return 8;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 16;
         default:
           return 12;
       }
     case 47:
       switch (sub) {
-        case '방어력%':
+        case 'def':
           return 0;
-        case '공명 효율':
+        case 'energy':
           return 0;
-        case '크리티컬 확률':
+        case 'cRate':
           return 5.4;
-        case '크리티컬 피해':
+        case 'cDmg':
           return 10.8;
         default:
           return 8.1;
@@ -107,7 +106,7 @@ export default class WeaponData {
   }: {
     code: string;
     atk1: EveryWeaponAtk1;
-    subOption: EveryWeaponSubOption;
+    subOption: WeaponSubStats;
   }) {
     const getRarity: (x: string) => EveryRarity = (x: string) => {
       switch (x[0]) {

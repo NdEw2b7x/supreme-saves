@@ -11,7 +11,7 @@ const result = new ResonatorData({
   element,
   weaponCategory,
   base: [hp1, atk1, def1],
-  minorFortes: ['방어력%', '인멸 피해 보너스'],
+  minorFortes: ['def', 'dark'],
 });
 
 export default result;

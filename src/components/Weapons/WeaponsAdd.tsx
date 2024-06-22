@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { EveryWeaponSubOption, everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
-import { EveryWeaponAtk1, EveryWeaponCategory, weaponPivot } from '../../types';
+import { everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
+import { EveryWeaponAtk1, EveryWeaponCategory, WeaponSubStats, weaponPivot } from '../../types';
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
 import { State, dispatch } from '../../store';
 import { addWeapon } from '../../slice/weaponsSlice';
@@ -20,7 +20,7 @@ export default function WeaponsAdd() {
         if (weaponData) {
           const category: EveryWeaponCategory = weaponData.category;
           const atk1: EveryWeaponAtk1 = weaponData.atk1;
-          const subOption: EveryWeaponSubOption = weaponData.subOption;
+          const subOption: WeaponSubStats = weaponData.subOption;
           const subOption1 = getWeaponSubOptionValue1(atk1, subOption);
           if (filterR[rarity] && filterW[category]) {
             return (

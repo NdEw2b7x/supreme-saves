@@ -31,4 +31,4 @@ export default class ResonatorData {
   minorFortes;
 }
 
-export type MinorForte = Exclude<EchoPrimaryMainStats, 'HP' | '공격력' | '방어력' | '공명 효율'>;
+export type MinorForte = Exclude<EchoPrimaryMainStats, 'energy'>;

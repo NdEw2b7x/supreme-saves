@@ -1,8 +1,9 @@
-import { EveryWeaponSubOption, WeaponData } from '.';
+import { WeaponSubStats } from '../../types';
+import { WeaponData } from '.';
 
 const code = '400400003';
 const atk1 = 27;
-const subOption: EveryWeaponSubOption = '공명 효율';
+const subOption: WeaponSubStats = 'energy';
 // const skill: WeaponSkill = {
 //   name: '전사의 충정',
 //   afterSkill: [

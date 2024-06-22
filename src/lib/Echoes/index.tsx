@@ -1,5 +1,6 @@
 import { EchoCode, EchoCost, Harmony, everyHarmony } from '../../types';
 import EchoData from './EchoData';
+import { echoMainStatsValue0 } from './EchoMainStatsValue0';
 import G01 from './G01';
 import G02 from './G02';
 import G03 from './G03';
@@ -58,6 +59,7 @@ import W77 from './W77';
 import X53 from './X53';
 import X54 from './X54';
 
+export { echoMainStatsValue0 };
 export { EchoData };
 
 export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {

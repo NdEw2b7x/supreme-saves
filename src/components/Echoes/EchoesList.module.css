@@ -31,13 +31,12 @@
     display: flex;
     gap: 0.25rem;
     .thumbnail {
-      width: 8rem;
-      height: 8rem;
+      width: 7rem;
+      height: 7rem;
       border-radius: 0.25rem;
       overflow: hidden;
     }
     .info {
-      padding: 0.25rem;
       flex: 1;
       text-align: right;
       display: flex;
@@ -46,14 +45,16 @@
       align-items: flex-end;
     }
     .name {
-      font-size: 1.5rem;
+      font-size: 1rem;
       font-weight: bolder;
+      padding: 0.25rem;
     }
     .cost {
       background-color: black;
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 0.5rem;
       border: 0.1rem solid var(--theme-color-alpha-400);
       border-radius: 0.25rem;
+      font-size: 0.8rem;
     }
     .level {
       display: flex;
@@ -79,4 +80,41 @@
   padding: 0.25rem 0.5rem;
   background-color: var(--theme-color-alpha-200);
   border-radius: 2rem;
+}
+.subItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+
+  input {
+    padding: 0.25rem;
+    background-color: transparent;
+    color: limegreen;
+  }
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #000e;
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    border-radius: 0.25rem;
+    background-color: var(--theme-color-alpha-400);
+    padding: 0.25rem;
+    width: 20rem;
+  }
+}
+.save,
+.cancel {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
 }

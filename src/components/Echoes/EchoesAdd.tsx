@@ -5,7 +5,7 @@ import {
   EchoCode,
   EchoCost,
   EchoRarity,
-  Statistics,
+  Stats,
   Harmony,
   everyEchoMainStatistics1cost,
   everyEchoMainStatistics3cost,
@@ -57,7 +57,7 @@ export default function EchoesAdd() {
         return everyEchoMainStatistics1cost;
     }
   };
-  const submitBtn = (code?: EchoCode, main?: Statistics) => {
+  const submitBtn = (code?: EchoCode, main?: Stats) => {
     if (code && main) {
       return (
         <section>

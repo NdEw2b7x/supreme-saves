@@ -1,9 +1,15 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EveryResonatorName, EveryWeaponAtk1, EveryWeaponCode, weaponPivot } from '../../types';
+import {
+  EveryResonatorName,
+  EveryWeaponAtk1,
+  EveryWeaponCode,
+  weaponPivot,
+  WeaponSubStats,
+} from '../../types';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { everyResonatorData } from '../../lib/Resonators';
-import { EveryWeaponSubOption, WeaponData, everyWeaponData } from '../../lib/Weapons';
+import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 import {
   getATK,
   getDEF,
@@ -15,18 +21,19 @@ import {
 import styles from './ResonatorsList.module.css';
 import { MyWeapon, MyWeapons, WeaponId } from '../../slice/weaponsSlice';
 import { genByMinorForte } from '../ResonatorDetail/ResonatorDetail';
+import { getElementMap } from '../../types/everyStatistics';
 
 export const genByWeapon = (myWeapons: MyWeapons) => {
+  const byWeapon: Record<WeaponSubStats, number> = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    energy: 0,
+    cRate: 0,
+    cDmg: 0,
+  };
   return (id?: WeaponId) => {
     let weaponAtk = 0;
-    const byWeapon: Record<EveryWeaponSubOption, number> = {
-      'HP%': 0,
-      '공격력%': 0,
-      '방어력%': 0,
-      '공명 효율': 0,
-      '크리티컬 확률': 0,
-      '크리티컬 피해': 0,
-    };
     if (id) {
       const myWeapon = myWeapons[id];
       if (myWeapon) {
@@ -116,7 +123,7 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         getHP(resonatorData.hp1)(resonatorLevel) *
-                          (1 + (byWeapon?.['HP%'] + minorFortes[1]['HP%']) / 100)
+                          (1 + (byWeapon.hp + minorFortes[1].hp) / 100)
                       )}
                     </span>
                   </div>
@@ -125,7 +132,7 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
-                          (1 + (byWeapon['공격력%'] + minorFortes[1]['공격력%']) / 100)
+                          (1 + (byWeapon.atk + minorFortes[1].atk) / 100)
                       )}
                     </span>
                   </div>
@@ -134,33 +141,25 @@ export default function ResonatorsList() {
                     <span>
                       {refine(
                         getDEF(resonatorData.def1)(resonatorLevel) *
-                          (1 + (byWeapon['방어력%'] + minorFortes[1]['방어력%']) / 100)
+                          (1 + (byWeapon.def + minorFortes[1].def) / 100)
                       )}
                     </span>
                   </div>
                   <div>
                     <span>공명 효율</span>
-                    <span>{(100 + byWeapon['공명 효율']).toFixed(2)}%</span>
+                    <span>{(100 + byWeapon.energy).toFixed(2)}%</span>
                   </div>
                   <div>
                     <span>{element} 피해 보너스</span>
-                    <span>{minorFortes[1][`${element} 피해 보너스`]}%</span>
+                    <span>{minorFortes[1][getElementMap(element)]}%</span>
                   </div>
                   <div>
                     <span>크리티컬 확률</span>
-                    <span>
-                      {(5 + byWeapon['크리티컬 확률'] + minorFortes[1]['크리티컬 확률']).toFixed(2)}
-                      %
-                    </span>
+                    <span>{(5 + byWeapon.cRate + minorFortes[1].cRate).toFixed(2)}%</span>
                   </div>
                   <div>
                     <span>크리티컬 피해</span>
-                    <span>
-                      {(150 + byWeapon['크리티컬 피해'] + minorFortes[1]['크리티컬 피해']).toFixed(
-                        2
-                      )}
-                      %
-                    </span>
+                    <span>{(150 + byWeapon.cDmg + minorFortes[1].cRate).toFixed(2)}%</span>
                   </div>
                 </div>
               </div>

@@ -44,14 +44,6 @@ import w500500002 from './w500500002';
 export { getWeaponSubOptionValue1 };
 export { WeaponData };
 
-export type EveryWeaponSubOption =
-  | 'HP%'
-  | '공격력%'
-  | '방어력%'
-  | '공명 효율'
-  | '크리티컬 확률'
-  | '크리티컬 피해';
-
 export const everyWeaponData: Partial<Record<EveryWeaponCode, WeaponData>> = {
   w500100001,
   w500100002,
