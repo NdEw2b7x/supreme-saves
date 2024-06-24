@@ -130,7 +130,6 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
         );
       }
     }
-    return null;
   };
   return (
     <>

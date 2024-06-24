@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { EveryResonatorName } from '../types';
 import Thumbnail from './Thumbnail';
 
@@ -10,15 +11,19 @@ export default function SelectResonator({
   defaultValue?: EveryResonatorName;
   onChange: (name: EveryResonatorName) => void;
 }) {
+  const [thumbnailOwner, setThumbnailOwner] = useState<EveryResonatorName | undefined>(
+    defaultValue
+  );
   let thumbnail = <img alt='' />;
-  if (defaultValue) {
-    thumbnail = <Thumbnail scope='Resonators' code={defaultValue} />;
+  if (thumbnailOwner) {
+    thumbnail = <Thumbnail scope='Resonators' code={thumbnailOwner} />;
   }
   return (
     <div className='SelectResonatorContainer'>
       <select
         defaultValue={defaultValue}
         onChange={({ target: { value } }) => {
+          setThumbnailOwner(value as EveryResonatorName);
           onChange(value as EveryResonatorName);
         }}
       >

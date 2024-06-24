@@ -3,9 +3,9 @@ import { State } from '../../store';
 import { getStatsName, weaponPivot } from '../../types';
 import { MyWeapon, WeaponId } from '../../slice/weaponsSlice';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
-import { genByWeapon } from '../Resonators/ResonatorsList';
 import styles from './ResonatorDetail.module.css';
 import { getPercent } from '../../lib/formula';
+import { genByWeapon } from '..';
 
 export default function ResonatorDetailWeapon({ id }: { id?: WeaponId }) {
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
