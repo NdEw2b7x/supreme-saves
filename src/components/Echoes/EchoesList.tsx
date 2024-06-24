@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import {
-  EchoId,
-  EchoSubStatsId,
-  MyEcho,
-  changeEchoLevel,
-  changeEquip,
-} from '../../slice/echoesSlice';
+import { EchoId, EchoSubStatsId, MyEcho, changeEchoLevel } from '../../slice/echoesSlice';
 import {
   EchoCost,
   EchoMainStats,
@@ -16,11 +10,12 @@ import {
   Harmony,
   getStatsName,
 } from '../../types';
-import { ModalBox, RadioBtn, SelectResonator, Thumbnail } from '..';
+import { Thumbnail } from '..';
 import EchoesListSubAddModal from './EchoesListSubAddModal';
 import { EchoData, getEchoMainValue0, everyEchoData } from '../../lib/Echoes';
 import { getPercent } from '../../lib/formula';
 import styles from './EchoesList.module.css';
+import EquipModal from './EquipModal';
 
 export const getSecondaryMainStats: (cost: EchoCost) => EchoSecondaryMainStats = (
   cost: EchoCost
@@ -99,7 +94,6 @@ function EchoesListCardHeader({ id, info, cost }: { id: EchoId; info: MyEcho; co
 
 export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony }) {
   const filterCost = useSelector((state: State) => state.grobalSlice['filter'].cost);
-  const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
   const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
 
   const [subAddMode, setSubAddMode] = useState<boolean>(false);
@@ -107,80 +101,16 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
   const [echoId, setEchoId] = useState<EchoId>('echo_0');
 
   const [equipMode, setEquipMode] = useState<boolean>(false);
-  const [selectedEquip, setSelectedEquip] = useState<EveryResonatorName>();
-  const [selectedSlot, setSelectedSlot] = useState<1 | 2 | 3 | 4 | 5 | undefined>();
 
   const changeEquipModal = (x: boolean) => {
     if (x) {
       return (
-        <ModalBox key='EchoEquip'>
-          <div className={styles.equipHeader}>
-            <div className={styles.title}>장착할 공명자</div>
-            <SelectResonator
-              list={Object.keys(myResonators) as EveryResonatorName[]}
-              defaultValue={selectedEquip}
-              onChange={(name) => {
-                setSelectedEquip(name);
-              }}
-            />
-          </div>
-          <div className={styles.equipBody}>
-            <div className={styles.title}>장착할 슬롯</div>
-            <div className={styles.slotContainer}>
-              {([1, 2, 3, 4, 5] as const).map((i) => {
-                return (
-                  <RadioBtn
-                    name='subSlot'
-                    id={'subSlot' + i}
-                    key={'subSlot' + i}
-                    onChange={() => {
-                      setSelectedSlot(i);
-                    }}
-                  >
-                    <div
-                      style={{
-                        borderRadius: '100%',
-                        overflow: 'hidden',
-                        width: '2.5rem',
-                        height: '2.5rem',
-                        alignSelf: 'center',
-                        backgroundColor: 'var(--theme-color-alpha-400)',
-                      }}
-                    >
-                      <Thumbnail scope='Echoes' code='G01' />
-                    </div>
-                    <span>{i}</span>
-                  </RadioBtn>
-                );
-              })}
-            </div>
-          </div>
-          <div className={styles.equipFooter}>
-            <input
-              type='button'
-              className={styles.save}
-              value='확인'
-              onClick={() => {
-                if (selectedSlot && selectedEquip) {
-                  dispatch(
-                    changeEquip({ id: echoId, equip: { name: selectedEquip, slot: selectedSlot } })
-                  );
-                  setEquipMode(false);
-                  setSelectedSlot(undefined);
-                }
-              }}
-            />
-            <input
-              type='button'
-              className={styles.cancel}
-              value='취소'
-              onClick={() => {
-                setSelectedSlot(undefined);
-                setEquipMode(false);
-              }}
-            />
-          </div>
-        </ModalBox>
+        <EquipModal
+          id={echoId}
+          close={() => {
+            setEquipMode(false);
+          }}
+        />
       );
     }
   };

@@ -23,7 +23,7 @@ export type EchoEquipSlot = 1 | 2 | 3 | 4 | 5;
 export type EchoId = `echo_${number}`;
 export type MyEchoes = Partial<Record<EchoId, MyEcho>>;
 
-let initialState: {
+const initialState: {
   에코: MyEchoes;
   장착: Partial<Record<EveryResonatorName, Partial<Record<1 | 2 | 3 | 4 | 5, EchoId>>>>;
 } = {
@@ -32,10 +32,22 @@ let initialState: {
 };
 type InitialState = typeof initialState;
 
-let myEchoes = localStorage.getItem('에코');
+const myEchoes = localStorage.getItem('에코');
 if (myEchoes) {
   initialState['에코'] = JSON.parse(myEchoes) as MyEchoes;
 }
+
+Object.entries(initialState['에코']).forEach(([id, info]) => {
+  if (info && info['장착']['공명자'] !== '미장착') {
+    initialState['장착'] = {
+      ...initialState['장착'],
+      [info['장착']['공명자']]: {
+        ...initialState['장착'][info['장착']['공명자']],
+        [info['장착']['슬롯']]: id,
+      },
+    };
+  }
+});
 
 const save = (state: InitialState) => {
   localStorage.setItem('에코', JSON.stringify(state['에코']));
