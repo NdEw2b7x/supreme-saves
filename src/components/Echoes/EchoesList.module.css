@@ -42,52 +42,6 @@
   background-color: var(--theme-color-alpha-400);
 }
 .card {
-  .header {
-    display: flex;
-    gap: 0.25rem;
-    .thumbnail {
-      width: 7rem;
-      height: 7rem;
-      border-radius: 0.25rem;
-      overflow: hidden;
-    }
-    .info {
-      flex: 1;
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    .name {
-      font-size: 1rem;
-      font-weight: bolder;
-      padding: 0.25rem;
-    }
-    .cost {
-      background-color: black;
-      padding: 0.25rem 0.5rem;
-      border: 0.1rem solid var(--theme-color-alpha-400);
-      border-radius: 0.25rem;
-      font-size: 0.8rem;
-    }
-    .level {
-      display: flex;
-      border-radius: 0.25rem;
-      overflow: hidden;
-      span {
-        align-content: center;
-        padding: 0.5rem 1rem;
-        background-color: white;
-        color: black;
-      }
-      :first-child,
-      :last-child {
-        background-color: var(--theme-color-alpha-400);
-        color: white;
-      }
-    }
-  }
   .footer {
     div {
       align-content: center;

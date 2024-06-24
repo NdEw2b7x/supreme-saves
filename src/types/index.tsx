@@ -25,6 +25,7 @@ import {
   Stats,
   WeaponSubStats,
   getElementMap,
+  getStatsAbbr,
   getStatsName,
 } from './everyStatistics';
 import {
@@ -56,6 +57,7 @@ export {
   everyCost3EchoPrimaryMainStats,
   everyCost1EchoPrimaryMainStats,
   getStatsName,
+  getStatsAbbr,
   getElementMap,
   getWeaponName,
 };

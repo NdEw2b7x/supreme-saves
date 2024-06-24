@@ -46,7 +46,6 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
           defaultValue={selectDefault}
           onChange={(name) => {
             setSelectedEquip(name);
-            setSelectedSlot(undefined);
           }}
         />
       </div>
@@ -80,7 +79,7 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
                 >
                   {thumbnailSwitch(equipEchoCode(selectDefault, i))}
                 </div>
-                <span>{i}</span>
+                {/* <span>{i}</span> */}
               </RadioBtn>
             );
           })}
@@ -93,9 +92,11 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
           value='확인'
           onClick={() => {
             if (selectedSlot && selectedEquip) {
-              dispatch(changeEquip({ id, equip: { name: selectedEquip, slot: selectedSlot } }));
-              setSelectedSlot(undefined);
-              close();
+              if (selectedEquip !== '미장착') {
+                dispatch(changeEquip({ id, equip: { name: selectedEquip, slot: selectedSlot } }));
+                setSelectedSlot(undefined);
+                close();
+              }
             }
           }}
         />

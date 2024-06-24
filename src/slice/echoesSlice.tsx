@@ -120,7 +120,7 @@ const reducers = {
     action: {
       payload: {
         id: EchoId;
-        equip: { name: EveryResonatorName | '미장착'; slot: EchoEquipSlot };
+        equip: { name: EveryResonatorName; slot: EchoEquipSlot };
       };
     }
   ) => {
@@ -128,43 +128,36 @@ const reducers = {
     const targetInfo = state['에코'][targetId] as MyEcho;
     const guestOwner = action.payload.equip.name;
     const guestSlot = action.payload.equip.slot;
-    if (guestOwner === '미장착') {
+
+    const hostOwner = targetInfo['장착']['공명자'];
+    const hostSlot = targetInfo['장착']['슬롯'];
+    const currentId = state['장착'][guestOwner]?.[guestSlot];
+    if (currentId) {
+      const currentInfo = state['에코'][currentId];
       state['에코'] = {
         ...state['에코'],
-        [targetId]: { ...targetInfo, 장착: { 공명자: '미장착', 슬롯: 0 } },
+        [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
+        [currentId]: { ...currentInfo, 장착: { 공명자: hostOwner, 슬롯: hostSlot } },
       };
-      state['장착'] = { ...state['장착'], [targetInfo['장착']['공명자']]: undefined };
-    } else {
-      const hostOwner = targetInfo['장착']['공명자'];
-      const hostSlot = targetInfo['장착']['슬롯'];
-      const currentId = state['장착'][guestOwner]?.[guestSlot];
-      if (currentId) {
-        const currentInfo = state['에코'][currentId];
-        state['에코'] = {
-          ...state['에코'],
-          [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
-          [currentId]: { ...currentInfo, 장착: { 공명자: hostOwner, 슬롯: hostSlot } },
-        };
+      state['장착'] = {
+        ...state['장착'],
+        [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
+      };
+      if (hostOwner !== '미장착') {
         state['장착'] = {
           ...state['장착'],
-          [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
-        };
-        if (hostOwner !== '미장착') {
-          state['장착'] = {
-            ...state['장착'],
-            [hostOwner]: { ...state['장착'][hostOwner], [hostSlot]: currentId },
-          };
-        }
-      } else {
-        state['에코'] = {
-          ...state['에코'],
-          [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
-        };
-        state['장착'] = {
-          ...state['장착'],
-          [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
+          [hostOwner]: { ...state['장착'][hostOwner], [hostSlot]: currentId },
         };
       }
+    } else {
+      state['에코'] = {
+        ...state['에코'],
+        [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
+      };
+      state['장착'] = {
+        ...state['장착'],
+        [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
+      };
     }
     save(state);
     // window.location.reload();

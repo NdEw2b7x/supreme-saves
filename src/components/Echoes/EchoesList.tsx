@@ -1,21 +1,21 @@
 import { useState } from 'react';
+import { Thumbnail, genByEcho } from '..';
+import EchoesListCardHeader from './CardHeader';
+import EchoesListSubAddModal from './EchoesListSubAddModal';
+import EquipModal from './EquipModal';
 import { useSelector } from 'react-redux';
-import { State, dispatch } from '../../store';
-import { EchoId, EchoSubStatsId, MyEcho, changeEchoLevel } from '../../slice/echoesSlice';
+import { State } from '../../store';
+import { EchoId, EchoSubStatsId } from '../../slice/echoesSlice';
 import {
   EchoCost,
-  EchoMainStats,
   EchoSecondaryMainStats,
   EveryResonatorName,
   Harmony,
   getStatsName,
 } from '../../types';
-import { Thumbnail } from '..';
-import EchoesListSubAddModal from './EchoesListSubAddModal';
-import { EchoData, getEchoMainValue0, everyEchoData } from '../../lib/Echoes';
 import { getPercent } from '../../lib/formula';
+import { EchoData, everyEchoData } from '../../lib/Echoes';
 import styles from './EchoesList.module.css';
-import EquipModal from './EquipModal';
 
 export const getSecondaryMainStats: (cost: EchoCost) => EchoSecondaryMainStats = (
   cost: EchoCost
@@ -26,71 +26,6 @@ export const getSecondaryMainStats: (cost: EchoCost) => EchoSecondaryMainStats =
     return 'flatAtk';
   }
 };
-
-export const genByEcho = (info?: MyEcho) => {
-  const byEchoMain: Record<EchoMainStats, number> = {
-    hp: 0,
-    atk: 0,
-    def: 0,
-    energy: 0,
-    ice: 0,
-    fire: 0,
-    electro: 0,
-    wind: 0,
-    light: 0,
-    dark: 0,
-    cRate: 0,
-    cDmg: 0,
-    heal: 0,
-    flatHp: 0,
-    flatAtk: 0,
-  };
-  if (info) {
-    const lv = info['레벨'];
-    const p = info['메인 스텟'];
-    const r = info['희귀'];
-    const data = everyEchoData[info['코드']];
-    if (data) {
-      const c = data.cost;
-      const [p0, s0] = getEchoMainValue0(r)(c)(p);
-      byEchoMain[p] = p0 * (1 + 0.16 * lv);
-      byEchoMain[getSecondaryMainStats(c)] = s0 * (1 + 0.16 * lv);
-    }
-  }
-  return byEchoMain;
-};
-
-function EchoesListCardHeader({ id, info, cost }: { id: EchoId; info: MyEcho; cost: EchoCost }) {
-  const level = info['레벨'];
-  return (
-    <div className={styles.header}>
-      <div className={styles.thumbnail} style={{ backgroundColor: `var(--${info['희귀']}-star)` }}>
-        <Thumbnail scope='Echoes' code={info['코드']} key={info['코드']} />
-      </div>
-      <div className={styles.info}>
-        <span className={styles.name}>{info['이름']}</span>
-        <span className={styles.cost}>COST {cost}</span>
-        <div className={styles.level}>
-          <span
-            onClick={() => {
-              dispatch(changeEchoLevel({ id, level: level - 1 }));
-            }}
-          >
-            -
-          </span>
-          <span>Lv. {level}</span>
-          <span
-            onClick={() => {
-              dispatch(changeEchoLevel({ id, level: level + 1 }));
-            }}
-          >
-            +
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony }) {
   const filterCost = useSelector((state: State) => state.grobalSlice['filter'].cost);
@@ -154,8 +89,13 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
             if (filterCost[cost]) {
               if (filterHarmony === harmony || filterHarmony === undefined) {
                 return (
-                  <div key={id} className={styles.card}>
+                  <div
+                    key={id}
+                    className={styles.card}
+                    style={{ order: `${(6 - info['희귀']) * 100 + 25 - info['레벨']}` }}
+                  >
                     <EchoesListCardHeader id={id as EchoId} info={info} cost={cost} />
+
                     <div className={styles.body}>
                       <div className={styles.main}>
                         <div>

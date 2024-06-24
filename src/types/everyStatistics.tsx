@@ -84,3 +84,28 @@ export const getStatsName = (x: Stats) => {
   } as const;
   return statsMap[x];
 };
+export const getStatsAbbr = (x: Stats) => {
+  const statsMap: Record<Stats, string> = {
+    flatHp: 'HP',
+    flatAtk: '공',
+    flatDef: '방',
+    hp: 'HP%',
+    atk: '공%',
+    def: '방%',
+    energy: '효율',
+    ice: '응결',
+    fire: '용융',
+    electro: '전도',
+    wind: '기류',
+    light: '회절',
+    dark: '인멸',
+    cRate: '크확',
+    cDmg: '크피',
+    heal: '치료',
+    basic: '일반',
+    heavy: '강공',
+    skill: '스킬',
+    burst: '해방',
+  } as const;
+  return statsMap[x];
+};

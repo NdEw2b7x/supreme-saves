@@ -10,6 +10,7 @@ const thumbnailControl = (scope: 'Resonators' | 'Weapons' | 'Echoes') => {
 };
 
 export const weaponThumbnailControl = thumbnailControl('Weapons');
+export const echoThumbnailControl = thumbnailControl('Echoes');
 
 export default function Thumbnail({
   scope,

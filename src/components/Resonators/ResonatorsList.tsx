@@ -17,7 +17,7 @@ export default function ResonatorsList() {
         const element = resonatorData.element;
         const weaponCategory = resonatorData.weaponCatergory;
         if (filterE[element] && filterW[weaponCategory]) {
-          return <ResonatorCard resonatorName={resonatorName} info={info} />;
+          return <ResonatorCard resonatorName={resonatorName} info={info} key={resonatorName} />;
         }
         return null;
       })}

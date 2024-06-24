@@ -5,20 +5,23 @@ import System from './System/System';
 import ResonatorDetail from './ResonatorDetail/ResonatorDetail';
 import FlexBox from './FlexBox';
 import ModalBox from './ModalBox';
-import Thumbnail, { weaponThumbnailControl } from './Thumbnail';
+import Thumbnail, { echoThumbnailControl, weaponThumbnailControl } from './Thumbnail';
 import RadioBtn from './RadioBtn';
 import SelectResonator from './SelectResonator';
 import { MyWeapons, WeaponId } from '../slice/weaponsSlice';
-import { EveryResonatorName, EveryWeaponAtk1, WeaponSubStats } from '../types';
+import { EchoMainStats, EveryResonatorName, EveryWeaponAtk1, WeaponSubStats } from '../types';
 import { WeaponData, everyWeaponData } from '../lib/Weapons';
 import { getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
 import { MyResonators } from '../slice/resonatorsSlice';
 import { MinorForte } from '../lib/Resonators/ResonatorData';
 import { everyResonatorData } from '../lib/Resonators';
+import { MyEcho } from '../slice/echoesSlice';
+import { everyEchoData, getEchoMainValue0 } from '../lib/Echoes';
+import { getSecondaryMainStats } from './Echoes/EchoesList';
 
 export { Resonators, ResonatorDetail, Weapons, Echoes, System };
 export { FlexBox, ModalBox, Thumbnail, RadioBtn, SelectResonator };
-export { weaponThumbnailControl };
+export { weaponThumbnailControl, echoThumbnailControl };
 
 export const genByMinorForte = (myResonators: MyResonators) => {
   const byMinorFortes: Record<MinorForte, number> = {
@@ -94,4 +97,37 @@ export const genByWeapon = (myWeapons: MyWeapons) => {
     }
     return [weaponAtk, byWeapon] as const;
   };
+};
+
+export const genByEcho = (info?: MyEcho) => {
+  const byEchoMain: Record<EchoMainStats, number> = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    energy: 0,
+    ice: 0,
+    fire: 0,
+    electro: 0,
+    wind: 0,
+    light: 0,
+    dark: 0,
+    cRate: 0,
+    cDmg: 0,
+    heal: 0,
+    flatHp: 0,
+    flatAtk: 0,
+  };
+  if (info) {
+    const lv = info['레벨'];
+    const p = info['메인 스텟'];
+    const r = info['희귀'];
+    const data = everyEchoData[info['코드']];
+    if (data) {
+      const c = data.cost;
+      const [p0, s0] = getEchoMainValue0(r)(c)(p);
+      byEchoMain[p] = p0 * (1 + 0.16 * lv);
+      byEchoMain[getSecondaryMainStats(c)] = s0 * (1 + 0.16 * lv);
+    }
+  }
+  return byEchoMain;
 };
