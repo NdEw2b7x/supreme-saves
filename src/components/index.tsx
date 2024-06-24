@@ -5,6 +5,8 @@ import System from './System/System';
 import ResonatorDetail from './ResonatorDetail/ResonatorDetail';
 import FlexBox from './FlexBox';
 import ModalBox from './ModalBox';
+import Thumbnail from './Thumbnail';
+import RadioBtn from './RadioBtn';
 
 export { Resonators, ResonatorDetail, Weapons, Echoes, System };
-export { FlexBox, ModalBox };
+export { FlexBox, ModalBox, Thumbnail, RadioBtn };

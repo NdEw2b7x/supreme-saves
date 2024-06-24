@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { changeEquip, changeSyntonize, changeWeaponLevel } from '../../slice/weaponsSlice';
 import { EveryResonatorName, getStatsName, getWeaponName } from '../../types';
-import { getWeaponAtk, getWeaponSubOptionValue, refine } from '../../lib/formula';
+import { getPercent, getWeaponAtk, getWeaponSubOptionValue } from '../../lib/formula';
 import { everyResonatorData } from '../../lib/Resonators';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 import styles from './WeaponsList.module.css';
@@ -123,7 +123,7 @@ export default function WeaponsList() {
                     </div>
                     <div className={styles.subOption}>
                       <span>{getStatsName(subOption)}</span>
-                      <span>{refine(getWeaponSubOptionValue(atk1, subOption)(level))}%</span>
+                      <span>{getPercent(getWeaponSubOptionValue(atk1, subOption)(level))(2)}</span>
                     </div>
                   </div>
                   <div className={styles.equip}>

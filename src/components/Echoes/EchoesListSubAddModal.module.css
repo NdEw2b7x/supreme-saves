@@ -1,0 +1,57 @@
+.modalHeader {
+  background-color: var(--theme-color-alpha-400);
+  padding: 0.5rem;
+  font-size: 1.25rem;
+}
+.modalBody {
+  padding: 0.25rem;
+  display: flex;
+  gap: 1rem;
+
+  .statsBox,
+  .valueBox {
+    display: flex;
+    flex-direction: column;
+  }
+  .valueBox {
+    flex: 1;
+    justify-content: center;
+  }
+
+  label {
+    width: 100%;
+
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.25rem;
+
+    display: flex;
+    text-align: center;
+    justify-content: center;
+  }
+  label:has(:checked) {
+    background-color: var(--theme-color);
+    color: black;
+  }
+}
+.modalFooter {
+  border-radius: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+
+  .save,
+  .cancel {
+    color: white;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+  }
+  .save {
+    flex: 4;
+    background-color: green;
+  }
+  .cancel {
+    flex: 1;
+    background-color: crimson;
+  }
+}

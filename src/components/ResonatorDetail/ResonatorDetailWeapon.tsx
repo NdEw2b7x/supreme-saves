@@ -5,6 +5,7 @@ import { MyWeapon, WeaponId } from '../../slice/weaponsSlice';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 import { genByWeapon } from '../Resonators/ResonatorsList';
 import styles from './ResonatorDetail.module.css';
+import { getPercent } from '../../lib/formula';
 
 export default function ResonatorDetailWeapon({ id }: { id?: WeaponId }) {
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
@@ -35,7 +36,7 @@ export default function ResonatorDetailWeapon({ id }: { id?: WeaponId }) {
             </div>
             <div>
               <span>{getStatsName(sub)}</span>
-              <span>{byWeapon[sub].toFixed(3)}%</span>
+              <span>{getPercent(byWeapon[sub])(2)}</span>
             </div>
           </div>
         </div>

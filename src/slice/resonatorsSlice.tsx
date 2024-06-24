@@ -4,7 +4,7 @@ import {
   EveryElement,
   EveryRasonanceChain,
   EveryResonatorNameWithoutRover,
-  EveryResonatorName,
+  EveryResonatorName as ResonatorName,
   EverySkillLevel,
   EverySkillType,
   SkillSet,
@@ -20,10 +20,8 @@ if (savedElement) {
   localStorage.setItem('방랑자_속성', JSON.stringify(roverElement));
 }
 
-type ERNR = EveryResonatorName;
-
 export interface MyResonator {
-  이름: ERNR;
+  이름: ResonatorName;
   레벨: number;
   스킬: Record<EverySkillType, SkillSet>;
   체인: EveryRasonanceChain;
@@ -45,7 +43,7 @@ const defaultRover = {
   ...defaultResonator,
 } as MyResonator;
 
-export type MyResonators = Partial<Record<ERNR, MyResonator>>;
+export type MyResonators = Partial<Record<ResonatorName, MyResonator>>;
 
 let initialState: { 공명자: MyResonators } = { 공명자: { 방랑자: defaultRover } };
 type InitialState = typeof initialState;
@@ -81,7 +79,10 @@ const reducers = {
     localStorage.setItem('방랑자_속성', JSON.stringify(action.payload));
     window.location.reload();
   },
-  changeLevel: (state: InitialState, action: { payload: { name: ERNR; level: number } }) => {
+  changeLevel: (
+    state: InitialState,
+    action: { payload: { name: ResonatorName; level: number } }
+  ) => {
     const getResonators = state['공명자'];
     const getResonator = getResonators[action.payload.name];
     if (getResonator?.레벨) {
@@ -93,7 +94,7 @@ const reducers = {
     state: InitialState,
     action: {
       payload: {
-        name: ERNR;
+        name: ResonatorName;
         type: EverySkillType;
         level: EverySkillLevel;
       };
@@ -118,7 +119,10 @@ const reducers = {
     }
     save(state);
   },
-  toggleNode1: (state: InitialState, action: { payload: { name: ERNR; type: EverySkillType } }) => {
+  toggleNode1: (
+    state: InitialState,
+    action: { payload: { name: ResonatorName; type: EverySkillType } }
+  ) => {
     const getResonator = state['공명자'][action.payload.name];
     if (getResonator) {
       if (getResonator['스킬'][action.payload.type][1]) {
@@ -147,7 +151,10 @@ const reducers = {
     }
     save(state);
   },
-  toggleNode2: (state: InitialState, action: { payload: { name: ERNR; type: EverySkillType } }) => {
+  toggleNode2: (
+    state: InitialState,
+    action: { payload: { name: ResonatorName; type: EverySkillType } }
+  ) => {
     const getResonator = state['공명자'][action.payload.name];
     if (getResonator) {
       if (getResonator['스킬'][action.payload.type][2]) {
@@ -176,7 +183,10 @@ const reducers = {
     }
     save(state);
   },
-  changeChain: (state: InitialState, action: { payload: { name: ERNR; chain: EveryChain } }) => {
+  changeChain: (
+    state: InitialState,
+    action: { payload: { name: ResonatorName; chain: EveryChain } }
+  ) => {
     const getResonators = state['공명자'];
     const getResonator = getResonators[action.payload.name];
     if (getResonator) {

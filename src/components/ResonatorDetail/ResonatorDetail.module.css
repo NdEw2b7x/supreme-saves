@@ -132,12 +132,12 @@
       align-self: flex-end;
       border-radius: 0.25rem;
       overflow: hidden;
-      max-height: 7.5rem;
-      width: 7.5rem;
+      max-height: 6.5rem;
+      width: 6.5rem;
       background-color: var(--theme-color-alpha-400);
     }
     .info {
-      padding: 1.5rem 1rem;
+      padding: 1.5rem 0.5rem;
 
       display: flex;
       flex-direction: column;

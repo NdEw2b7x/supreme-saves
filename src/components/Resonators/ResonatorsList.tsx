@@ -14,14 +14,15 @@ import {
   getATK,
   getDEF,
   getHP,
+  getPercent,
   getWeaponAtk,
   getWeaponSubOptionValue,
-  refine,
 } from '../../lib/formula';
 import styles from './ResonatorsList.module.css';
 import { MyWeapon, MyWeapons, WeaponId } from '../../slice/weaponsSlice';
 import { genByMinorForte } from '../ResonatorDetail/ResonatorDetail';
 import { getElementMap } from '../../types/everyStatistics';
+import { Thumbnail } from '..';
 
 export const genByWeapon = (myWeapons: MyWeapons) => {
   const byWeapon: Record<WeaponSubStats, number> = {
@@ -121,57 +122,67 @@ export default function ResonatorsList() {
                   <div>
                     <span>HP</span>
                     <span>
-                      {refine(
+                      {(
                         getHP(resonatorData.hp1)(resonatorLevel) *
-                          (1 + (byWeapon.hp + minorFortes[1].hp) / 100)
-                      )}
+                        (1 + byWeapon.hp + minorFortes[1].hp)
+                      ).toFixed(3)}
                     </span>
                   </div>
                   <div>
                     <span>공격력</span>
                     <span>
-                      {refine(
+                      {(
                         (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) *
-                          (1 + (byWeapon.atk + minorFortes[1].atk) / 100)
-                      )}
+                        (1 + byWeapon.atk + minorFortes[1].atk)
+                      ).toFixed(3)}
                     </span>
                   </div>
                   <div>
                     <span>방어력</span>
                     <span>
-                      {refine(
+                      {(
                         getDEF(resonatorData.def1)(resonatorLevel) *
-                          (1 + (byWeapon.def + minorFortes[1].def) / 100)
-                      )}
+                        (1 + byWeapon.def + minorFortes[1].def)
+                      ).toFixed(3)}
                     </span>
                   </div>
                   <div>
                     <span>공명 효율</span>
-                    <span>{(100 + byWeapon.energy).toFixed(2)}%</span>
+                    <span>{getPercent(1 + byWeapon.energy)(2)}</span>
                   </div>
                   <div>
                     <span>{element} 피해 보너스</span>
-                    <span>{minorFortes[1][getElementMap(element)]}%</span>
+                    <span>{getPercent(minorFortes[1][getElementMap(element)])(2)}</span>
                   </div>
                   <div>
                     <span>크리티컬 확률</span>
-                    <span>{(5 + byWeapon.cRate + minorFortes[1].cRate).toFixed(2)}%</span>
+                    <span>{getPercent(0.05 + byWeapon.cRate + minorFortes[1].cRate)(2)}</span>
                   </div>
                   <div>
                     <span>크리티컬 피해</span>
-                    <span>{(150 + byWeapon.cDmg + minorFortes[1].cRate).toFixed(2)}%</span>
+                    <span>{getPercent(1.5 + byWeapon.cDmg + minorFortes[1].cDmg)(2)}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.bottom}>
                 <div className={styles.echoes}>
+                  {/* {(['H81', 'H41', 'H48', 'G01', 'G03'] as EchoCode[]).map((c) => {
+                    return (
+                      <div className={styles.echo}>
+                        <div className={styles.echoImgBox}>
+                          <Thumbnail scope='Echoes' code={c} />
+                        </div>
+                        <div className={styles.echoOpt}>
+                          <div className={styles.main}>
+                            <span>크리확률</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })} */}
                   <div className={styles.echo}>
                     <div className={styles.echoImgBox}>
-                      <img
-                        className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/H80.png'}
-                        alt={'크라운리스'}
-                      />
+                      <Thumbnail scope='Echoes' code='H81' key='H81' />
                     </div>
                     <div className={styles.echoOpt}>
                       <div className={styles.main}>
@@ -181,11 +192,7 @@ export default function ResonatorsList() {
                   </div>
                   <div className={styles.echo}>
                     <div className={styles.echoImgBox}>
-                      <img
-                        className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/H41.png'}
-                        alt={'무망자.png'}
-                      />
+                      <Thumbnail scope='Echoes' code='H41' key='H41' />
                     </div>
                     <div className={styles.echoOpt}>
                       <div className={styles.main}>
@@ -195,11 +202,7 @@ export default function ResonatorsList() {
                   </div>
                   <div className={styles.echo}>
                     <div className={styles.echoImgBox}>
-                      <img
-                        className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/H42.png'}
-                        alt={'후슈슈.png'}
-                      />
+                      <Thumbnail scope='Echoes' code='H48' key='H48' />
                     </div>
                     <div className={styles.echoOpt}>
                       <div className={styles.main}>
@@ -209,11 +212,7 @@ export default function ResonatorsList() {
                   </div>
                   <div className={styles.echo}>
                     <div className={styles.echoImgBox}>
-                      <img
-                        className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/G01.png'}
-                        alt={'아즈즈.png'}
-                      />
+                      <Thumbnail scope='Echoes' code='G01' key='G01' />
                     </div>
                     <div className={styles.echoOpt}>
                       <div className={styles.main}>
@@ -223,11 +222,7 @@ export default function ResonatorsList() {
                   </div>
                   <div className={styles.echo}>
                     <div className={styles.echoImgBox}>
-                      <img
-                        className={styles.img}
-                        src={process.env.PUBLIC_URL + '/img/Echoes/G02.png'}
-                        alt={'칵찰찰.png'}
-                      />
+                      <Thumbnail scope='Echoes' code='G03' key='G03' />
                     </div>
                     <div className={styles.echoOpt}>
                       <div className={styles.main}>

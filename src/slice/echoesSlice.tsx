@@ -5,8 +5,7 @@ import { EchoPrimaryMainStats, EchoSubStats } from '../types/everyStatistics';
 
 const name = 'echoesSlice';
 
-type EchoSlot = 1 | 2 | 3 | 4 | 5;
-export type EchoSubStatsNumber = 1 | 2 | 3 | 4 | 5;
+export type EchoSubStatsId = keyof MyEcho['서브 스텟'];
 export interface MyEcho {
   코드: EchoCode;
   이름: string;
@@ -14,10 +13,10 @@ export interface MyEcho {
   레벨: number;
   '메인 스텟': EchoPrimaryMainStats;
   '서브 스텟': {
-    [x in EchoSubStatsNumber]?: { stat: EchoSubStats; value: number };
+    [x in 's1' | 's2' | 's3' | 's4' | 's5']?: { stat: EchoSubStats; value: number };
   };
   화음: Harmony;
-  장착?: [EveryResonatorName, EchoSlot];
+  장착: { 공명자?: EveryResonatorName; 슬롯?: 1 | 2 | 3 | 4 | 5 };
 }
 
 export type EchoId = `echo_${number}`;
@@ -57,6 +56,7 @@ const reducers = {
       '메인 스텟': action.payload.main,
       '서브 스텟': {},
       화음: action.payload.harmony,
+      장착: {},
     };
     state['에코'] = {
       ...state['에코'],
@@ -73,14 +73,15 @@ const reducers = {
         getEcho.레벨 = action.payload.level;
       }
       if (level < 25) {
-        getEcho['서브 스텟'][Math.ceil((level + 1) / 5) as 1 | 2 | 3 | 4 | 5] = undefined;
+        const sNumber = Math.ceil((level + 1) / 5) as 1 | 2 | 3 | 4 | 5;
+        getEcho['서브 스텟'][`s${sNumber}`] = undefined;
       }
     }
     save(state);
   },
   changeSubStat: (
     state: InitialState,
-    action: { payload: { id: EchoId; slot: 1 | 2 | 3 | 4 | 5; stat: EchoSubStats; value: number } }
+    action: { payload: { id: EchoId; order: EchoSubStatsId; stat: EchoSubStats; value: number } }
   ) => {
     const id = action.payload.id;
     state['에코'] = {
@@ -89,7 +90,7 @@ const reducers = {
         ...state['에코'][id],
         '서브 스텟': {
           ...state['에코'][id]?.['서브 스텟'],
-          [action.payload.slot]: { stat: action.payload.stat, value: action.payload.value },
+          [action.payload.order]: { stat: action.payload.stat, value: action.payload.value },
         },
       },
     };

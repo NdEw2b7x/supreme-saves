@@ -121,6 +121,7 @@ select {
   appearance: none;
   border: none;
   text-align-last: center;
+  font-size: 1rem;
 }
 input[type='radio'] {
   display: none;

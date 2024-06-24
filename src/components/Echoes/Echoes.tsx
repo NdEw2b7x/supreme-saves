@@ -10,13 +10,13 @@ export default function Echoes() {
   const filter = useSelector((state: State) => state.grobalSlice['filter'].cost);
   const subPage = useSelector((state: State) => state.grobalSlice['subPage']);
 
-  const [harmony, setHarmony] = useState<Harmony>(everyHarmony[0]);
+  const [harmony, setHarmony] = useState<Harmony>();
 
   let contents;
   if (subPage === '추가') {
     contents = <EchoesAdd />;
   } else {
-    contents = <EchoesList selected={harmony} />;
+    contents = <EchoesList filterHarmony={harmony} />;
   }
   return (
     <main id='Echoes'>
@@ -25,10 +25,15 @@ export default function Echoes() {
           <select
             name='filterHarmory'
             id='FilterHarmory'
-            onChange={(e) => {
-              setHarmony(e.target.value as Harmony);
+            onChange={({ target: { value } }) => {
+              if (value === '전체') {
+                setHarmony(undefined);
+              } else {
+                setHarmony(value as Harmony);
+              }
             }}
           >
+            <option value='전체'>전체</option>
             {everyHarmony.map((i) => {
               return (
                 <option key={i} value={i}>

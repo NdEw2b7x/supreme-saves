@@ -1,11 +1,18 @@
 import { useSelector } from 'react-redux';
 import { everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
-import { EveryWeaponAtk1, EveryWeaponCategory, WeaponSubStats, weaponPivot } from '../../types';
+import {
+  EveryWeaponAtk1,
+  EveryWeaponCategory,
+  WeaponSubStats,
+  getStatsName,
+  weaponPivot,
+} from '../../types';
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
 import { State, dispatch } from '../../store';
 import { addWeapon } from '../../slice/weaponsSlice';
 import { changeSubPage } from '../../slice/grobalSlice';
 import styles from './WeaponsAdd.module.css';
+import { getPercent } from '../../lib/formula';
 
 export default function WeaponsAdd() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);
@@ -48,9 +55,9 @@ export default function WeaponsAdd() {
                       </span>
                     </div>
                     <div>
-                      <span>{subOption}</span>
+                      <span>{getStatsName(subOption)}</span>
                       <span>
-                        {subOption1.toFixed(2)}% ~ {(subOption1 * 4.5).toFixed(2)}%
+                        {getPercent(subOption1)(1)} ~ {getPercent(subOption1 * 4.5)(1)}
                       </span>
                     </div>
                   </div>

@@ -38,8 +38,8 @@
   flex: 1;
   background-color: var(--theme-color-alpha-400);
 
-  height: 4rem;
-  max-width: 4rem;
+  height: 4.5rem;
+  max-width: 4.5rem;
   overflow: hidden;
   border-radius: 0.25rem;
 

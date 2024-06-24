@@ -14,26 +14,32 @@
     grid-template-columns: repeat(5, 1fr);
   }
 }
+.footer {
+  display: flex;
+}
 .card,
 .body,
 .main,
-.sub,
-.modalContent,
-.modalBody,
-.statsBox {
+.sub {
   display: flex;
-  flex-direction: column;
   gap: 0.25rem;
   border-radius: 0.25rem;
 }
 .card,
-.modalContent {
+.body,
+.main,
+.sub {
+  flex-direction: column;
+}
+.card {
   padding: 0.25rem;
 }
 .card,
-.main div,
-.modalContent {
+.main div {
   background-color: var(--theme-color-alpha-200);
+}
+.equipTag {
+  background-color: var(--theme-color-alpha-400);
 }
 .card {
   .header {
@@ -82,6 +88,32 @@
       }
     }
   }
+  .footer {
+    div {
+      align-content: center;
+    }
+    .equipTag {
+      width: 6rem;
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+    .equipName {
+      border-top-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+      width: 100%;
+      background-color: white;
+      color: black;
+    }
+    .equipThumbnail {
+      background-color: var(--theme-color-alpha-400);
+      margin-left: 0.25rem;
+      width: 2.5rem;
+      min-width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 100%;
+      overflow: hidden;
+    }
+  }
 }
 .main div {
   display: flex;
@@ -99,69 +131,31 @@
   }
 }
 
-.modalContent {
-  width: 20rem;
-  .modalHeader {
-    background-color: var(--theme-color);
-    color: black;
+.equipHeader {
+  padding: 0.5rem;
+  input {
     padding: 0.5rem;
-    border-radius: 0.25rem;
-    font-size: 1.25rem;
   }
-  .valueBox {
-    display: flex;
-    span {
-      flex: 1;
-      align-content: center;
-      background-color: var(--theme-color-alpha-400);
-      border-top-left-radius: 0.25rem;
-      border-bottom-left-radius: 0.25rem;
-    }
-    select {
-      flex: 3;
-      padding: 0.5rem;
-      color: black;
-      font-size: 1rem;
-      border-top-right-radius: 0.25rem;
-      border-bottom-right-radius: 0.25rem;
-    }
-  }
-  .modalFooter {
-    border-radius: 0.25rem;
-    display: flex;
-    gap: 0.25rem;
+}
+.equipFooter {
+  border-radius: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
 
-    .save,
-    .cancel {
-      color: white;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 0.25rem;
-    }
-    .save {
-      flex: 3;
-      background-color: green;
-    }
-    .cancel {
-      flex: 1;
-      background-color: crimson;
-    }
+  .save,
+  .cancel {
+    color: white;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
   }
-
-  .statsBoxRow {
-    display: flex;
-    justify-content: space-between;
-    label {
-      width: 100%;
-      text-align: center;
-      display: flex;
-      padding: 0.5rem 0.25rem;
-      justify-content: center;
-      border-radius: 0.25rem;
-    }
-    label:has(:checked) {
-      background-color: var(--theme-color);
-      color: black;
-    }
+  .save {
+    flex: 4;
+    background-color: green;
+  }
+  .cancel {
+    flex: 1;
+    background-color: crimson;
   }
 }

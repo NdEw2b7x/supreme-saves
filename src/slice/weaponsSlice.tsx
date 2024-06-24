@@ -22,9 +22,9 @@ if (myWeapons) {
   initialState['무기'] = JSON.parse(myWeapons) as MyWeapons;
 }
 
-Object.entries(initialState['무기']).forEach(([id, weapon]) => {
-  if (weapon && weapon.장착 !== '미장착') {
-    initialState['맵핑'] = { ...initialState['맵핑'], [weapon.장착]: id };
+Object.entries(initialState['무기']).forEach(([id, myWeapon]) => {
+  if (myWeapon && myWeapon['장착'] !== '미장착') {
+    initialState['맵핑'] = { ...initialState['맵핑'], [myWeapon['장착']]: id };
   }
 });
 

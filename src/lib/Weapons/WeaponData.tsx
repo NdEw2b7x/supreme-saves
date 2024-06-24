@@ -7,13 +7,13 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: WeaponSubSt
         case 'def':
           return 0;
         case 'energy':
-          return 7.2;
+          return 0.072;
         case 'cRate':
           return 0;
         case 'cDmg':
           return 0;
         default:
-          return 6.75;
+          return 0.0675;
       }
     case 26:
       switch (sub) {
@@ -26,46 +26,46 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: WeaponSubSt
         case 'cDmg':
           return 0;
         default:
-          return 5.4;
+          return 0.054;
       }
     case 27:
       switch (sub) {
         case 'def':
-          return 13.675;
+          return 0.13675;
         case 'energy':
-          return 11.52;
+          return 0.1152;
         case 'cRate':
-          return 7.2;
+          return 0.072;
         case 'cDmg':
-          return 14.4;
+          return 0.144;
         default:
-          return 10.8;
+          return 0.108;
       }
     case 31:
       switch (sub) {
         case 'def':
           return 0;
         case 'energy':
-          return 8.64;
+          return 0.0864;
         case 'cRate':
-          return 5.4;
+          return 0.054;
         case 'cDmg':
-          return 10.8;
+          return 0.108;
         default:
-          return 8.1;
+          return 0.081;
       }
     case 33:
       switch (sub) {
         case 'def':
           return 0;
         case 'energy':
-          return 7.2;
+          return 0.072;
         case 'cRate':
-          return 4.5;
+          return 0.045;
         case 'cDmg':
-          return 9.0;
+          return 0.09;
         default:
-          return 6.75;
+          return 0.0675;
       }
     case 40:
       switch (sub) {
@@ -74,11 +74,11 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: WeaponSubSt
         case 'energy':
           return 0;
         case 'cRate':
-          return 8;
+          return 0.08;
         case 'cDmg':
-          return 16;
+          return 0.16;
         default:
-          return 12;
+          return 0.12;
       }
     case 47:
       switch (sub) {
@@ -87,11 +87,11 @@ export const getWeaponSubOptionValue1 = (atk1: EveryWeaponAtk1, sub: WeaponSubSt
         case 'energy':
           return 0;
         case 'cRate':
-          return 5.4;
+          return 0.054;
         case 'cDmg':
-          return 10.8;
+          return 0.108;
         default:
-          return 8.1;
+          return 0.081;
       }
     default:
       return 0;
