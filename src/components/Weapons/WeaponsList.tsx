@@ -1,6 +1,11 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { changeEquip, changeSyntonize, changeWeaponLevel } from '../../slice/weaponsSlice';
+import {
+  WeaponId,
+  changeEquip,
+  changeSyntonize,
+  changeWeaponLevel,
+} from '../../slice/weaponsSlice';
 import { EveryResonatorName, getStatsName, getWeaponName } from '../../types';
 import { getPercent, getWeaponAtk, getWeaponSubOptionValue } from '../../lib/formula';
 import { everyResonatorData } from '../../lib/Resonators';
@@ -36,6 +41,11 @@ export default function WeaponsList() {
                 </option>
               );
             }
+            const nonEquip = (x: EveryResonatorName | '미장착') => {
+              if (x === '미장착') {
+                return <option value='미장착'>미장착</option>;
+              }
+            };
             const thumbnail = (x: EveryResonatorName | '미장착') => {
               if (equip !== '미장착') {
                 return (
@@ -131,16 +141,18 @@ export default function WeaponsList() {
                     <select
                       name={id}
                       defaultValue={equip}
-                      onChange={(e) => {
-                        dispatch(
-                          changeEquip({
-                            id: id as `weapon_${number}`,
-                            equip: e.target.value as EveryResonatorName,
-                          })
-                        );
+                      onChange={({ target: { value } }) => {
+                        if (value !== '미장착') {
+                          dispatch(
+                            changeEquip({
+                              id: id as WeaponId,
+                              equip: value as EveryResonatorName,
+                            })
+                          );
+                        }
                       }}
                     >
-                      <option value='미장착'>미장착</option>
+                      {nonEquip(equip)}
                       {Object.keys(myResonators).map((name) => {
                         const resonatorCategory =
                           everyResonatorData[name as EveryResonatorName].weaponCatergory;

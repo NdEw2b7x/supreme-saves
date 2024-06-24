@@ -132,9 +132,30 @@
 }
 
 .equipHeader {
-  padding: 0.5rem;
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   input {
     padding: 0.5rem;
+  }
+}
+.title {
+  background-color: var(--theme-color-alpha-200);
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  width: 100%;
+}
+.title + select {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  width: 10rem;
+}
+.equipBody {
+  padding: 0 0.25rem;
+  .slotContainer {
+    display: flex;
   }
 }
 .equipFooter {

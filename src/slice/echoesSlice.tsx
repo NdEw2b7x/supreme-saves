@@ -16,13 +16,20 @@ export interface MyEcho {
     [x in 's1' | 's2' | 's3' | 's4' | 's5']?: { stat: EchoSubStats; value: number };
   };
   화음: Harmony;
-  장착: { 공명자?: EveryResonatorName; 슬롯?: 1 | 2 | 3 | 4 | 5 };
+  장착: { 공명자: EveryResonatorName | '미장착'; 슬롯: 0 | EchoEquipSlot };
 }
 
+export type EchoEquipSlot = 1 | 2 | 3 | 4 | 5;
 export type EchoId = `echo_${number}`;
 export type MyEchoes = Partial<Record<EchoId, MyEcho>>;
 
-let initialState: { 에코: MyEchoes } = { 에코: {} };
+let initialState: {
+  에코: MyEchoes;
+  장착: Partial<Record<EveryResonatorName, Partial<Record<1 | 2 | 3 | 4 | 5, EchoId>>>>;
+} = {
+  에코: {},
+  장착: {},
+};
 type InitialState = typeof initialState;
 
 let myEchoes = localStorage.getItem('에코');
@@ -56,7 +63,7 @@ const reducers = {
       '메인 스텟': action.payload.main,
       '서브 스텟': {},
       화음: action.payload.harmony,
-      장착: {},
+      장착: { 공명자: '미장착', 슬롯: 0 },
     };
     state['에코'] = {
       ...state['에코'],
@@ -98,17 +105,57 @@ const reducers = {
   },
   changeEquip: (
     state: InitialState,
-    action: { payload: { id: EchoId; equip: EveryResonatorName | '미장착' } }
+    action: {
+      payload: {
+        id: EchoId;
+        equip: { name: EveryResonatorName | '미장착'; slot: EchoEquipSlot };
+      };
+    }
   ) => {
-    const id = action.payload.id;
-    const newOwner = action.payload.equip;
-    const targetWeapon = state['에코'][id] as MyEcho;
-    if (newOwner === '미장착') {
-      state['에코'] = { ...state['에코'], [id]: { ...targetWeapon, 장착: '미장착' } };
+    const targetId = action.payload.id;
+    const targetInfo = state['에코'][targetId] as MyEcho;
+    const guestOwner = action.payload.equip.name;
+    const guestSlot = action.payload.equip.slot;
+    if (guestOwner === '미장착') {
+      state['에코'] = {
+        ...state['에코'],
+        [targetId]: { ...targetInfo, 장착: { 공명자: '미장착', 슬롯: 0 } },
+      };
+      state['장착'] = { ...state['장착'], [targetInfo['장착']['공명자']]: undefined };
     } else {
+      const hostOwner = targetInfo['장착']['공명자'];
+      const hostSlot = targetInfo['장착']['슬롯'];
+      const currentId = state['장착'][guestOwner]?.[guestSlot];
+      if (currentId) {
+        const currentInfo = state['에코'][currentId];
+        state['에코'] = {
+          ...state['에코'],
+          [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
+          [currentId]: { ...currentInfo, 장착: { 공명자: hostOwner, 슬롯: hostSlot } },
+        };
+        state['장착'] = {
+          ...state['장착'],
+          [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
+        };
+        if (hostOwner !== '미장착') {
+          state['장착'] = {
+            ...state['장착'],
+            [hostOwner]: { ...state['장착'][hostOwner], [hostSlot]: currentId },
+          };
+        }
+      } else {
+        state['에코'] = {
+          ...state['에코'],
+          [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
+        };
+        state['장착'] = {
+          ...state['장착'],
+          [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
+        };
+      }
     }
     save(state);
-    window.location.reload();
+    // window.location.reload();
   },
 };
 

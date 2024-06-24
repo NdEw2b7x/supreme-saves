@@ -1,0 +1,33 @@
+.RadioBtn:has(:checked) {
+  background-color: var(--theme-color);
+  color: black;
+}
+.RadioBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  justify-content: center;
+}
+
+.SelectResonatorContainer {
+  display: flex;
+  width: 10rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+
+  select {
+    width: 100%;
+    padding: 0.5rem;
+  }
+  .ThumbnailContainer {
+    flex: 1;
+    min-width: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    overflow: hidden;
+    background-color: var(--theme-color-alpha-400);
+  }
+}

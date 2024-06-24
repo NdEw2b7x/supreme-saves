@@ -3,16 +3,18 @@ import { ReactNode } from 'react';
 export default function RadioBtn({
   name,
   id,
-  child,
+  children,
+  onChange,
 }: {
   name: string;
   id: string;
-  child: ReactNode;
+  children: ReactNode;
+  onChange: () => void;
 }) {
   return (
-    <label htmlFor={id}>
-      <span>{child}</span>
-      <input type='radio' name={name} id={id} />
+    <label htmlFor={id} className='RadioBtn'>
+      {children}
+      <input type='radio' name={name} id={id} onChange={onChange} />
     </label>
   );
 }

@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EchoId, EchoSubStatsId, MyEcho, changeEchoLevel } from '../../slice/echoesSlice';
+import {
+  EchoId,
+  EchoSubStatsId,
+  MyEcho,
+  changeEchoLevel,
+  changeEquip,
+} from '../../slice/echoesSlice';
 import {
   EchoCost,
   EchoMainStats,
   EchoSecondaryMainStats,
+  EveryResonatorName,
   Harmony,
   getStatsName,
 } from '../../types';
-import { ModalBox, Thumbnail } from '..';
+import { ModalBox, RadioBtn, SelectResonator, Thumbnail } from '..';
 import EchoesListSubAddModal from './EchoesListSubAddModal';
 import { EchoData, getEchoMainValue0, everyEchoData } from '../../lib/Echoes';
 import { getPercent } from '../../lib/formula';
@@ -96,33 +103,57 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
   const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
 
   const [subAddMode, setSubAddMode] = useState<boolean>(false);
-  const [equipMode, setEquipMode] = useState<boolean>(false);
-  const [subSlot, setSubSlot] = useState<EchoSubStatsId>('s1');
+  const [subStatNumber, setStatNumber] = useState<EchoSubStatsId>('s1');
   const [echoId, setEchoId] = useState<EchoId>('echo_0');
 
-  const changeEquip = (x: boolean) => {
+  const [equipMode, setEquipMode] = useState<boolean>(false);
+  const [selectedEquip, setSelectedEquip] = useState<EveryResonatorName>();
+  const [selectedSlot, setSelectedSlot] = useState<1 | 2 | 3 | 4 | 5 | undefined>();
+
+  const changeEquipModal = (x: boolean) => {
     if (x) {
       return (
         <ModalBox key='EchoEquip'>
           <div className={styles.equipHeader}>
-            <div>장착할 공명자</div>
-            <select name='' id=''>
-              {Object.keys(myResonators).map((name) => {
-                return (
-                  <option value={name} key={name}>
-                    {name}
-                  </option>
-                );
-              })}
-            </select>
+            <div className={styles.title}>장착할 공명자</div>
+            <SelectResonator
+              list={Object.keys(myResonators) as EveryResonatorName[]}
+              defaultValue={selectedEquip}
+              onChange={(name) => {
+                setSelectedEquip(name);
+              }}
+            />
           </div>
           <div className={styles.equipBody}>
-            장착할 슬롯
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
+            <div className={styles.title}>장착할 슬롯</div>
+            <div className={styles.slotContainer}>
+              {([1, 2, 3, 4, 5] as const).map((i) => {
+                return (
+                  <RadioBtn
+                    name='subSlot'
+                    id={'subSlot' + i}
+                    key={'subSlot' + i}
+                    onChange={() => {
+                      setSelectedSlot(i);
+                    }}
+                  >
+                    <div
+                      style={{
+                        borderRadius: '100%',
+                        overflow: 'hidden',
+                        width: '2.5rem',
+                        height: '2.5rem',
+                        alignSelf: 'center',
+                        backgroundColor: 'var(--theme-color-alpha-400)',
+                      }}
+                    >
+                      <Thumbnail scope='Echoes' code='G01' />
+                    </div>
+                    <span>{i}</span>
+                  </RadioBtn>
+                );
+              })}
+            </div>
           </div>
           <div className={styles.equipFooter}>
             <input
@@ -130,7 +161,13 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
               className={styles.save}
               value='확인'
               onClick={() => {
-                setEquipMode(false);
+                if (selectedSlot && selectedEquip) {
+                  dispatch(
+                    changeEquip({ id: echoId, equip: { name: selectedEquip, slot: selectedSlot } })
+                  );
+                  setEquipMode(false);
+                  setSelectedSlot(undefined);
+                }
               }}
             />
             <input
@@ -138,6 +175,7 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
               className={styles.cancel}
               value='취소'
               onClick={() => {
+                setSelectedSlot(undefined);
                 setEquipMode(false);
               }}
             />
@@ -153,7 +191,7 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
         return (
           <EchoesListSubAddModal
             id={echoId}
-            subSlotNumber={Number(subSlot[1]) as 1 | 2 | 3 | 4 | 5}
+            subSlotNumber={Number(subStatNumber[1]) as 1 | 2 | 3 | 4 | 5}
             myEcho={myEcho}
             close={() => {
               setSubAddMode(false);
@@ -178,6 +216,12 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
             const secondary = getSecondaryMainStats(cost);
             const harmony = info['화음'];
             const byEcho = genByEcho(info);
+
+            const equipThumbnail = (x: EveryResonatorName | '미장착') => {
+              if (x !== '미장착') {
+                return <Thumbnail scope='Resonators' code={x} key={'equip-' + x} />;
+              }
+            };
             if (filterCost[cost]) {
               if (filterHarmony === harmony || filterHarmony === undefined) {
                 return (
@@ -220,7 +264,7 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
                                     className={styles.addSubBtn}
                                     onClick={() => {
                                       setEchoId(id as EchoId);
-                                      setSubSlot(`s${i}` as EchoSubStatsId);
+                                      setStatNumber(`s${i}` as EchoSubStatsId);
                                       setSubAddMode(true);
                                     }}
                                   >
@@ -243,30 +287,14 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
                       <div
                         className={styles.equipName}
                         onClick={() => {
+                          setEchoId(id as EchoId);
                           setEquipMode(true);
                         }}
                       >
                         {info['장착']['공명자']}
                       </div>
-                      {/* <select
-            className={styles.equipName}
-            defaultValue={info['장착']['공명자']}
-            onChange={({ target: { value } }) => {
-              dispatch(
-                changeEquip({ id: id as EchoId, equip: value as EveryResonatorName })
-              );
-            }}
-          >
-            {Object.keys(myResonators).map((name) => {
-              return (
-                <option value={name} key={name}>
-                  {name}
-                </option>
-              );
-            })}
-          </select> */}
                       <div className={styles.equipThumbnail}>
-                        <Thumbnail scope='Resonators' code='음림' key='df' />
+                        {equipThumbnail(info['장착']['공명자'])}
                       </div>
                     </div>
                   </div>
@@ -278,7 +306,7 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
         })}
       </section>
       {subAddModal(subAddMode)}
-      {changeEquip(equipMode)}
+      {changeEquipModal(equipMode)}
     </>
   );
 }

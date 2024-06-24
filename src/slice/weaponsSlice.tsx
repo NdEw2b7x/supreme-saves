@@ -14,7 +14,7 @@ export type MyWeapons = Partial<Record<WeaponId, MyWeapon>>;
 
 type WeaponMapping = Partial<Record<EveryResonatorName, WeaponId>>;
 
-let initialState: { 무기: MyWeapons; 맵핑: WeaponMapping } = { 무기: {}, 맵핑: {} };
+let initialState: { 무기: MyWeapons; 장착: WeaponMapping } = { 무기: {}, 장착: {} };
 type InitialState = typeof initialState;
 
 let myWeapons = localStorage.getItem('무기');
@@ -24,7 +24,7 @@ if (myWeapons) {
 
 Object.entries(initialState['무기']).forEach(([id, myWeapon]) => {
   if (myWeapon && myWeapon['장착'] !== '미장착') {
-    initialState['맵핑'] = { ...initialState['맵핑'], [myWeapon['장착']]: id };
+    initialState['장착'] = { ...initialState['장착'], [myWeapon['장착']]: id };
   }
 });
 
@@ -70,29 +70,28 @@ const reducers = {
   },
   changeEquip: (
     state: InitialState,
-    action: { payload: { id: WeaponId; equip: EveryResonatorName | '미장착' } }
+    action: { payload: { id: WeaponId; equip: EveryResonatorName } }
   ) => {
-    const id = action.payload.id;
-    const newOwner = action.payload.equip;
-    const targetWeapon = state['무기'][id] as MyWeapon;
-    if (newOwner === '미장착') {
-      state['무기'] = { ...state['무기'], [id]: { ...targetWeapon, 장착: '미장착' } };
-      state['맵핑'] = { ...state['맵핑'], [targetWeapon.장착]: undefined };
-    } else {
-      const oldOwner = targetWeapon.장착;
-      const oldWeaponId = state['맵핑'][newOwner];
-      if (oldWeaponId) {
-        const oldWeapon = state['무기'][oldWeaponId];
-        state['무기'] = {
-          ...state['무기'],
-          [id]: { ...targetWeapon, 장착: newOwner },
-          [oldWeaponId]: { ...oldWeapon, 장착: oldOwner },
-        };
-        state['맵핑'] = { ...state['맵핑'], [newOwner]: id, [oldOwner]: oldWeaponId };
-      } else {
-        state['무기'] = { ...state['무기'], [id]: { ...targetWeapon, 장착: newOwner } };
-        state['맵핑'] = { ...state['맵핑'], [newOwner]: id };
+    const targetId = action.payload.id;
+    const guestOwner = action.payload.equip;
+    const targetInfo = state['무기'][targetId] as MyWeapon;
+
+    const hostOwner = targetInfo['장착'];
+    const currentId = state['장착'][guestOwner];
+    if (currentId) {
+      const currentInfo = state['무기'][currentId];
+      state['무기'] = {
+        ...state['무기'],
+        [targetId]: { ...targetInfo, 장착: guestOwner },
+        [currentId]: { ...currentInfo, 장착: hostOwner },
+      };
+      state['장착'] = { ...state['장착'], [guestOwner]: targetId };
+      if (hostOwner !== '미장착') {
+        state['장착'] = { ...state['장착'], [hostOwner]: currentId };
       }
+    } else {
+      state['무기'] = { ...state['무기'], [targetId]: { ...targetInfo, 장착: guestOwner } };
+      state['장착'] = { ...state['장착'], [guestOwner]: targetId };
     }
     save(state);
     window.location.reload();

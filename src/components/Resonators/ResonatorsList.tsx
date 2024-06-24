@@ -56,7 +56,7 @@ export default function ResonatorsList() {
   const filterW = filters.weaponCategory;
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
-  const weaponMap = useSelector((state: State) => state.weaponsSlice['맵핑']);
+  const weaponMap = useSelector((state: State) => state.weaponsSlice['장착']);
   return (
     <section id='ResonatorsList' className={styles.container} data-section='list'>
       {Object.entries(myResonators).map(([key, info]) => {

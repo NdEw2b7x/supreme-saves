@@ -77,7 +77,7 @@ export default function ResonatorDetail() {
   const name = useSelector((state: State) => state.grobalSlice['detail']) as EveryResonatorName;
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
-  const weaponMapping = useSelector((state: State) => state.weaponsSlice['맵핑']);
+  const weaponMapping = useSelector((state: State) => state.weaponsSlice['장착']);
 
   const resonatorData = everyResonatorData[name];
   const myResonator = myResonators[name] as MyResonator;
