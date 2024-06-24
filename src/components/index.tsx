@@ -9,7 +9,13 @@ import Thumbnail, { echoThumbnailControl, weaponThumbnailControl } from './Thumb
 import RadioBtn from './RadioBtn';
 import SelectResonator from './SelectResonator';
 import { MyWeapons, WeaponId } from '../slice/weaponsSlice';
-import { EchoMainStats, EveryResonatorName, EveryWeaponAtk1, WeaponSubStats } from '../types';
+import {
+  EchoMainStats,
+  EchoSubStats,
+  EveryResonatorName,
+  EveryWeaponAtk1,
+  WeaponSubStats,
+} from '../types';
 import { WeaponData, everyWeaponData } from '../lib/Weapons';
 import { getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
 import { MyResonators } from '../slice/resonatorsSlice';
@@ -111,17 +117,37 @@ export const genByEcho = (info?: MyEcho) => {
     wind: 0,
     light: 0,
     dark: 0,
+    heal: 0,
     cRate: 0,
     cDmg: 0,
-    heal: 0,
     flatHp: 0,
     flatAtk: 0,
+  };
+  const byEchoSub: Record<EchoSubStats, number> = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    energy: 0,
+    cRate: 0,
+    cDmg: 0,
+    basic: 0,
+    heavy: 0,
+    skill: 0,
+    burst: 0,
+    flatHp: 0,
+    flatAtk: 0,
+    flatDef: 0,
   };
   if (info) {
     const lv = info['레벨'];
     const p = info['메인 스텟'];
     const r = info['희귀'];
     const data = everyEchoData[info['코드']];
+    Object.values(info['서브 스텟']).forEach((sub) => {
+      if (sub) {
+        byEchoSub[sub.stat as EchoSubStats] += sub.value;
+      }
+    });
     if (data) {
       const c = data.cost;
       const [p0, s0] = getEchoMainValue0(r)(c)(p);
@@ -129,5 +155,72 @@ export const genByEcho = (info?: MyEcho) => {
       byEchoMain[getSecondaryMainStats(c)] = s0 * (1 + 0.16 * lv);
     }
   }
-  return byEchoMain;
+  return [byEchoMain, byEchoSub] as const;
+};
+
+type EchoStatsValueSet = Record<EchoMainStats | EchoSubStats, number>;
+export const genByEchoTotal: (x: ReturnType<typeof genByEcho>) => EchoStatsValueSet = (
+  x: ReturnType<typeof genByEcho>
+) => {
+  const byEcho: EchoStatsValueSet = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    energy: 0,
+    ice: 0,
+    fire: 0,
+    electro: 0,
+    wind: 0,
+    light: 0,
+    dark: 0,
+    heal: 0,
+    cRate: 0,
+    cDmg: 0,
+    basic: 0,
+    heavy: 0,
+    skill: 0,
+    burst: 0,
+    flatHp: 0,
+    flatAtk: 0,
+    flatDef: 0,
+  };
+  Object.entries(x[0]).forEach(([stat, value]) => {
+    byEcho[stat as EchoMainStats] += value;
+  });
+  Object.entries(x[1]).forEach(([stat, value]) => {
+    byEcho[stat as EchoSubStats] += value;
+  });
+  return byEcho;
+};
+export const genByEchoes: (x: EchoStatsValueSet[]) => EchoStatsValueSet = (
+  x: Array<ReturnType<typeof genByEchoTotal>>
+) => {
+  const byEchoes: EchoStatsValueSet = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    energy: 0,
+    ice: 0,
+    fire: 0,
+    electro: 0,
+    wind: 0,
+    light: 0,
+    dark: 0,
+    heal: 0,
+    cRate: 0,
+    cDmg: 0,
+    basic: 0,
+    heavy: 0,
+    skill: 0,
+    burst: 0,
+    flatHp: 0,
+    flatAtk: 0,
+    flatDef: 0,
+  };
+  x.forEach((i) => {
+    Object.entries(i).forEach(([stat, value]) => {
+      byEchoes[stat as EchoMainStats | EchoSubStats] += value;
+    });
+  });
+  return byEchoes;
 };

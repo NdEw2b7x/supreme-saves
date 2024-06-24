@@ -79,7 +79,7 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
             const sub = info['서브 스텟'];
             const secondary = getSecondaryMainStats(cost);
             const harmony = info['화음'];
-            const byEcho = genByEcho(info);
+            const [byEchoMain] = genByEcho(info);
 
             const equipThumbnail = (x: EveryResonatorName | '미장착') => {
               if (x !== '미장착') {
@@ -92,7 +92,10 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
                   <div
                     key={id}
                     className={styles.card}
-                    style={{ order: `${(6 - info['희귀']) * 100 + 25 - info['레벨']}` }}
+                    style={{
+                      order: `${(6 - info['희귀']) * 100 + 25 - info['레벨']}`,
+                      position: 'relative',
+                    }}
                   >
                     <EchoesListCardHeader id={id as EchoId} info={info} cost={cost} />
 
@@ -100,11 +103,11 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
                       <div className={styles.main}>
                         <div>
                           <span>{getStatsName(main)}</span>
-                          <span>{getPercent(byEcho[main])(2)}</span>
+                          <span>{getPercent(byEchoMain[main])(2)}</span>
                         </div>
                         <div>
                           <span>{getStatsName(secondary)}</span>
-                          <span>{byEcho[secondary].toFixed(1)}</span>
+                          <span>{byEchoMain[secondary].toFixed(1)}</span>
                         </div>
                       </div>
                       <div className={styles.sub}>

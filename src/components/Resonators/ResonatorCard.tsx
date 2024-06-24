@@ -1,5 +1,5 @@
 import { echoThumbnailControl } from '..';
-import ResonatorCardUpper from './CardUpper';
+import ResonatorCardUpper, { getMyEchoInfoes } from './CardUpper';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
@@ -18,13 +18,7 @@ export default function ResonatorCard({
 }) {
   const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
   const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
-  const myEchoSet = ([1, 2, 3, 4, 5] as const).map((i) => {
-    const myEcho = equipEchoes[resonatorName]?.[i];
-    if (myEcho) {
-      return myEchoes[myEcho];
-    }
-    return undefined;
-  });
+  const myEchoInfoes = getMyEchoInfoes(myEchoes)(equipEchoes)(resonatorName);
 
   const resonatorLevel = info['레벨'];
   return (
@@ -40,33 +34,33 @@ export default function ResonatorCard({
       <ResonatorCardUpper resonatorName={resonatorName} info={info} />
       <div className={styles.bottom}>
         <div className={styles.echoes}>
-          {myEchoSet.map((value, index) => {
+          {myEchoInfoes.map((echoInfo, i) => {
             let code: EchoCode | undefined;
             let main: EchoPrimaryMainStats | undefined;
             let sub: MyEcho['서브 스텟'] = {};
-            if (value) {
-              code = value['코드'];
-              main = getStatsAbbr(value['메인 스텟']) as EchoPrimaryMainStats;
-              sub = value['서브 스텟'];
+            if (echoInfo) {
+              code = echoInfo['코드'];
+              main = getStatsAbbr(echoInfo['메인 스텟']) as EchoPrimaryMainStats;
+              sub = echoInfo['서브 스텟'];
             }
             return (
-              <div className={styles.echo} key={`${resonatorName} ${index}`}>
+              <div className={styles.echo} key={`${resonatorName} ${i}`}>
                 <div className={styles.echoImgBox}>{echoThumbnailControl(code)}</div>
                 <div className={styles.echoOpt}>
                   <div className={styles.main}>
                     <span>{main}</span>
                   </div>
                   {(['s1', 's2', 's3', 's4', 's5'] as const)
-                    .filter((v) => {
-                      const subOpt = sub[v];
+                    .filter((i) => {
+                      const subOpt = sub[i];
                       if (subOpt) {
                         return true;
                       }
                       return false;
                     })
-                    .map((s) => {
+                    .map((i) => {
                       let optName = '';
-                      const subOpt = sub[s];
+                      const subOpt = sub[i];
                       if (subOpt) {
                         let optValue = subOpt.value.toString();
                         if (subOpt.value < 1) {
@@ -74,7 +68,7 @@ export default function ResonatorCard({
                         }
                         optName = getStatsAbbr(subOpt.stat);
                         return (
-                          <div className={styles.sub} key={s}>
+                          <div className={styles.sub} key={i}>
                             <span>{optName}</span>
                             <span>{optValue}</span>
                           </div>

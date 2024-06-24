@@ -53,6 +53,12 @@
   gap: 0.5rem;
   justify-content: space-evenly;
 
+  position: absolute;
+  width: 19rem;
+  top: 7.5rem;
+  backdrop-filter: blur(0.1rem);
+  box-shadow: 0 0.5rem 1rem black;
+
   div {
     flex: 1;
     background-color: var(--theme-color);

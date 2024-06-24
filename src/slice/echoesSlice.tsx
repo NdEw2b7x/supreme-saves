@@ -154,13 +154,25 @@ const reducers = {
         ...state['에코'],
         [targetId]: { ...targetInfo, 장착: { 공명자: guestOwner, 슬롯: guestSlot } },
       };
-      state['장착'] = {
-        ...state['장착'],
-        [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
-      };
+      if (hostOwner !== '미장착') {
+        if (hostOwner === guestOwner) {
+          state['장착'] = {
+            ...state['장착'],
+            [guestOwner]: {
+              ...state['장착'][guestOwner],
+              [guestSlot]: targetId,
+              [hostSlot]: undefined,
+            },
+          };
+        }
+      } else {
+        state['장착'] = {
+          ...state['장착'],
+          [guestOwner]: { ...state['장착'][guestOwner], [guestSlot]: targetId },
+        };
+      }
     }
     save(state);
-    // window.location.reload();
   },
 };
 

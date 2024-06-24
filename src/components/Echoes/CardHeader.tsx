@@ -2,8 +2,8 @@ import { Thumbnail } from '..';
 import { dispatch } from '../../store';
 import { EchoId, MyEcho, changeEchoLevel } from '../../slice/echoesSlice';
 import { EchoCost } from '../../types';
-import styles from './CardHeader.module.css';
 import { useState } from 'react';
+import styles from './CardHeader.module.css';
 
 export default function EchoesListCardHeader({
   id,
@@ -41,6 +41,7 @@ export default function EchoesListCardHeader({
                     {([0, 5, 10, 15, 20, 25] as const).map((level) => {
                       return (
                         <div
+                          key={level}
                           onClick={() => {
                             dispatch(changeEchoLevel({ id, level }));
                             setQuick(<></>);

@@ -13,8 +13,11 @@
     display: flex;
     flex-direction: column;
   }
+  .statsBox {
+    flex: 3;
+  }
   .valueBox {
-    flex: 1;
+    flex: 2;
     justify-content: center;
   }
 

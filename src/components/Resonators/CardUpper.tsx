@@ -1,4 +1,12 @@
-import { Thumbnail, genByMinorForte, genByWeapon, weaponThumbnailControl } from '..';
+import {
+  Thumbnail,
+  genByEcho,
+  genByEchoTotal,
+  genByEchoes,
+  genByMinorForte,
+  genByWeapon,
+  weaponThumbnailControl,
+} from '..';
 import { useSelector } from 'react-redux';
 import { State } from '../../store';
 import { MyResonator } from '../../slice/resonatorsSlice';
@@ -7,6 +15,30 @@ import { EveryResonatorName, Stats, getStatsName } from '../../types';
 import { getATK, getDEF, getHP, getPercent } from '../../lib/formula';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './CardUpper.module.css';
+import { EchoEquipSlot, EchoId, MyEcho } from '../../slice/echoesSlice';
+
+export const getMyEchoInfoes = (myEchoes: Partial<Record<EchoId, MyEcho>>) => {
+  return (
+    equipEchoes: Partial<Record<EveryResonatorName, Partial<Record<EchoEquipSlot, EchoId>>>>
+  ) => {
+    return (name: EveryResonatorName) => {
+      return ([1, 2, 3, 4, 5] as const).map((i) => {
+        const myEcho = equipEchoes[name]?.[i];
+        if (myEcho) {
+          return myEchoes[myEcho];
+        }
+        return undefined;
+      });
+    };
+  };
+};
+export const getMyEchoValues = (x: (MyEcho | undefined)[]) => {
+  return genByEchoes(
+    x.map((i) => {
+      return genByEchoTotal(genByEcho(i));
+    })
+  );
+};
 
 export default function ResonatorCardUpper({
   resonatorName,
@@ -43,7 +75,7 @@ export default function ResonatorCardUpper({
   const element = resonatorData.element;
   const byMinorFortes = genByMinorForte(myResonators)(resonatorName);
   Object.entries(byMinorFortes[1]).forEach(([stat, value]) => {
-    values[stat as Stats] = value;
+    values[stat as Stats] += value;
   });
 
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
@@ -56,7 +88,14 @@ export default function ResonatorCardUpper({
   const myWeaponCode = myWeapon?.코드;
   const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(myWeaponId);
   Object.entries(byWeapon).forEach(([stat, value]) => {
-    values[stat as Stats] = value;
+    values[stat as Stats] += value;
+  });
+
+  const myEchoInfoes = getMyEchoInfoes(useSelector((state: State) => state.echoesSlice['에코']))(
+    useSelector((state: State) => state.echoesSlice['장착'])
+  )(resonatorName);
+  Object.entries(getMyEchoValues(myEchoInfoes)).forEach(([stat, value]) => {
+    values[stat as Stats] += value;
   });
 
   const result: Record<
@@ -83,7 +122,7 @@ export default function ResonatorCardUpper({
       <div className={styles.intro}>
         <div className={styles.lvBadge}>Lv.{resonatorLevel}</div>
         <div className={styles.imgBox}>
-          <Thumbnail scope='Resonators' code={resonatorName} key={resonatorName} />
+          <Thumbnail scope='Resonators' code={resonatorName} />
         </div>
         <div className={styles.name} style={{ backgroundColor: 'var(--element-' + element + ')' }}>
           {resonatorName}
@@ -99,6 +138,7 @@ export default function ResonatorCardUpper({
             return false;
           })
           .map(([stat, value]) => {
+            let tag = getStatsName(stat as Stats);
             let result: string = getPercent(value)(2);
             switch (stat) {
               case 'hp':
@@ -107,9 +147,20 @@ export default function ResonatorCardUpper({
                 result = value.toFixed(3);
                 break;
             }
+            switch (stat) {
+              case 'hp':
+                tag = 'HP';
+                break;
+              case 'atk':
+                tag = '공격력';
+                break;
+              case 'def':
+                tag = '방어력';
+                break;
+            }
             return (
               <div key={stat}>
-                <span>{getStatsName(stat as Stats)}</span>
+                <span>{tag}</span>
                 <span>{result}</span>
               </div>
             );
