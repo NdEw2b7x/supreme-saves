@@ -1,81 +1,107 @@
-import { genByMinorForte, genByWeapon } from '..';
-import { useSelector } from 'react-redux';
-import { State } from '../../store';
-import { ResonatorName, getElementMap } from '../../types';
-import { getATK, getDEF, getHP, getPercent } from '../../lib/formula';
-import { everyResonatorData } from '../../lib/Resonators';
-import styles from './ResonatorDetail.module.css';
+import { ResonatorName, Stats, getStatsName } from '../../types';
+import { getPercent } from '../../lib/formula';
+import { useStatsResult } from '../useStatsResult';
+import styles from './DetailStats.module.css';
 
-export function DetailStats({ name, level }: { name: ResonatorName; level: number }) {
-  const weaponMapping = useSelector((state: State) => state.weaponsSlice['장착']);
-  const weaponId = weaponMapping[name];
-  const data = everyResonatorData[name];
-  const element = data.element;
-  const [, byMinorForte] = genByMinorForte(
-    useSelector((state: State) => state.resonatorsSlice['공명자'])
-  )(name);
-  const [weaponAtk, byWeapon] = genByWeapon(
-    useSelector((state: State) => state.weaponsSlice['무기'])
-  )(weaponId);
+export function DetailStats({ name }: { name: ResonatorName }) {
+  const { baseHp, baseAtk, baseDef, hp, atk, def, flatHp, flatAtk, flatDef, ...stats } =
+    useStatsResult(name);
   return (
-    <div className={styles.statistics}>
-      <div>
-        <span>HP</span>
-        <span>
+    <div className={styles.stats}>
+      <div className={styles.group}>
+        <div>
+          <span>HP</span>
           <span>
-            {(getHP(data.hp1)(level) * (1 + byWeapon.hp + byMinorForte.hp / 100)).toFixed(3)}
+            <span>{(baseHp * (1 + hp) + flatHp).toFixed(3)}</span>
+            <span style={{ fontSize: 'smaller' }}>
+              &nbsp;({baseHp}&nbsp;+&nbsp;
+              {(baseHp * hp + flatHp).toFixed(2)})
+            </span>
           </span>
-          <span style={{ fontSize: 'smaller' }}>
-            &nbsp;({Math.floor(getHP(data.hp1)(level))}&nbsp;+&nbsp;
-            {Math.floor(getHP(data.hp1)(level) * (byWeapon.hp + byMinorForte.hp))})
-          </span>
-        </span>
-      </div>
-      <div>
-        <span>공격력</span>
-        <span>
+        </div>
+        <div>
+          <span>공격력</span>
           <span>
-            {(
-              (getATK(data.atk1)(level) + weaponAtk) *
-              (1 + byWeapon.atk + byMinorForte.atk)
-            ).toFixed(3)}
+            <span>{(baseAtk * (1 + atk) + flatAtk).toFixed(3)}</span>
+            <span style={{ fontSize: 'smaller' }}>
+              &nbsp;({baseAtk}
+              &nbsp;+&nbsp;
+              {(baseAtk * atk + flatAtk).toFixed(2)})
+            </span>
           </span>
-          <span style={{ fontSize: 'smaller' }}>
-            &nbsp;({Math.floor(getATK(data.atk1)(level) + weaponAtk)}
-            &nbsp;+&nbsp;
-            {Math.floor((getATK(data.atk1)(level) + weaponAtk) * (byWeapon.atk + byMinorForte.atk))}
-            )
-          </span>
-        </span>
-      </div>
-      <div>
-        <span>방어력</span>
-        <span>
+        </div>
+        <div>
+          <span>방어력</span>
           <span>
-            {(getDEF(data.def1)(level) * (1 + byWeapon.def + byMinorForte.def)).toFixed(3)}
+            <span>{(baseDef * (1 + def) + flatDef).toFixed(3)}</span>
+            <span style={{ fontSize: 'smaller' }}>
+              &nbsp;({baseDef}
+              &nbsp;+&nbsp;
+              {(baseDef * def + flatDef).toFixed(2)})
+            </span>
           </span>
-          <span style={{ fontSize: 'smaller' }}>
-            &nbsp;({Math.floor(getDEF(data.def1)(level))}
-            &nbsp;+&nbsp;
-            {Math.floor(getDEF(data.def1)(level) * (byWeapon.def + byMinorForte.def))})
-          </span>
-        </span>
+        </div>
       </div>
-      <div>
-        <span>공명 효율</span>
-        <span>{getPercent(1 + byWeapon.energy)(2)}</span>
+      <div className={styles.group}>
+        {(
+          [
+            'energy',
+            'ice',
+            'fire',
+            'electro',
+            'wind',
+            'light',
+            'dark',
+            'heal',
+            'cRate',
+            'cDmg',
+          ] as Stats[]
+        )
+          .filter((i) => {
+            if (stats[i as keyof typeof stats] > 0) {
+              return true;
+            }
+            return false;
+          })
+          .map((i) => {
+            let color = 'white';
+            switch (i) {
+              case 'ice':
+              case 'fire':
+              case 'electro':
+              case 'wind':
+              case 'light':
+              case 'dark':
+                color = `var(--element-${i})`;
+                break;
+              default:
+                break;
+            }
+
+            return (
+              <div key={i}>
+                <span style={{ color }}>{getStatsName(i)}</span>
+                <span>{getPercent(stats[i as keyof typeof stats])(3)}</span>
+              </div>
+            );
+          })}
       </div>
-      <div>
-        <span>{element} 피해 보너스</span>
-        <span>{getPercent(byMinorForte[getElementMap(element)])(2)}</span>
-      </div>
-      <div>
-        <span>크리티컬 확률</span>
-        <span>{getPercent(0.05 + byWeapon.cRate + byMinorForte.cRate)(3)}</span>
-      </div>
-      <div>
-        <span>크리티컬 피해</span>
-        <span>{getPercent(1.5 + byWeapon.cDmg + byMinorForte.cDmg)(3)}</span>
+      <div className={styles.group}>
+        {(['basic', 'heavy', 'skill', 'burst'] as Stats[])
+          .filter((i) => {
+            if (stats[i as keyof typeof stats] > 0) {
+              return true;
+            }
+            return false;
+          })
+          .map((i) => {
+            return (
+              <div key={i}>
+                <span>{getStatsName(i)}</span>
+                <span>{getPercent(stats[i as keyof typeof stats])(3)}</span>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

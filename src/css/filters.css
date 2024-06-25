@@ -12,11 +12,12 @@
 .filter {
   flex: 2;
   display: flex;
-
   gap: 0.25rem;
-
-  display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
+  @media (min-width: 60rem) {
+    flex-direction: row;
+  }
 }
 .filter .radio {
   flex: 1;

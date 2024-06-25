@@ -8,7 +8,7 @@ const name = 'grobalSlice';
 
 export const everyPage = ['공명자', '무기', '에코', '기타'] as const;
 export type EveryPage = (typeof everyPage)[number];
-export const everySubPage = ['', '추가', '상세'] as const;
+export const everySubPage = ['추가', '상세'] as const;
 export type EverySubPage = (typeof everySubPage)[number];
 
 interface InitialFilter {
@@ -19,7 +19,7 @@ interface InitialFilter {
 }
 interface InitialState {
   page: EveryPage;
-  subPage: EverySubPage;
+  subPage?: EverySubPage;
   detail?: ResonatorName;
   filter: InitialFilter;
 }
@@ -29,7 +29,7 @@ const initialFilter: InitialFilter = {
   weaponCategory: { 대검: true, 직검: true, 권총: true, 권갑: true, 증폭기: true },
   cost: { 4: true, 3: true, 1: true },
 } as const;
-const initialState: InitialState = { page: '공명자', subPage: '', filter: initialFilter };
+const initialState: InitialState = { page: '공명자', filter: initialFilter };
 
 const modeFromStorage = sessionStorage.getItem('page');
 if (modeFromStorage) {
@@ -40,34 +40,34 @@ if (filterFromStorage) {
   initialState.filter = JSON.parse(filterFromStorage) as InitialFilter;
 }
 const reducers = {
-  changePage: (state: InitialState, action: { payload: EveryPage }) => {
-    const selected = action.payload;
-    state.page = selected;
-    state.subPage = '';
-    sessionStorage.setItem('page', JSON.stringify(selected));
+  changePage: (state: InitialState, { payload }: { payload: EveryPage }) => {
+    sessionStorage.setItem('page', JSON.stringify(payload));
+    const state_: InitialState = { ...state, page: payload, subPage: undefined };
+    return state_;
   },
-  changeSubPage: (state: InitialState, action: { payload: EverySubPage }) => {
-    state.subPage = action.payload;
+  changeSubPage: (state: InitialState, { payload }: { payload: EverySubPage | undefined }) => {
+    return { ...state, subPage: payload };
   },
-  selectDetail: (state: InitialState, action: { payload: ResonatorName }) => {
-    state.detail = action.payload;
+  selectDetail: (state: InitialState, { payload }: { payload: ResonatorName }) => {
+    return { ...state, detail: payload };
   },
   changefilter: (
     state: InitialState,
-    action: {
+    {
+      payload: { filter, item },
+    }: {
       payload: {
         filter: keyof InitialFilter;
         item: EveryRarity | EveryWeaponCategory | EveryElement | EchoCost;
       };
     }
   ) => {
-    const item = action.payload.item;
     switch (item) {
       case 5:
       case 4:
       case 3:
       case 1:
-        if (action.payload.filter === 'rarity' && item !== 1) {
+        if (filter === 'rarity' && item !== 1) {
           const filterR = state.filter.rarity;
           const nowR = filterR[item];
           const countTrueR = Object.values(filterR).filter((i) => i === true).length;

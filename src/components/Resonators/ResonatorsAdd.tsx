@@ -23,7 +23,7 @@ export default function ResonatorsAdd() {
               className={styles.card}
               onClick={() => {
                 dispatch(addResonator(name));
-                dispatch(changeSubPage(''));
+                dispatch(changeSubPage(undefined));
               }}
             >
               <img

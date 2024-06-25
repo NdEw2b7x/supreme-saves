@@ -1,5 +1,5 @@
 .RadioBtn:has(:checked) {
-  background-color: var(--theme-color);
+  background-color: var(--theme-color-alpha-800);
   color: black;
 }
 .RadioBtn {
@@ -20,6 +20,7 @@
 
   select {
     width: 100%;
+    color: black;
     padding: 0.5rem;
   }
   .ThumbnailContainer {

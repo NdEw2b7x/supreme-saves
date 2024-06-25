@@ -37,7 +37,7 @@ export default function WeaponsAdd() {
                 key={code}
                 onClick={() => {
                   dispatch(addWeapon(code as EveryWeaponCode));
-                  dispatch(changeSubPage(''));
+                  dispatch(changeSubPage(undefined));
                 }}
               >
                 <div className={styles.name} style={{ backgroundColor: `var(--${rarity}-star)` }}>

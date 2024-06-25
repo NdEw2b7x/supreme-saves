@@ -2,25 +2,13 @@ import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './ResonatorDetail.module.css';
-import {
-  ResonatorName,
-  SkillLevel,
-  everySkillLevel,
-  everySkillType,
-  getStatsName,
-} from '../../types';
-import {
-  MyResonator,
-  changeLevel,
-  changeSkillLevel,
-  toggleNode1,
-  toggleNode2,
-} from '../../slice/resonatorsSlice';
-import { getPercent } from '../../lib/formula';
-import ResonatorDetailWeapon from './DetailWeapon';
-import { genByMinorForte } from '..';
+import { EveryChain, ResonatorName } from '../../types';
+import { MyResonator, changeChain, changeLevel } from '../../slice/resonatorsSlice';
+import DetailWeapon from './DetailWeapon';
 import { RoverChangeElement } from './RoverChangeElement';
 import { DetailStats } from './DetailStats';
+import { DetailSkill } from './DetailSkill';
+import Chain from '../icons/Chain';
 
 export default function ResonatorDetail() {
   const name = useSelector((state: State) => state.grobalSlice['detail']) as ResonatorName;
@@ -41,7 +29,6 @@ export default function ResonatorDetail() {
     );
   }
   const weaponId = weaponMapping[name];
-  const [minorForte, byMinorForte] = genByMinorForte(myResonators)(name);
   return (
     <>
       <header className={styles.header}>
@@ -71,87 +58,37 @@ export default function ResonatorDetail() {
         <section className={styles.info}>
           <div className={styles.top}>
             <div className={styles.left}>
-              <DetailStats name={name} level={myResonator['레벨']} />
+              <DetailStats name={name} />
             </div>
             <div className={styles.right}>
-              <ResonatorDetailWeapon id={weaponId} />
-              <div className={styles.skill}>
-                <div className={styles.skillNodes}>
-                  {everySkillType.map((type) => {
+              <DetailWeapon id={weaponId} name={name} />
+              <DetailSkill name={name} />
+              <div className={styles.chain}>
+                <div className={styles.chainNodes}>
+                  {([1, 2, 3, 4, 5, 6] as const).map((i) => {
+                    const chainNumber: EveryChain = myResonator.체인;
+                    let s = 'chainTrue';
+                    let c = 'var(--theme-color)';
+                    if (chainNumber < i) {
+                      s = 'chainFalse';
+                      c = 'var(--theme-color-alpha-400)';
+                    }
                     return (
-                      <div className={styles.skillLine} key={type}>
-                        <div className={styles.skillNode}>
-                          <select
-                            defaultValue={Number(myResonator?.스킬[type][0])}
-                            onChange={(e) => {
-                              const level = Number(e.target.value) as SkillLevel;
-                              dispatch(changeSkillLevel({ name, type, level }));
-                            }}
-                          >
-                            {everySkillLevel.map((i) => {
-                              let levelCap = 1;
-                              const myLevel = myResonator?.레벨;
-                              if (myLevel) {
-                                if (myLevel > 80) {
-                                  levelCap = 10;
-                                } else if (myLevel > 70) {
-                                  levelCap = 8;
-                                } else if (myLevel > 60) {
-                                  levelCap = 6;
-                                } else if (myLevel > 50) {
-                                  levelCap = 4;
-                                } else if (myLevel > 40) {
-                                  levelCap = 2;
-                                }
-                              }
-                              if (i <= levelCap) {
-                                return (
-                                  <option key={i} value={i}>
-                                    {i}
-                                  </option>
-                                );
-                              } else {
-                                return (
-                                  <option key={i} value={i} disabled>
-                                    {i}
-                                  </option>
-                                );
-                              }
-                            })}
-                          </select>
-                        </div>
-                        <div
-                          className={styles.skillNode}
-                          data-selected={myResonator?.스킬[type][1]}
-                          onClick={() => {
-                            dispatch(toggleNode1({ name, type }));
-                          }}
-                        ></div>
-                        <div
-                          className={styles.skillNode}
-                          data-selected={myResonator?.스킬[type][2]}
-                          onClick={() => {
-                            dispatch(toggleNode2({ name, type }));
-                          }}
-                        ></div>
+                      <div
+                        className={styles[s]}
+                        key={i}
+                        onClick={() => {
+                          let value: EveryChain = i;
+                          if (i === chainNumber) {
+                            value = (chainNumber - 1) as 0 | 1 | 2 | 3 | 4 | 5;
+                          }
+                          dispatch(changeChain({ name, chain: value as EveryChain }));
+                        }}
+                      >
+                        <Chain fill={c} />
                       </div>
                     );
                   })}
-                </div>
-                <div className={styles.skillTags}>
-                  {everySkillType.map((i) => {
-                    return <span key={i}>{i}</span>;
-                  })}
-                </div>
-                <div className={styles.minorForte}>
-                  <div>
-                    <span>{getStatsName(minorForte[0])}</span>
-                    <span>+{getPercent(byMinorForte[minorForte[0]])(2)}</span>
-                  </div>
-                  <div>
-                    <span>{getStatsName(minorForte[1])}</span>
-                    <span>+{getPercent(byMinorForte[minorForte[1]])(2)}</span>
-                  </div>
                 </div>
               </div>
             </div>

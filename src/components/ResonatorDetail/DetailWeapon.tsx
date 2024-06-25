@@ -1,17 +1,18 @@
-import { Thumbnail, genByWeapon } from '..';
+import { Thumbnail } from '..';
+import { useByWeapon } from '../useByWeapon';
 import { useSelector } from 'react-redux';
 import { State } from '../../store';
 import { MyWeapon, WeaponId } from '../../slice/weaponsSlice';
-import { getStatsName, getWeaponName, weaponPivot } from '../../types';
+import { ResonatorName, getStatsName, getWeaponName, weaponPivot } from '../../types';
 import { getPercent } from '../../lib/formula';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
 import styles from './DetailWeapon.module.css';
 
-export default function ResonatorDetailWeapon({ id }: { id?: WeaponId }) {
+export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: WeaponId }) {
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  const [weaponAtk, byWeapon] = useByWeapon(name);
 
   if (id) {
-    const [weaponAtk, byWeapon] = genByWeapon(myWeapons)(id);
     const weapon = myWeapons[id] as MyWeapon;
     const code = weapon.코드;
     const data = everyWeaponData[code] as WeaponData;

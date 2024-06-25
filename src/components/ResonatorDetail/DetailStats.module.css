@@ -1,0 +1,28 @@
+.stats,
+.group,
+.group > div {
+  display: flex;
+}
+
+.stats,
+.group {
+  background-color: var(--theme-color-alpha-200);
+  border-radius: 0.25rem;
+  padding: 1rem;
+  flex-direction: column;
+}
+
+.stats {
+  height: 100%;
+  justify-content: space-evenly;
+  gap: 0.25rem;
+  padding: 0.25rem;
+}
+.group {
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  height: 100%;
+  div {
+    justify-content: space-between;
+  }
+}

@@ -77,7 +77,7 @@ export default function EchoesAdd() {
         e.preventDefault();
         if (code && main) {
           dispatch(addEcho({ code, rarity, level, main, harmony }));
-          dispatch(changeSubPage(''));
+          dispatch(changeSubPage(undefined));
         }
       }}
     >

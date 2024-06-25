@@ -1,7 +1,7 @@
 import { echoThumbnailControl } from '..';
-import ResonatorCardUpper, { getMyEchoInfoes, getMyHarmony } from './CardUpper';
-import { useSelector } from 'react-redux';
-import { State, dispatch } from '../../store';
+import ResonatorCardUpper, { getMyHarmony } from './CardUpper';
+import { useMyEchoInfoSet } from '../useMyEchoInfoSet';
+import { dispatch } from '../../store';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { MyResonator } from '../../slice/resonatorsSlice';
 import { MyEcho } from '../../slice/echoesSlice';
@@ -16,9 +16,7 @@ export default function ResonatorCard({
   resonatorName: ResonatorName;
   info: MyResonator;
 }) {
-  const myEchoInfoes = getMyEchoInfoes(useSelector((state: State) => state.echoesSlice['에코']))(
-    useSelector((state: State) => state.echoesSlice['장착'])
-  )(resonatorName);
+  const myEchoInfoes = useMyEchoInfoSet(resonatorName);
 
   const myHarmony = getMyHarmony(myEchoInfoes);
 

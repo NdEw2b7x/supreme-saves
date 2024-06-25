@@ -1,7 +1,19 @@
+@keyframes page {
+  from {
+    left: -10rem;
+    opacity: 0;
+  }
+  to {
+    left: 0rem;
+    opacity: 1;
+  }
+}
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  animation: page 0.5s ease-out;
 
   section {
     background-color: var(--theme-color-alpha-400);

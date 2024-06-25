@@ -5,16 +5,22 @@ import Thumbnail from './Thumbnail';
 export default function SelectResonator({
   list,
   defaultValue,
+  nonEquip,
   onChange,
 }: {
   list: ResonatorName[];
   defaultValue?: ResonatorName;
+  nonEquip: boolean;
   onChange: (name: ResonatorName) => void;
 }) {
   const [thumbnailOwner, setThumbnailOwner] = useState<ResonatorName | undefined>(defaultValue);
   let thumbnail = <img alt='' />;
   if (thumbnailOwner) {
     thumbnail = <Thumbnail scope='Resonators' code={thumbnailOwner} />;
+  }
+  let nonEquipOption = <></>;
+  if (nonEquip) {
+    nonEquipOption = <option value='미장착'>미장착</option>;
   }
   return (
     <div className='SelectResonatorContainer'>
@@ -25,7 +31,7 @@ export default function SelectResonator({
           onChange(value as ResonatorName);
         }}
       >
-        {/* <option value='미장착'>미장착</option> */}
+        {nonEquipOption}
         {list.map((name) => {
           return (
             <option value={name} key={name}>
