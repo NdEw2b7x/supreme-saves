@@ -21,4 +21,4 @@ export const everyResonatorNameWithoutRover = [
 export type EveryResonatorNameWithoutRover = (typeof everyResonatorNameWithoutRover)[number];
 
 export const everyResonatorName = ['방랑자', ...everyResonatorNameWithoutRover] as const;
-export type EveryResonatorName = (typeof everyResonatorName)[number];
+export type ResonatorName = (typeof everyResonatorName)[number];

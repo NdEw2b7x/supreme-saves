@@ -1,0 +1,50 @@
+.weapon {
+  padding: 0.2rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background-color: var(--theme-color-alpha-200);
+  min-width: 20rem;
+}
+.weaponName {
+  color: black;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: bold;
+}
+.body {
+  display: flex;
+  gap: 0.25rem;
+
+  .imgContainer {
+    max-width: 8rem;
+    height: 8rem;
+    border-radius: 0.25rem;
+    background-color: var(--theme-color-alpha-200);
+    overflow: hidden;
+  }
+  .info {
+    padding: 1.5rem 0.5rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    border: 0.1rem solid var(--theme-color-alpha-400);
+    border-radius: 0.25rem;
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+.ability {
+  border: 0.1rem solid var(--theme-color-alpha-400);
+  border-radius: 0.25rem;
+  height: 100%;
+
+  padding: 0.5rem;
+
+  text-align: justify;
+}

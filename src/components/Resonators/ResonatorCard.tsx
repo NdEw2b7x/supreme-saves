@@ -1,11 +1,11 @@
 import { echoThumbnailControl } from '..';
-import ResonatorCardUpper, { getMyEchoInfoes } from './CardUpper';
+import ResonatorCardUpper, { getMyEchoInfoes, getMyHarmony } from './CardUpper';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { MyResonator } from '../../slice/resonatorsSlice';
 import { MyEcho } from '../../slice/echoesSlice';
-import { EchoCode, EchoPrimaryMainStats, EveryResonatorName, getStatsAbbr } from '../../types';
+import { EchoCode, EchoPrimaryMainStats, ResonatorName, getStatsAbbr } from '../../types';
 import { getPercent } from '../../lib/formula';
 import styles from './ResonatorCard.module.css';
 
@@ -13,12 +13,14 @@ export default function ResonatorCard({
   resonatorName,
   info,
 }: {
-  resonatorName: EveryResonatorName;
+  resonatorName: ResonatorName;
   info: MyResonator;
 }) {
-  const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
-  const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
-  const myEchoInfoes = getMyEchoInfoes(myEchoes)(equipEchoes)(resonatorName);
+  const myEchoInfoes = getMyEchoInfoes(useSelector((state: State) => state.echoesSlice['에코']))(
+    useSelector((state: State) => state.echoesSlice['장착'])
+  )(resonatorName);
+
+  const myHarmony = getMyHarmony(myEchoInfoes);
 
   const resonatorLevel = info['레벨'];
   return (
@@ -44,7 +46,7 @@ export default function ResonatorCard({
               sub = echoInfo['서브 스텟'];
             }
             return (
-              <div className={styles.echo} key={`${resonatorName} ${i}`}>
+              <div className={styles.echo} key={i}>
                 <div className={styles.echoImgBox}>{echoThumbnailControl(code)}</div>
                 <div className={styles.echoOpt}>
                   <div className={styles.main}>
@@ -77,6 +79,16 @@ export default function ResonatorCard({
                       return undefined;
                     })}
                 </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className={styles.harmonyContainer}>
+          {Object.entries(myHarmony).map(([h, c]) => {
+            return (
+              <div className={styles.harmony} key={h + 'x' + c}>
+                <span>{h}</span>
+                <span>{c}</span>
               </div>
             );
           })}

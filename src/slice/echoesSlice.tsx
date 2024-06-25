@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EchoCode, EchoRarity, EveryResonatorName, Harmony } from '../types';
+import { EchoCode, EchoRarity, ResonatorName, Harmony } from '../types';
 import { everyEchoData } from '../lib/Echoes';
 import { EchoPrimaryMainStats, EchoSubStats } from '../types/everyStatistics';
 
@@ -16,7 +16,7 @@ export interface MyEcho {
     [x in 's1' | 's2' | 's3' | 's4' | 's5']?: { stat: EchoSubStats; value: number };
   };
   화음: Harmony;
-  장착: { 공명자: EveryResonatorName | '미장착'; 슬롯: 0 | EchoEquipSlot };
+  장착: { 공명자: ResonatorName | '미장착'; 슬롯: 0 | EchoEquipSlot };
 }
 
 export type EchoEquipSlot = 1 | 2 | 3 | 4 | 5;
@@ -25,7 +25,7 @@ export type MyEchoes = Partial<Record<EchoId, MyEcho>>;
 
 const initialState: {
   에코: MyEchoes;
-  장착: Partial<Record<EveryResonatorName, Partial<Record<1 | 2 | 3 | 4 | 5, EchoId>>>>;
+  장착: Partial<Record<ResonatorName, Partial<Record<1 | 2 | 3 | 4 | 5, EchoId>>>>;
 } = {
   에코: {},
   장착: {},
@@ -120,7 +120,7 @@ const reducers = {
     action: {
       payload: {
         id: EchoId;
-        equip: { name: EveryResonatorName; slot: EchoEquipSlot };
+        equip: { name: ResonatorName; slot: EchoEquipSlot };
       };
     }
   ) => {

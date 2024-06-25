@@ -8,6 +8,6 @@ export const everySkillType = [
 export type EverySkillType = (typeof everySkillType)[number];
 
 export const everySkillLevel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
-export type EverySkillLevel = (typeof everySkillLevel)[number];
+export type SkillLevel = (typeof everySkillLevel)[number];
 type MinorForte = true | false;
-export type SkillSet = [EverySkillLevel, MinorForte, MinorForte];
+export type SkillSet = [SkillLevel, MinorForte, MinorForte];

@@ -4,8 +4,8 @@ import {
   EveryElement,
   EveryRasonanceChain,
   EveryResonatorNameWithoutRover,
-  EveryResonatorName as ResonatorName,
-  EverySkillLevel,
+  ResonatorName,
+  SkillLevel,
   EverySkillType,
   SkillSet,
 } from '../types';
@@ -27,7 +27,8 @@ export interface MyResonator {
   체인: EveryRasonanceChain;
 }
 
-const defaultResonator = {
+const defaultRover: MyResonator = {
+  이름: '방랑자',
   레벨: 1,
   스킬: {
     '일반 공격': [1, false, false],
@@ -38,10 +39,6 @@ const defaultResonator = {
   },
   체인: 0,
 };
-const defaultRover = {
-  이름: '방랑자',
-  ...defaultResonator,
-} as MyResonator;
 
 export type MyResonators = Partial<Record<ResonatorName, MyResonator>>;
 
@@ -96,7 +93,7 @@ const reducers = {
       payload: {
         name: ResonatorName;
         type: EverySkillType;
-        level: EverySkillLevel;
+        level: SkillLevel;
       };
     }
   ) => {

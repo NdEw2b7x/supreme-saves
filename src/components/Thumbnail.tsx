@@ -1,8 +1,8 @@
 import { everyEchoData } from '../lib/Echoes';
-import { EchoCode, EveryResonatorName, EveryWeaponCode, Name, weaponPivot } from '../types';
+import { EchoCode, ResonatorName, EveryWeaponCode, Name, weaponPivot } from '../types';
 
 const thumbnailControl = (scope: 'Resonators' | 'Weapons' | 'Echoes') => {
-  return (code?: EveryResonatorName | EveryWeaponCode | EchoCode) => {
+  return (code?: ResonatorName | EveryWeaponCode | EchoCode) => {
     if (code) {
       return <Thumbnail scope={scope} code={code} />;
     }
@@ -17,7 +17,7 @@ export default function Thumbnail({
   code,
 }: {
   scope: 'Resonators' | 'Weapons' | 'Echoes';
-  code: EveryResonatorName | EveryWeaponCode | EchoCode;
+  code: ResonatorName | EveryWeaponCode | EchoCode;
 }) {
   let alt: string = code;
   if (scope === 'Weapons') {

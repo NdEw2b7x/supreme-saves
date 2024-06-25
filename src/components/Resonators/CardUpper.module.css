@@ -38,11 +38,23 @@
       font-size: 1.25rem;
     }
   }
+  .chain {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    .iconBox {
+      max-width: 2rem;
+      height: 2rem;
+      background-color: var(--theme-color-alpha-200);
+      border-radius: 100%;
+    }
+  }
   .stats {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    font-size: 0.8rem;
 
     border: 0.1rem solid var(--theme-color-alpha-400);
     border-radius: 0.25rem;

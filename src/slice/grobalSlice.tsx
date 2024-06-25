@@ -1,11 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  EchoCost,
-  EveryElement,
-  EveryRarity,
-  EveryResonatorName,
-  EveryWeaponCategory,
-} from '../types';
+import { EchoCost, EveryElement, EveryRarity, ResonatorName, EveryWeaponCategory } from '../types';
 
 // localStorage.clear();
 // sessionStorage.clear();
@@ -26,7 +20,7 @@ interface InitialFilter {
 interface InitialState {
   page: EveryPage;
   subPage: EverySubPage;
-  detail?: EveryResonatorName;
+  detail?: ResonatorName;
   filter: InitialFilter;
 }
 const initialFilter: InitialFilter = {
@@ -55,7 +49,7 @@ const reducers = {
   changeSubPage: (state: InitialState, action: { payload: EverySubPage }) => {
     state.subPage = action.payload;
   },
-  selectDetail: (state: InitialState, action: { payload: EveryResonatorName }) => {
+  selectDetail: (state: InitialState, action: { payload: ResonatorName }) => {
     state.detail = action.payload;
   },
   changefilter: (

@@ -1,5 +1,14 @@
 import { EveryElement } from './everyElement';
 
+export const everyBaseStats = [
+  'baseHp',
+  'resonatorAtk',
+  'weaponAtk',
+  'baseAtk',
+  'baseDef',
+] as const;
+export type BaseStats = (typeof everyBaseStats)[number];
+
 export const eveyrWeaponSubStats = ['hp', 'atk', 'def', 'energy', 'cRate', 'cDmg'] as const;
 export type WeaponSubStats = (typeof eveyrWeaponSubStats)[number];
 
@@ -57,10 +66,20 @@ export const getElementMap: (x: EveryElement) => keyof typeof elementMap = (x: E
   }
 };
 
-export type Stats = WeaponSubStats | EchoPrimaryMainStats | EchoSecondaryMainStats | EchoSubStats;
+export type Stats =
+  | BaseStats
+  | WeaponSubStats
+  | EchoPrimaryMainStats
+  | EchoSecondaryMainStats
+  | EchoSubStats;
 
 export const getStatsName = (x: Stats) => {
   const statsMap: Record<Stats, string> = {
+    resonatorAtk: '공명자 공격력',
+    weaponAtk: '무기 공격력',
+    baseHp: '기초 HP',
+    baseAtk: '기초 공격력',
+    baseDef: '기초 방어력',
     flatHp: 'HP',
     flatAtk: '공격력',
     flatDef: '방어력',
@@ -86,6 +105,11 @@ export const getStatsName = (x: Stats) => {
 };
 export const getStatsAbbr = (x: Stats) => {
   const statsMap: Record<Stats, string> = {
+    baseHp: 'HP',
+    baseAtk: '공',
+    resonatorAtk: '공',
+    weaponAtk: '공',
+    baseDef: '방',
     flatHp: 'HP',
     flatAtk: '공',
     flatDef: '방',

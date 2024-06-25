@@ -1,4 +1,4 @@
-import { EveryResonatorName } from '../../types';
+import { ResonatorName } from '../../types';
 import ResonatorData from './ResonatorData';
 import 감심 from './r50404001';
 import 기염 from './r50401001';
@@ -18,7 +18,7 @@ import 음림 from './r50305001';
 import 치샤 from './r40203001';
 import 카카루 from './r50301001';
 
-export const everyResonatorData: Record<EveryResonatorName, ResonatorData> = {
+export const everyResonatorData: Record<ResonatorName, ResonatorData> = {
   감심,
   기염,
   //   금희,

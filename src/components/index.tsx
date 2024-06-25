@@ -12,7 +12,7 @@ import { MyWeapons, WeaponId } from '../slice/weaponsSlice';
 import {
   EchoMainStats,
   EchoSubStats,
-  EveryResonatorName,
+  ResonatorName,
   EveryWeaponAtk1,
   WeaponSubStats,
 } from '../types';
@@ -44,7 +44,7 @@ export const genByMinorForte = (myResonators: MyResonators) => {
     cDmg: 0,
     heal: 0,
   };
-  return (name: EveryResonatorName) => {
+  return (name: ResonatorName) => {
     const info = myResonators[name];
     const minorFortes = everyResonatorData[name].minorFortes;
     if (info) {

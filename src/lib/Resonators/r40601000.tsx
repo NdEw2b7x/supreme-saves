@@ -1,7 +1,7 @@
-import { EveryElement, EveryResonatorName, EveryWeaponCategory } from '../../types';
+import { EveryElement, ResonatorName, EveryWeaponCategory } from '../../types';
 import ResonatorData from './ResonatorData';
 
-const name: EveryResonatorName = '도기';
+const name: ResonatorName = '도기';
 const element: EveryElement = '인멸';
 const weaponCategory: EveryWeaponCategory = '대검';
 const [hp1, atk1, def1] = [716, 18, 128];

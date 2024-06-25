@@ -6,7 +6,7 @@ import {
   changeSyntonize,
   changeWeaponLevel,
 } from '../../slice/weaponsSlice';
-import { EveryResonatorName, getStatsName, getWeaponName } from '../../types';
+import { ResonatorName, getStatsName, getWeaponName } from '../../types';
 import { getPercent, getWeaponAtk, getWeaponSubOptionValue } from '../../lib/formula';
 import { everyResonatorData } from '../../lib/Resonators';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
@@ -41,12 +41,12 @@ export default function WeaponsList() {
                 </option>
               );
             }
-            const nonEquip = (x: EveryResonatorName | '미장착') => {
+            const nonEquip = (x: ResonatorName | '미장착') => {
               if (x === '미장착') {
                 return <option value='미장착'>미장착</option>;
               }
             };
-            const thumbnail = (x: EveryResonatorName | '미장착') => {
+            const thumbnail = (x: ResonatorName | '미장착') => {
               if (equip !== '미장착') {
                 return (
                   <img
@@ -146,7 +146,7 @@ export default function WeaponsList() {
                           dispatch(
                             changeEquip({
                               id: id as WeaponId,
-                              equip: value as EveryResonatorName,
+                              equip: value as ResonatorName,
                             })
                           );
                         }
@@ -155,7 +155,7 @@ export default function WeaponsList() {
                       {nonEquip(equip)}
                       {Object.keys(myResonators).map((name) => {
                         const resonatorCategory =
-                          everyResonatorData[name as EveryResonatorName].weaponCatergory;
+                          everyResonatorData[name as ResonatorName].weaponCatergory;
                         if (resonatorCategory === category) {
                           return (
                             <option value={name} key={name}>

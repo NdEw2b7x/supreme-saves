@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EveryResonatorName, EveryWeaponCode } from '../types';
+import { ResonatorName, EveryWeaponCode } from '../types';
 
 const name = 'weaponsSlice';
 
@@ -7,12 +7,12 @@ export interface MyWeapon {
   코드: EveryWeaponCode;
   레벨: number;
   공진: 1 | 2 | 3 | 4 | 5;
-  장착: EveryResonatorName | '미장착';
+  장착: ResonatorName | '미장착';
 }
 export type WeaponId = `weapon_${number}`;
 export type MyWeapons = Partial<Record<WeaponId, MyWeapon>>;
 
-type WeaponMapping = Partial<Record<EveryResonatorName, WeaponId>>;
+type WeaponMapping = Partial<Record<ResonatorName, WeaponId>>;
 
 let initialState: { 무기: MyWeapons; 장착: WeaponMapping } = { 무기: {}, 장착: {} };
 type InitialState = typeof initialState;
@@ -70,7 +70,7 @@ const reducers = {
   },
   changeEquip: (
     state: InitialState,
-    action: { payload: { id: WeaponId; equip: EveryResonatorName } }
+    action: { payload: { id: WeaponId; equip: ResonatorName } }
   ) => {
     const targetId = action.payload.id;
     const guestOwner = action.payload.equip;

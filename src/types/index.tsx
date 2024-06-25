@@ -3,12 +3,12 @@ import { Harmony, everyHarmony } from './everyHarmory';
 import { EveryChain, EveryRarity, everyChain, everyRarity } from './everyRarity';
 import {
   EveryResonatorNameWithoutRover,
-  EveryResonatorName,
+  ResonatorName,
   everyResonatorNameWithoutRover,
   everyResonatorName,
 } from './everyResonatorName';
 import {
-  EverySkillLevel,
+  SkillLevel,
   EverySkillType,
   SkillSet,
   everySkillLevel,
@@ -72,9 +72,9 @@ export type {
   EveryElement,
   Harmony,
   EveryRarity,
-  EveryResonatorName,
+  ResonatorName,
   EveryResonatorNameWithoutRover,
-  EverySkillLevel,
+  SkillLevel,
   EverySkillType,
   EveryWeaponAtk1,
   EveryWeaponCode,

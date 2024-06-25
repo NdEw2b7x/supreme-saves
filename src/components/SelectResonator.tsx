@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { EveryResonatorName } from '../types';
+import { ResonatorName } from '../types';
 import Thumbnail from './Thumbnail';
 
 export default function SelectResonator({
@@ -7,13 +7,11 @@ export default function SelectResonator({
   defaultValue,
   onChange,
 }: {
-  list: EveryResonatorName[];
-  defaultValue?: EveryResonatorName;
-  onChange: (name: EveryResonatorName) => void;
+  list: ResonatorName[];
+  defaultValue?: ResonatorName;
+  onChange: (name: ResonatorName) => void;
 }) {
-  const [thumbnailOwner, setThumbnailOwner] = useState<EveryResonatorName | undefined>(
-    defaultValue
-  );
+  const [thumbnailOwner, setThumbnailOwner] = useState<ResonatorName | undefined>(defaultValue);
   let thumbnail = <img alt='' />;
   if (thumbnailOwner) {
     thumbnail = <Thumbnail scope='Resonators' code={thumbnailOwner} />;
@@ -23,8 +21,8 @@ export default function SelectResonator({
       <select
         defaultValue={defaultValue}
         onChange={({ target: { value } }) => {
-          setThumbnailOwner(value as EveryResonatorName);
-          onChange(value as EveryResonatorName);
+          setThumbnailOwner(value as ResonatorName);
+          onChange(value as ResonatorName);
         }}
       >
         {/* <option value='미장착'>미장착</option> */}

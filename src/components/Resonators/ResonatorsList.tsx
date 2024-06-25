@@ -1,7 +1,7 @@
 import ResonatorCard from './ResonatorCard';
 import { useSelector } from 'react-redux';
 import { State } from '../../store';
-import { EveryResonatorName } from '../../types';
+import { ResonatorName } from '../../types';
 import { everyResonatorData } from '../../lib/Resonators';
 
 export default function ResonatorsList() {
@@ -12,7 +12,7 @@ export default function ResonatorsList() {
   return (
     <section id='ResonatorsList' data-section='list' style={{ display: 'grid', gap: '0.5rem' }}>
       {Object.entries(myResonators).map(([key, info]) => {
-        const resonatorName = key as EveryResonatorName;
+        const resonatorName = key as ResonatorName;
         const resonatorData = everyResonatorData[resonatorName];
         const element = resonatorData.element;
         const weaponCategory = resonatorData.weaponCatergory;

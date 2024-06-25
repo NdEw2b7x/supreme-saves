@@ -8,6 +8,11 @@
   padding: 0.25rem;
 }
 
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
 .echoes {
   display: flex;
   justify-content: space-between;
@@ -60,6 +65,29 @@
     }
     span:first-child {
       background-color: var(--theme-color-alpha-400);
+    }
+  }
+}
+
+.harmonyContainer {
+  display: flex;
+  gap: 0.25rem;
+  .harmony {
+    border-radius: 0.25rem;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25rem;
+    gap: 0.5rem;
+    background-color: var(--theme-color-alpha-400);
+    :last-child {
+      background-color: var(--theme-color-alpha-400);
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 100%;
+      padding: 0.25rem 0.5rem;
+      align-content: center;
     }
   }
 }

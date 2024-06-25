@@ -11,17 +11,16 @@ import { useSelector } from 'react-redux';
 import { State } from '../../store';
 import { MyResonator } from '../../slice/resonatorsSlice';
 import { MyWeapon } from '../../slice/weaponsSlice';
-import { EveryResonatorName, Stats, getStatsName } from '../../types';
+import { ResonatorName, Harmony, Stats, getStatsName } from '../../types';
 import { getATK, getDEF, getHP, getPercent } from '../../lib/formula';
 import { everyResonatorData } from '../../lib/Resonators';
 import styles from './CardUpper.module.css';
 import { EchoEquipSlot, EchoId, MyEcho } from '../../slice/echoesSlice';
+import Chain from '../icons/Chain';
 
 export const getMyEchoInfoes = (myEchoes: Partial<Record<EchoId, MyEcho>>) => {
-  return (
-    equipEchoes: Partial<Record<EveryResonatorName, Partial<Record<EchoEquipSlot, EchoId>>>>
-  ) => {
-    return (name: EveryResonatorName) => {
+  return (equipEchoes: Partial<Record<ResonatorName, Partial<Record<EchoEquipSlot, EchoId>>>>) => {
+    return (name: ResonatorName) => {
       return ([1, 2, 3, 4, 5] as const).map((i) => {
         const myEcho = equipEchoes[name]?.[i];
         if (myEcho) {
@@ -39,15 +38,48 @@ export const getMyEchoValues = (x: (MyEcho | undefined)[]) => {
     })
   );
 };
+export const getMyHarmony: (x: (MyEcho | undefined)[]) => Partial<Record<Harmony, number>> = (
+  x: (MyEcho | undefined)[]
+) => {
+  const countHarmony: Record<Harmony, 0 | 1 | 2 | 3 | 4 | 5> = {
+    '야밤의 서리': 0,
+    '솟구치는 용암': 0,
+    '울려퍼지는 뇌음': 0,
+    '스쳐가는 바람': 0,
+    '빛나는 별': 0,
+    '빛을 삼키는 해': 0,
+    '찬란한 광휘': 0,
+    '떠오르는 구름': 0,
+    '끊임없는 잔향': 0,
+  };
+  x.forEach((i) => {
+    if (i) {
+      countHarmony[i['화음']] += 1;
+    }
+  });
+  return Object.fromEntries(
+    Object.entries(countHarmony).filter(([h, c]) => {
+      if (c >= 2) {
+        return true;
+      }
+      return false;
+    })
+  );
+};
 
 export default function ResonatorCardUpper({
   resonatorName,
   info,
 }: {
-  resonatorName: EveryResonatorName;
+  resonatorName: ResonatorName;
   info: MyResonator;
 }) {
   const values: Record<Stats, number> = {
+    baseHp: 0,
+    resonatorAtk: 0,
+    weaponAtk: 0,
+    baseAtk: 0,
+    baseDef: 0,
     hp: 0,
     atk: 0,
     def: 0,
@@ -95,17 +127,22 @@ export default function ResonatorCardUpper({
     useSelector((state: State) => state.echoesSlice['장착'])
   )(resonatorName);
   Object.entries(getMyEchoValues(myEchoInfoes)).forEach(([stat, value]) => {
-    values[stat as Stats] += value;
+    values[stat as Stats] = Math.round(values[stat as Stats] * 10000 + value * 10000) / 10000;
   });
 
-  const result: Record<
-    Exclude<Stats, 'basic' | 'heavy' | 'skill' | 'burst' | 'flatHp' | 'flatAtk' | 'flatDef'>,
-    number
-  > = {
-    hp: getHP(resonatorData.hp1)(resonatorLevel) * (1 + values.hp) + values.flatHp,
-    atk:
-      (getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk) * (1 + values.atk) + values.flatAtk,
-    def: getDEF(resonatorData.def1)(resonatorLevel) * (1 + values.def) + values.flatDef,
+  type StatsSummary = Exclude<
+    Stats,
+    'basic' | 'heavy' | 'skill' | 'burst' | 'flatHp' | 'flatAtk' | 'flatDef'
+  >;
+  const result: Record<StatsSummary, number> = {
+    baseHp: getHP(resonatorData.hp1)(resonatorLevel),
+    resonatorAtk: getATK(resonatorData.atk1)(resonatorLevel),
+    weaponAtk: weaponAtk,
+    baseAtk: getATK(resonatorData.atk1)(resonatorLevel) + weaponAtk,
+    baseDef: getDEF(resonatorData.def1)(resonatorLevel),
+    hp: values.hp,
+    atk: values.atk,
+    def: values.def,
     energy: 1 + values.energy,
     ice: values.ice,
     fire: values.fire,
@@ -129,39 +166,54 @@ export default function ResonatorCardUpper({
         </div>
         <div className={styles.imgBox}>{weaponThumbnailControl(myWeaponCode)}</div>
       </div>
+      <div className={styles.chain}>
+        {[1, 2, 3, 4, 5, 6].map((i) => {
+          return (
+            <div className={styles.iconBox} key={i}>
+              <Chain fill={'var(--theme-color-alpha-400)'} />
+            </div>
+          );
+        })}
+      </div>
       <div className={styles.stats}>
-        {Object.entries(result)
+        <div>
+          <span>HP</span>
+          <span>{(result.baseHp * (1 + result.hp) + values.flatHp).toFixed(3)}</span>
+        </div>
+        <div>
+          <span>공격력</span>
+          <span>{(result.baseAtk * (1 + result.atk) + values.flatAtk).toFixed(3)}</span>
+        </div>
+        <div>
+          <span>방어력</span>
+          <span>{(result.baseDef * (1 + result.def) + values.flatDef).toFixed(3)}</span>
+        </div>
+        {(
+          [
+            'energy',
+            'ice',
+            'fire',
+            'electro',
+            'wind',
+            'light',
+            'dark',
+            'heal',
+            'cRate',
+            'cDmg',
+          ] as StatsSummary[]
+        )
           .filter((i) => {
-            if (i[1] > 0) {
+            if (result[i] > 0) {
               return true;
             }
             return false;
           })
-          .map(([stat, value]) => {
-            let tag = getStatsName(stat as Stats);
-            let result: string = getPercent(value)(2);
-            switch (stat) {
-              case 'hp':
-              case 'atk':
-              case 'def':
-                result = value.toFixed(3);
-                break;
-            }
-            switch (stat) {
-              case 'hp':
-                tag = 'HP';
-                break;
-              case 'atk':
-                tag = '공격력';
-                break;
-              case 'def':
-                tag = '방어력';
-                break;
-            }
+          .map((i) => {
+            let output = getPercent(result[i])(2);
             return (
-              <div key={stat}>
-                <span>{tag}</span>
-                <span>{result}</span>
+              <div key={i}>
+                <span>{getStatsName(i)}</span>
+                <span>{output}</span>
               </div>
             );
           })}

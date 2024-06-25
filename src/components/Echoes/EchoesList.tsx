@@ -9,7 +9,7 @@ import { EchoId, EchoSubStatsId } from '../../slice/echoesSlice';
 import {
   EchoCost,
   EchoSecondaryMainStats,
-  EveryResonatorName,
+  ResonatorName,
   Harmony,
   getStatsName,
 } from '../../types';
@@ -81,7 +81,7 @@ export default function EchoesList({ filterHarmony }: { filterHarmony?: Harmony 
             const harmony = info['화음'];
             const [byEchoMain] = genByEcho(info);
 
-            const equipThumbnail = (x: EveryResonatorName | '미장착') => {
+            const equipThumbnail = (x: ResonatorName | '미장착') => {
               if (x !== '미장착') {
                 return <Thumbnail scope='Resonators' code={x} key={'equip-' + x} />;
               }
