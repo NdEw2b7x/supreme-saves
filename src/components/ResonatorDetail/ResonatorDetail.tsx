@@ -9,6 +9,7 @@ import { RoverChangeElement } from './RoverChangeElement';
 import { DetailStats } from './DetailStats';
 import { DetailSkill } from './DetailSkill';
 import Chain from '../icons/Chain';
+import { Thumbnail } from '..';
 
 export default function ResonatorDetail() {
   const name = useSelector((state: State) => state.grobalSlice['detail']) as ResonatorName;
@@ -31,29 +32,31 @@ export default function ResonatorDetail() {
   const weaponId = weaponMapping[name];
   return (
     <>
-      <header className={styles.header}>
-        <div className={styles.imgBox}>
-          <img src={`${process.env.PUBLIC_URL}/img/Resonators/${name}.png`} alt={name} />
-        </div>
-        <div className={styles.infoBox}>
-          <div className={styles.name} style={{ backgroundColor: `var(--element-${element})` }}>
-            {name}
+      <header className={styles.headerContainer}>
+        <div className={styles.header}>
+          <div className={styles.imgBox}>
+            <Thumbnail scope='Resonators' code={name} />
           </div>
-          <div className={styles.levelBox}>
-            <span>Lv.</span>
-            <select
-              defaultValue={myResonator?.레벨}
-              onChange={(e) => {
-                const level = Number(e.target.value);
-                dispatch(changeLevel({ name, level }));
-              }}
-            >
-              {innerLevel}
-            </select>
+          <div className={styles.infoBox}>
+            <div className={styles.name} style={{ backgroundColor: `var(--element-${element})` }}>
+              <span>{name}</span>
+            </div>
+            <div className={styles.levelBox}>
+              <span>Lv.</span>
+              <select
+                defaultValue={myResonator?.레벨}
+                onChange={(e) => {
+                  const level = Number(e.target.value);
+                  dispatch(changeLevel({ name, level }));
+                }}
+              >
+                {innerLevel}
+              </select>
+            </div>
           </div>
         </div>
       </header>
-      <RoverChangeElement name={name} />
+      {name === '방랑자' ? <RoverChangeElement /> : undefined}
       <main id='ResonatorDetail' className={styles.mainConatainer}>
         <section className={styles.info}>
           <div className={styles.top}>

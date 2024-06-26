@@ -55,16 +55,16 @@ export const genByEcho = (info?: MyEcho) => {
     const p = info['메인 스텟'];
     const r = info['희귀'];
     const data = everyEchoData[info['코드']];
-    Object.values(info['서브 스텟']).forEach((sub) => {
-      if (sub) {
-        byEchoSub[sub.stat as EchoSubStats] += sub.value;
+    Object.values(info['서브 스텟']).forEach(({ stat, value }) => {
+      if (stat) {
+        byEchoSub[stat] = (byEchoSub[stat] * 1000 + value * 1000) / 1000;
       }
     });
     if (data) {
       const c = data.cost;
       const [p0, s0] = getEchoMainValue0(r)(c)(p);
       byEchoMain[p] = p0 * (1 + 0.16 * lv);
-      byEchoMain[getSecondaryMainStats(c)] = s0 * (1 + 0.16 * lv);
+      byEchoMain[getSecondaryMainStats(c)] = Math.floor(s0 * (1 + 0.16 * lv));
     }
   }
   return [byEchoMain, byEchoSub] as const;

@@ -2,13 +2,24 @@ import { WeaponSubStats } from '../../types';
 import { WeaponData } from '.';
 
 const code = '400500002';
-const atk1 = 33;
-const subOption: WeaponSubStats = 'hp';
+const name = '판타지 변주';
+const atk1 = 27;
+const subOption: WeaponSubStats = 'energy';
+
 // const skill: WeaponSkill = {
-//   name: '빛의 비호',
-//   condition: [{ when: ['일반 공격', '강공격'], stat: '치료 효과 보너스', from: 3, to: 5 }],
+//   name: '끝없는 메아리',
+//   condition: [{ when: ['공명 스킬'], stat: '협주 에너지', from: 8, to: 16 }],
 // };
 
-const result = new WeaponData({ code, atk1, subOption });
-
+const result = new WeaponData({
+  code,
+  name,
+  atk1,
+  subOption,
+  skill: {
+    name: '끝없는 메아리',
+    passive: [],
+    active: [],
+  },
+});
 export default result;

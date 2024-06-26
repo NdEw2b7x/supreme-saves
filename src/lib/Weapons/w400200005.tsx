@@ -5,6 +5,5 @@ const code = '400200005';
 const atk1 = 31;
 const subOption: WeaponSubStats = 'atk';
 
-const result = new WeaponData({ code, atk1, subOption });
-
+const result = new WeaponData({ code, atk1, subOption, skill: { passive: [] } });
 export default result;

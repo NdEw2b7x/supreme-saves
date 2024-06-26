@@ -5,11 +5,22 @@ const code = '400500004';
 const atk1 = 33;
 const subOption: WeaponSubStats = 'cRate';
 
-// const skill: WeaponSkill = {
-//   name: '끝없는 메아리',
-//   condition: [{ when: ['공명 스킬'], stat: '협주 에너지', from: 8, to: 16 }],
-// };
-
-const result = new WeaponData({ code, atk1, subOption });
-
+const result = new WeaponData({
+  code,
+  name: '청음',
+  atk1,
+  subOption,
+  skill: {
+    name: '강유병존',
+    passive: [],
+    active: [
+      {
+        trigger: ['burst'],
+        stat: 'atk',
+        s1: 0.15,
+        s5: 0.48,
+      },
+    ],
+  },
+});
 export default result;

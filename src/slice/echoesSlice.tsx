@@ -117,17 +117,22 @@ const reducers = {
   },
   changeEquip: (
     state: InitialState,
-    action: {
+    {
+      payload: {
+        id,
+        equip: { name, slot },
+      },
+    }: {
       payload: {
         id: EchoId;
         equip: { name: ResonatorName; slot: EchoEquipSlot };
       };
     }
   ) => {
-    const targetId = action.payload.id;
+    const targetId = id;
     const targetInfo = state['에코'][targetId] as MyEcho;
-    const guestOwner = action.payload.equip.name;
-    const guestSlot = action.payload.equip.slot;
+    const guestOwner = name;
+    const guestSlot = slot;
 
     const hostOwner = targetInfo['장착']['공명자'];
     const hostSlot = targetInfo['장착']['슬롯'];
@@ -161,6 +166,18 @@ const reducers = {
             [guestOwner]: {
               ...state['장착'][guestOwner],
               [guestSlot]: targetId,
+              [hostSlot]: undefined,
+            },
+          };
+        } else {
+          state['장착'] = {
+            ...state['장착'],
+            [guestOwner]: {
+              ...state['장착'][guestOwner],
+              [guestSlot]: targetId,
+            },
+            [hostOwner]: {
+              ...state['장착'][hostOwner],
               [hostSlot]: undefined,
             },
           };

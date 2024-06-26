@@ -12,6 +12,5 @@ const subOption: WeaponSubStats = 'energy';
 //   ],
 // };
 
-const result = new WeaponData({ code, atk1, subOption });
-
+const result = new WeaponData({ code, atk1, subOption, skill: { passive: [] } });
 export default result;

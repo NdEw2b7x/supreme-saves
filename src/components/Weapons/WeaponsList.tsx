@@ -6,7 +6,7 @@ import {
   changeSyntonize,
   changeWeaponLevel,
 } from '../../slice/weaponsSlice';
-import { ResonatorName, getStatsName, getWeaponName } from '../../types';
+import { ResonatorName, getStatsName } from '../../types';
 import { getPercent, getWeaponAtk, getWeaponSubOptionValue } from '../../lib/formula';
 import { everyResonatorData } from '../../lib/Resonators';
 import { WeaponData, everyWeaponData } from '../../lib/Weapons';
@@ -27,12 +27,12 @@ export default function WeaponsList() {
             const level = weapon.레벨;
             const equip = weapon.장착;
             const syntonize = weapon.공진;
-            const weaponData = everyWeaponData[code] as WeaponData;
-            const name = getWeaponName(code);
-            const rarity = weaponData.rarity;
-            const category = weaponData.category;
-            const atk1 = weaponData.atk1;
-            const subOption = weaponData.subOption;
+            const data = everyWeaponData[code] as WeaponData;
+            const name = data.getName();
+            const rarity = data.rarity;
+            const category = data.category;
+            const atk1 = data.atk1;
+            const subOption = data.subOption;
             const innerLevel = [];
             for (let i = 1; i <= 90; i++) {
               innerLevel.push(

@@ -1,0 +1,31 @@
+.changeElement {
+  scroll-snap-align: start;
+  scroll-margin-top: 6rem;
+
+  margin: 0.5rem auto;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0;
+  background-color: var(--theme-color-alpha-200);
+  border-radius: 0.25rem;
+
+  max-width: 80rem;
+
+  display: flex;
+  justify-content: center;
+
+  [data-selected='true'] {
+    color: black;
+    background-color: var(--theme-color);
+  }
+}
+.changeElement > div {
+  display: flex;
+  justify-content: space-evenly;
+  min-width: 20rem;
+  margin: auto;
+
+  div {
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+  }
+}

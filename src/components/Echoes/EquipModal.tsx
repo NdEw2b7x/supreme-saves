@@ -12,10 +12,13 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
   const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
 
   const myEcho = myEchoes[id] as MyEcho;
+  const currentSlot = myEcho['장착']['슬롯'];
   const [selectedEquip, setSelectedEquip] = useState<ResonatorName | '미장착'>(
     myEcho['장착']['공명자']
   );
-  const [selectedSlot, setSelectedSlot] = useState<EchoEquipSlot>(1);
+  const [selectedSlot, setSelectedSlot] = useState<EchoEquipSlot>(
+    currentSlot !== 0 ? currentSlot : 1
+  );
 
   const equipEchoCode = (x?: ResonatorName, y?: EchoEquipSlot) => {
     if (x && y) {
@@ -36,7 +39,6 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
   if (selectedEquip !== '미장착') {
     selectDefault = selectedEquip;
   }
-  const currentSlot = myEcho['장착']['슬롯'];
   return (
     <ModalBox key='EchoEquip'>
       <div className={styles.equipBody}>
@@ -57,12 +59,12 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
               defaultChecked = true;
             }
             return (
-              <div>
+              <div key={i}>
                 <RadioBtn
                   defaultChecked={defaultChecked}
                   name='subSlot'
-                  id={'subSlot' + i}
-                  key={'subSlot' + i}
+                  id={'subSlot' + i + selectedEquip}
+                  key={'subSlot' + i + selectedEquip}
                   onChange={() => {
                     setSelectedSlot(i);
                   }}

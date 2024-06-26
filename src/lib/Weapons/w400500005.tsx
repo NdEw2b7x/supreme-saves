@@ -10,6 +10,5 @@ const subOption: WeaponSubStats = 'energy';
 //   condition: [{ when: ['공명 스킬'], stat: '협주 에너지', from: 8, to: 16 }],
 // };
 
-const result = new WeaponData({ code, atk1, subOption });
-
+const result = new WeaponData({ code, atk1, subOption, skill: { passive: [] } });
 export default result;

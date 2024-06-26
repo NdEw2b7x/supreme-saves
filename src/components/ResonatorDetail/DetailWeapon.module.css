@@ -1,38 +1,54 @@
 .weapon {
-  padding: 0.2rem;
-  border-radius: 0.25rem;
+  padding: 0.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   background-color: var(--theme-color-alpha-200);
   min-width: 20rem;
+
+  border-top-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border: 0.1rem solid var(--theme-color-alpha-800);
 }
 .weaponName {
   color: black;
   padding: 0.5rem;
   border-radius: 0.25rem;
   font-weight: bold;
+  span::before {
+    display: inline-block;
+    background-color: var(--theme-color);
+    padding: 0.25rem;
+    margin: 0 0.25rem;
+    border-radius: 0.25rem;
+    content: attr(data-level);
+  }
+  span::after {
+    display: inline;
+    content: attr(data-syntonize);
+  }
 }
 .body {
   display: flex;
   gap: 0.25rem;
 
   .imgContainer {
-    max-width: 8rem;
-    height: 8rem;
+    max-width: 7.5rem;
+    height: 7.5rem;
     border-radius: 0.25rem;
     background-color: var(--theme-color-alpha-200);
     overflow: hidden;
   }
   .info {
     padding: 1.5rem 0.5rem;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 0.5rem;
     flex: 1;
     border: 0.1rem solid var(--theme-color-alpha-400);
     border-radius: 0.25rem;
+
     div {
       display: flex;
       justify-content: space-between;
@@ -40,11 +56,28 @@
   }
 }
 .ability {
-  border: 0.1rem solid var(--theme-color-alpha-400);
-  border-radius: 0.25rem;
-  height: 100%;
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 
-  padding: 0.5rem;
-
-  text-align: justify;
+  h5.abilityName {
+    padding: 0.25rem;
+    color: var(--theme-color);
+    text-align: start;
+  }
+  .passive {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    div {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem;
+    }
+    div:nth-child(2n) {
+      background-color: var(--theme-color-alpha-200);
+      border-radius: 0.5rem;
+    }
+  }
 }

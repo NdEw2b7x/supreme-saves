@@ -1,12 +1,11 @@
 import { dispatch } from '../../store';
-import styles from './ResonatorDetail.module.css';
-import { ResonatorName } from '../../types';
 import { changeElement } from '../../slice/resonatorsSlice';
+import styles from './RoverChangeElement.module.css';
 
-export function RoverChangeElement({ name }: { name: ResonatorName }) {
-  if (name === '방랑자') {
-    return (
-      <section className={styles.changeElement}>
+export function RoverChangeElement() {
+  return (
+    <section className={styles.changeElement}>
+      <div>
         {['회절', '인멸'].map((i) => {
           switch (i) {
             case '회절':
@@ -26,14 +25,13 @@ export function RoverChangeElement({ name }: { name: ResonatorName }) {
                     dispatch(changeElement(i));
                   }}
                 >
-                  {i}
+                  <span>{i}</span>
                 </div>
               );
           }
           return null;
         })}
-      </section>
-    );
-  }
-  return <></>;
+      </div>
+    </section>
+  );
 }

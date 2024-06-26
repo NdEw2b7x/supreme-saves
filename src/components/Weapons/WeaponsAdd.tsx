@@ -1,12 +1,6 @@
 import { useSelector } from 'react-redux';
 import { everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
-import {
-  EveryWeaponAtk1,
-  EveryWeaponCategory,
-  WeaponSubStats,
-  getStatsName,
-  weaponPivot,
-} from '../../types';
+import { EveryWeaponAtk1, EveryWeaponCategory, WeaponSubStats, getStatsName } from '../../types';
 import { EveryWeaponCode } from '../../types/everyWeaponCode';
 import { State, dispatch } from '../../store';
 import { addWeapon } from '../../slice/weaponsSlice';
@@ -20,14 +14,15 @@ export default function WeaponsAdd() {
   const filterW = filters.weaponCategory;
   return (
     <section id='WeaponAdd' className={styles.container}>
-      {Object.entries(weaponPivot).map(([code, name]) => {
+      {Object.entries(everyWeaponData).map(([code]) => {
         const rarity = Number(code[1]) as 5 | 4 | 3;
         const type = Number(code[4]);
-        const weaponData = everyWeaponData[code as EveryWeaponCode];
-        if (weaponData) {
-          const category: EveryWeaponCategory = weaponData.category;
-          const atk1: EveryWeaponAtk1 = weaponData.atk1;
-          const subOption: WeaponSubStats = weaponData.subOption;
+        const data = everyWeaponData[code as EveryWeaponCode];
+        const name = data ? data.getName() : '(무기 이름)';
+        if (data) {
+          const category: EveryWeaponCategory = data.category;
+          const atk1: EveryWeaponAtk1 = data.atk1;
+          const subOption: WeaponSubStats = data.subOption;
           const subOption1 = getWeaponSubOptionValue1(atk1, subOption);
           if (filterR[rarity] && filterW[category]) {
             return (

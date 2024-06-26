@@ -1,13 +1,12 @@
 import { getMyEchoValues } from '.';
-import { useByMinorForte } from './useByMinorForte';
-import { useByWeapon } from './useByWeapon';
 import { useSelector } from 'react-redux';
 import { State } from '../store';
 import { MyResonator } from '../slice/resonatorsSlice';
-import { ResonatorName, Stats } from '../types';
-import { getATK, getDEF, getHP } from '../lib/formula';
+import { EveryWeaponAtk1, Harmony, ResonatorName, Stats, WeaponSubStats } from '../types';
+import { getATK, getDEF, getHP, getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
 import { everyResonatorData } from '../lib/Resonators';
-import { useMyEchoInfoSet } from './useMyEchoInfoSet';
+import { everyHarmonyEffectData } from '../lib/HarmonyEffects';
+import { WeaponData, everyWeaponData } from '../lib/Weapons';
 
 export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, number> = (
   resonatorName: ResonatorName
@@ -41,26 +40,116 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
     flatAtk: 0,
     flatDef: 0,
   };
-  const resonatorLevel = info['레벨'];
-  const resonatorData = everyResonatorData[resonatorName];
-  const [, byMinorFortes] = useByMinorForte(resonatorName);
-  Object.entries(byMinorFortes).forEach(([stat, value]) => {
-    values[stat as Stats] += value;
-  });
-  const [weaponAtk, byWeapon] = useByWeapon(resonatorName);
+  type Stat = keyof typeof values;
+
+  const minorFortes = everyResonatorData[resonatorName].minorFortes;
+  if (info) {
+    const skill = info.스킬;
+    minorFortes.forEach((i) => {
+      const trueCheck3 =
+        i === 'hp' || i === 'atk' || i === 'def'
+          ? [skill['공명 스킬'][1], skill['공명 해방'][1]].filter((i) => i).length
+          : [skill['일반 공격'][1], skill['변주 스킬'][1]].filter((i) => i).length;
+      const trueCheck7 =
+        i === 'hp' || i === 'atk' || i === 'def'
+          ? [skill['공명 스킬'][2], skill['공명 해방'][2]].filter((i) => i).length
+          : [skill['일반 공격'][2], skill['변주 스킬'][2]].filter((i) => i).length;
+      const max = i === 'def' ? 0.152 : i === 'cRate' ? 0.08 : i === 'cDmg' ? 0.16 : 0.12;
+      values[i] = values[i] + Number((((trueCheck3 * 3 + trueCheck7 * 7) * max) / 20).toFixed(3));
+    });
+  }
+  const level = info['레벨'];
+  const data = everyResonatorData[resonatorName];
+
+  const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
+  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  let weaponAtk = 0;
+  const byWeapon: Record<WeaponSubStats, number> = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    energy: 0,
+    cRate: 0,
+    cDmg: 0,
+  };
+  const id = equipWeapons[resonatorName];
+  if (id) {
+    const myWeapon = myWeapons[id];
+    if (myWeapon) {
+      const data = everyWeaponData[myWeapon['코드']] as WeaponData;
+      const level = myWeapon['레벨'];
+      const s = myWeapon['공진'];
+      const atk1: EveryWeaponAtk1 = data.atk1;
+      const sub = data.subOption;
+
+      data.skill.passive
+        .map(({ stat, s1, s5 }) => {
+          return [stat, s1 + ((s5 - s1) * (s - 1)) / 4] as const;
+        })
+        .forEach(([stat, value]) => {
+          values[stat] += value;
+        });
+      weaponAtk = getWeaponAtk(atk1)(level);
+      byWeapon[sub] = getWeaponSubOptionValue(atk1, sub)(level);
+    }
+  }
+
   Object.entries(byWeapon).forEach(([stat, value]) => {
-    values[stat as Stats] += value;
-  });
-  const myEchoInfoes = useMyEchoInfoSet(resonatorName);
-  Object.entries(getMyEchoValues(myEchoInfoes)).forEach(([stat, value]) => {
-    values[stat as Stats] = Math.round((values[stat as Stats] + value) * 100000) / 100000;
+    values[stat as Stat] = Math.floor(values[stat as Stat] * 100000 + value * 100000) / 100000;
   });
 
-  values['baseHp'] = getHP(resonatorData.hp1)(resonatorLevel);
-  values['resonatorAtk'] = getATK(resonatorData.atk1)(resonatorLevel);
+  const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
+  const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
+  Object.entries(
+    getMyEchoValues(
+      ([1, 2, 3, 4, 5] as const).map((i) => {
+        const myEcho = equipEchoes[resonatorName]?.[i];
+        return myEcho ? myEchoes[myEcho] : undefined;
+      })
+    )
+  ).forEach(([stat, value]) => {
+    values[stat as Stat] = Math.floor(values[stat as Stat] * 10000 + value * 10000) / 10000;
+  });
+
+  const countHarmony: Record<Harmony, 0 | 1 | 2 | 3 | 4 | 5> = {
+    '야밤의 서리': 0,
+    '솟구치는 용암': 0,
+    '울려퍼지는 뇌음': 0,
+    '스쳐가는 바람': 0,
+    '빛나는 별': 0,
+    '빛을 삼키는 해': 0,
+    '찬란한 광휘': 0,
+    '떠오르는 구름': 0,
+    '끊임없는 잔향': 0,
+  };
+  ([1, 2, 3, 4, 5] as const)
+    .map((i) => {
+      const myEcho = equipEchoes[resonatorName]?.[i];
+      return myEcho ? myEchoes[myEcho] : undefined;
+    })
+    .forEach((i) => {
+      if (i) {
+        countHarmony[i['화음']] += 1;
+      }
+    });
+
+  Object.entries(Object.fromEntries(Object.entries(countHarmony).filter(([, c]) => c >= 2)))
+    .map(([h, c]) => {
+      return c >= 2 ? everyHarmonyEffectData[h as Harmony].effect2 : undefined;
+    })
+    .map((i) => {
+      return i ? Object.entries(i) : undefined;
+    })
+    .forEach((i) => {
+      i?.forEach(([h, c]) => {
+        values[h as unknown as Stats] += c;
+      });
+    });
+
+  values['baseHp'] = getHP(data.hp1)(level);
+  values['resonatorAtk'] = getATK(data.atk1)(level);
   values['weaponAtk'] = weaponAtk;
   values['baseAtk'] = values['resonatorAtk'] + values['weaponAtk'];
-  values['baseDef'] = getDEF(resonatorData.def1)(resonatorLevel);
-
+  values['baseDef'] = getDEF(data.def1)(level);
   return values;
 };

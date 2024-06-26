@@ -1,49 +1,25 @@
-import { Name, Stats } from '../../types';
-import { he001 } from './he001';
-import { he002 } from './he002';
-import { he003 } from './he003';
-import { he004 } from './he004';
-import { he005 } from './he005';
-import { he006 } from './he006';
-import { he007 } from './he007';
+import { Harmony, Stats } from '../../types';
+import HarmonyEffectData from './HarmonyEffectData';
+import he001 from './he001';
+import he002 from './he002';
+import he003 from './he003';
+import he004 from './he004';
+import he005 from './he005';
+import he006 from './he006';
+import he007 from './he007';
+import he008 from './he008';
+import he009 from './he009';
 
 export type Effect2 = Partial<Record<Stats, number>>;
 export type Effect5 = Partial<Record<Stats, number>>;
-export class HarmonyEffect {
-  constructor({
-    code,
-    name,
-    effect2,
-    effect5,
-  }: {
-    code: string;
-    name: Name;
-    effect2: Effect2;
-    effect5: Effect5;
-  }) {
-    this.code = code;
-    this.name = name;
-    this.effect2 = effect2;
-    this.effect5 = effect5;
-  }
-  code;
-  name;
-  effect2;
-  effect5;
-}
-
-export const everyHarmony = {
-  he001,
-  he002,
-  he003,
-  he004,
-  he005,
-  he006,
-  he007,
+export const everyHarmonyEffectData: Record<Harmony, HarmonyEffectData> = {
+  '야밤의 서리': he001,
+  '솟구치는 용암': he002,
+  '울려퍼지는 뇌음': he003,
+  '스쳐가는 바람': he004,
+  '빛나는 별': he005,
+  '빛을 삼키는 해': he006,
+  '찬란한 광휘': he007,
+  '떠오르는 구름': he008,
+  '끊임없는 잔향': he009,
 } as const;
-export type HarmonyCode = keyof typeof everyHarmony;
-export const harmonyNameMapping = Object.fromEntries(
-  Object.entries(everyHarmony).map(([code, { name }]) => {
-    return [code, name] as const;
-  })
-);

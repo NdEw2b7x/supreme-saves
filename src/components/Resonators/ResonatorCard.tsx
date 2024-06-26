@@ -17,9 +17,7 @@ export default function ResonatorCard({
   info: MyResonator;
 }) {
   const myEchoInfoes = useMyEchoInfoSet(resonatorName);
-
   const myHarmony = getMyHarmony(myEchoInfoes);
-
   const resonatorLevel = info['레벨'];
   return (
     <div
@@ -35,46 +33,37 @@ export default function ResonatorCard({
       <div className={styles.bottom}>
         <div className={styles.echoes}>
           {myEchoInfoes.map((echoInfo, i) => {
-            let code: EchoCode | undefined;
-            let main: EchoPrimaryMainStats | undefined;
-            let sub: MyEcho['서브 스텟'] = {};
+            let c: EchoCode | undefined;
+            let m: EchoPrimaryMainStats | undefined;
+            let s: MyEcho['서브 스텟'] = {};
             if (echoInfo) {
-              code = echoInfo['코드'];
-              main = getStatsAbbr(echoInfo['메인 스텟']) as EchoPrimaryMainStats;
-              sub = echoInfo['서브 스텟'];
+              c = echoInfo['코드'];
+              m = getStatsAbbr(echoInfo['메인 스텟']) as EchoPrimaryMainStats;
+              s = echoInfo['서브 스텟'];
             }
             return (
               <div className={styles.echo} key={i}>
-                <div className={styles.echoImgBox}>{echoThumbnailControl(code)}</div>
+                <div className={styles.echoImgBox}>{echoThumbnailControl(c)}</div>
                 <div className={styles.echoOpt}>
                   <div className={styles.main}>
-                    <span>{main}</span>
+                    <span>{m}</span>
                   </div>
                   {(['s1', 's2', 's3', 's4', 's5'] as const)
-                    .filter((i) => {
-                      const subOpt = sub[i];
-                      if (subOpt) {
-                        return true;
-                      }
-                      return false;
-                    })
+                    .filter((i) => s[i])
                     .map((i) => {
-                      let optName = '';
-                      const subOpt = sub[i];
-                      if (subOpt) {
-                        let optValue = subOpt.value.toString();
-                        if (subOpt.value < 1) {
-                          optValue = getPercent(subOpt.value)(2);
-                        }
-                        optName = getStatsAbbr(subOpt.stat);
-                        return (
-                          <div className={styles.sub} key={i}>
-                            <span>{optName}</span>
-                            <span>{optValue}</span>
-                          </div>
-                        );
-                      }
-                      return undefined;
+                      const subOpt = s[i];
+                      return (
+                        <div className={styles.sub} key={i}>
+                          <span>{subOpt ? getStatsAbbr(subOpt.stat) : ''}</span>
+                          <span>
+                            {subOpt
+                              ? subOpt.value < 1
+                                ? getPercent(subOpt.value)(2)
+                                : subOpt.value.toString()
+                              : ''}
+                          </span>
+                        </div>
+                      );
                     })}
                 </div>
               </div>
@@ -84,9 +73,9 @@ export default function ResonatorCard({
         <div className={styles.harmonyContainer}>
           {Object.entries(myHarmony).map(([h, c]) => {
             return (
-              <div className={styles.harmony} key={h + 'x' + c}>
+              <div className={styles.harmony} key={h + 'x' + c} data-set={c}>
                 <span>{h}</span>
-                <span>{c}</span>
+                <span>{c === 5 ? 5 : 2}</span>
               </div>
             );
           })}

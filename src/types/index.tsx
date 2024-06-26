@@ -14,7 +14,7 @@ import {
   everySkillLevel,
   everySkillType,
 } from './everySkillType';
-import { EveryWeaponCode, getWeaponName, weaponPivot } from './everyWeaponCode';
+import { EveryWeaponCode } from './everyWeaponCode';
 import { EveryWeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
 import { EveryWeaponAtk1 } from './everyWeapon';
 import {
@@ -53,7 +53,6 @@ export {
   everySkillLevel,
   everySkillType,
   everyWeaponCategory,
-  weaponPivot,
   everyCost4EchoPrimaryMainStats,
   everyCost3EchoPrimaryMainStats,
   everyCost1EchoPrimaryMainStats,
@@ -61,7 +60,6 @@ export {
   getStatsName,
   getStatsAbbr,
   getElementMap,
-  getWeaponName,
 };
 export type {
   Stats,

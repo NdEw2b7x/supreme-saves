@@ -2,6 +2,7 @@ import { WeaponSubStats } from '../../types';
 import { WeaponData } from '.';
 
 const code = '300200001';
+const name = '흑야의 직검 · 흑뢰';
 const atk1 = 26;
 const subOption: WeaponSubStats = 'atk';
 // const skill: WeaponSkill = {
@@ -9,6 +10,5 @@ const subOption: WeaponSubStats = 'atk';
 //   condition: [{ when: ['변주 스킬'], stat: '공격력', from: 8, to: 16 }],
 // };
 
-const result = new WeaponData({ code, atk1, subOption });
-
+const result = new WeaponData({ code, name, atk1, subOption, skill: { passive: [] } });
 export default result;

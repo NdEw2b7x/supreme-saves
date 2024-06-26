@@ -97,6 +97,7 @@ export default function ResonatorCardUpper({
       <div className={styles.stats}>
         <div>
           <span>HP</span>
+          {/* <span>{Math.floor((result.baseHp * (1 + result.hp)) / 10) * 10 + result.flatHp}</span> */}
           <span>{(result.baseHp * (1 + result.hp) + result.flatHp).toFixed(3)}</span>
         </div>
         <div>

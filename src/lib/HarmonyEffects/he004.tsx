@@ -1,9 +1,12 @@
-import { Effect2, HarmonyEffect } from '.';
-import { Stats } from '../../types';
+import { Effect2 } from '.';
+import HarmonyEffectData from './HarmonyEffectData';
+import { Harmony, Stats } from '../../types';
 
 const code = 'he004';
-const name = '야밤의 서리';
-const effect2: Effect2 = { ice: 0.1 };
-const effect5: Partial<Record<Stats, number>> = { ice: 0.1 };
+const name: Harmony = '스쳐가는 바람';
+const effect2: Effect2 = { wind: 0.1 };
+const effect5: Partial<Record<Stats, number>> = { wind: 0.1 };
 
-export const he004 = new HarmonyEffect({ code, name, effect2, effect5 });
+const result = new HarmonyEffectData({ code, name, effect2, effect5 });
+
+export default result;
