@@ -4,6 +4,7 @@ import resonatorsSlice from './slice/resonatorsSlice';
 import weaponsSlice from './slice/weaponsSlice';
 import echoesSlice from './slice/echoesSlice';
 import statisticsSlice from './slice/statisticsSlice';
+import triggerSlice from './slice/triggerSlice';
 
 const reducer = {
   grobalSlice,
@@ -11,6 +12,7 @@ const reducer = {
   weaponsSlice,
   echoesSlice,
   statisticsSlice,
+  triggerSlice,
 };
 const store = configureStore({ reducer });
 

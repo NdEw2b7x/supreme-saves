@@ -13,14 +13,7 @@ const result = new WeaponData({
   skill: {
     name: '강유병존',
     passive: [],
-    active: [
-      {
-        trigger: ['burst'],
-        stat: 'atk',
-        s1: 0.15,
-        s5: 0.48,
-      },
-    ],
+    active: [{ trigger: ['burst'], value: [{ stat: 'atk', s1: 0.15, s5: 0.48 }] }],
   },
 });
 export default result;

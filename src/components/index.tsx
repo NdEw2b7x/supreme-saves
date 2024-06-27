@@ -12,9 +12,10 @@ import { EchoMainStats, EchoSubStats } from '../types';
 import { MyEcho } from '../slice/echoesSlice';
 import { everyEchoData, getEchoMainValue0 } from '../lib/Echoes';
 import { getSecondaryMainStats } from './Echoes/EchoesList';
+import SelectNumber from './SelectNumber';
 
 export { Resonators, ResonatorDetail, Weapons, Echoes, System };
-export { FlexBox, ModalBox, Thumbnail, RadioBtn, SelectResonator };
+export { FlexBox, ModalBox, Thumbnail, RadioBtn, SelectNumber, SelectResonator };
 export { weaponThumbnailControl, echoThumbnailControl };
 
 export const genByEcho = (info?: MyEcho) => {

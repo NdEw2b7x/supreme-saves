@@ -12,5 +12,10 @@ const subOption: WeaponSubStats = 'cRate';
 //   ],
 // };
 
-const result = new WeaponData({ code, atk1, subOption, skill: { passive: [] } });
+const result = new WeaponData({
+  code,
+  atk1,
+  subOption,
+  skill: { passive: [], active: [] },
+});
 export default result;

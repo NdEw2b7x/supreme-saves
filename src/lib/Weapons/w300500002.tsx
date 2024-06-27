@@ -9,5 +9,10 @@ const subOption: WeaponSubStats = 'hp';
 //   condition: [{ when: ['변주 스킬'], stat: '공격력', from: 8, to: 16 }],
 // };
 
-const result = new WeaponData({ code, atk1, subOption, skill: { passive: [] } });
+const result = new WeaponData({
+  code,
+  atk1,
+  subOption,
+  skill: { passive: [], active: [] },
+});
 export default result;

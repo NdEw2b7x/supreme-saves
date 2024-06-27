@@ -16,10 +16,6 @@ const result = new WeaponData({
   name,
   atk1,
   subOption,
-  skill: {
-    name: '끝없는 메아리',
-    passive: [],
-    active: [],
-  },
+  skill: { name: '끝없는 메아리', passive: [], active: [] },
 });
 export default result;

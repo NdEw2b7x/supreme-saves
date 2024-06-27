@@ -13,14 +13,7 @@ const result = new WeaponData({
   skill: {
     name: '정면돌파',
     passive: [],
-    active: [
-      {
-        trigger: ['intro'],
-        stat: 'atk',
-        s1: 0.15,
-        s5: 0.3,
-      },
-    ],
+    active: [{ trigger: ['intro'], value: [{ stat: 'atk', s1: 0.15, s5: 0.3 }] }],
   },
 });
 export default result;

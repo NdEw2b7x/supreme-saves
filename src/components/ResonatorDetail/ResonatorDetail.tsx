@@ -16,10 +16,11 @@ export default function ResonatorDetail() {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
   const weaponMapping = useSelector((state: State) => state.weaponsSlice['장착']);
 
-  const resonatorData = everyResonatorData[name];
+  const data = everyResonatorData[name];
   const myResonator = myResonators[name] as MyResonator;
 
-  const element = resonatorData.element;
+  const element = data.element;
+  // const skill = data.skill;
 
   const innerLevel = [];
   for (let i = 1; i <= 90; i++) {
@@ -100,7 +101,13 @@ export default function ResonatorDetail() {
             <div className={styles.echoes}>echoes</div>
           </div>
         </section>
-        <section className='damage'>damage</section>
+        <section className={styles.damage}>
+          <article className={styles.basic}></article>
+          <article className={styles.skill}></article>
+          <article className={styles.circuit}></article>
+          <article className={styles.burst}></article>
+          <article className={styles.intro}></article>
+        </section>
       </main>
     </>
   );

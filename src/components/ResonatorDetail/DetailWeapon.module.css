@@ -70,14 +70,52 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    div {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem;
-    }
-    div:nth-child(2n) {
+  }
+  .active {
+    .trigger {
       background-color: var(--theme-color-alpha-200);
+      padding: 0.25rem;
       border-radius: 0.5rem;
+      display: flex;
+      gap: 0.25rem;
+      justify-content: space-between;
+      .name {
+        flex-basis: 6rem;
+        width: 100%;
+        padding: 0.25rem;
+        align-content: center;
+        text-align: left;
+      }
+      .switch {
+        background-color: var(--theme-color-alpha-200);
+        display: flex;
+        border-radius: 0.5rem;
+        * {
+          border-radius: 0.5rem;
+        }
+      }
+      .stack {
+        border-radius: 0.5rem;
+        overflow: hidden;
+        background-color: white;
+        select {
+          padding: 0.5rem 1rem;
+        }
+        span {
+          color: black;
+          padding: 0 0.5rem 0 0;
+        }
+      }
     }
   }
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+.statRow:nth-child(2n) {
+  background-color: var(--theme-color-alpha-200);
+  border-radius: 0.5rem;
 }

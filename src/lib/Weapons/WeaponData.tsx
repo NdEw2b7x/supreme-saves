@@ -8,16 +8,13 @@ import {
   WeaponSubStats,
 } from '../../types';
 
+export type Trigger = 'basic' | 'heavy' | 'skill' | 'burst' | 'intro' | 'dmg';
 export type WeaponSkill = {
   name?: Name;
   passive: { stat: Stats; s1: number; s5: number }[];
-  active?: {
-    trigger: ('basic' | 'heavy' | 'skill' | 'burst' | 'intro' | 'dmg')[];
-    stat: Stats;
-    s1: number;
-    s5: number;
-    name?: Name;
-    stack?: number;
+  active: {
+    trigger: Trigger[];
+    value: { stat: Stats; s1: number; s5: number; name?: Name; stack?: number }[];
   }[];
   field?: { on: boolean; stat: Stats; s1: number; s5: number }[];
 };

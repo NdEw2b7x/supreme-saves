@@ -14,14 +14,7 @@ const result = new WeaponData({
   skill: {
     name: '빛의 비호',
     passive: [],
-    active: [
-      {
-        trigger: ['basic', 'heavy'],
-        stat: 'heal',
-        s1: 0.03,
-        s5: 0.05,
-      },
-    ],
+    active: [{ trigger: ['basic', 'heavy'], value: [{ stat: 'heal', s1: 0.03, s5: 0.05 }] }],
   },
 });
 export default result;

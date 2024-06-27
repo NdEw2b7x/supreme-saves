@@ -1,15 +1,19 @@
-import { Thumbnail } from '..';
+import { Fragment } from 'react/jsx-runtime';
+import { RadioBtn, SelectNumber, Thumbnail } from '..';
 import { useByWeapon } from '../useByWeapon';
 import { useSelector } from 'react-redux';
-import { State } from '../../store';
+import { State, dispatch } from '../../store';
 import { MyWeapon, WeaponId } from '../../slice/weaponsSlice';
 import { ResonatorName, Stats, getStatsName } from '../../types';
 import { getPercent } from '../../lib/formula';
-import { WeaponData, everyWeaponData } from '../../lib/Weapons';
+import { Trigger, WeaponData, everyWeaponData } from '../../lib/Weapons';
 import styles from './DetailWeapon.module.css';
+import { setStack, toggleTrigger } from '../../slice/triggerSlice';
 
 export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: WeaponId }) {
   const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  const currentTrigger = useSelector((state: State) => state.triggerSlice);
+  const currentStack = currentTrigger['stack'];
   const [weaponAtk, byWeapon] = useByWeapon(name);
 
   if (id) {
@@ -45,24 +49,101 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: W
         </div>
         <div className={styles.ability}>
           <h5 className={styles.abilityName}>{skill.name ? skill.name : '(스킬 이름)'}</h5>
-          <div className={styles.passive}>
-            {skill.passive.map(({ stat, s1, s5 }) => {
-              return (
-                <div>
-                  <span style={{ color: isElement(stat) ? `var(--element-${stat})` : 'white' }}>
-                    {getStatsName(stat)}
-                  </span>
-                  <span>{getPercent(s1 + ((s5 - s1) * (s - 1)) / 4)(2)}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className={styles.active}>
-            <div>
-              {/* <span>전체 피해 보너스</span>
-              <span>12%</span> */}
+          {skill.passive.length ? (
+            <div className={styles.passive}>
+              <div>
+                {skill.passive.map(({ stat, s1, s5 }) => (
+                  <div key={stat} className={styles.statRow}>
+                    <span style={{ color: isElement(stat) ? `var(--element-${stat})` : 'white' }}>
+                      {getStatsName(stat)}
+                    </span>
+                    <span>{getPercent(s1 + ((s5 - s1) * (s - 1)) / 4)(2)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : undefined}
+          {skill.passive.length && skill.active?.length ? <hr /> : undefined}
+          {skill.active?.length ? (
+            <div className={styles.active}>
+              {skill.active.map(({ trigger, value }, i) => {
+                const stat = value[0].stat;
+                const stack = value[0].stack;
+                const name = value[0].name;
+                return (
+                  <Fragment key={i}>
+                    <div className={styles.trigger}>
+                      {name ? <div>{name}</div> : undefined}
+                      {trigger.map((trigger) => (
+                        <Fragment key={i}>
+                          <div className={styles.name}>
+                            <span key={trigger}>{triggerConvert(trigger)}</span>
+                          </div>
+                          {stack && currentTrigger[trigger] ? (
+                            <div className={styles.stack}>
+                              <SelectNumber
+                                min={1}
+                                max={stack}
+                                onChange={(i) => {
+                                  i <= stack ? dispatch(setStack(i)) : dispatch(setStack(i));
+                                  dispatch(setStack(Math.min(i, stack)));
+                                }}
+                              />
+                              <span>스택</span>
+                            </div>
+                          ) : undefined}
+                          <div className={styles.switch}>
+                            {[false, true].map((v, i) => (
+                              <RadioBtn
+                                key={i}
+                                name={trigger + '' + stat}
+                                id={'trigger' + v + '' + i}
+                                defaultChecked={currentTrigger[trigger] === v ? true : false}
+                                onChange={() => {
+                                  const switching = toggleTrigger(trigger);
+                                  dispatch(switching);
+                                  switching ? dispatch(setStack(1)) : dispatch(setStack(0));
+                                }}
+                              >
+                                {v ? '발동' : '미발동'}
+                              </RadioBtn>
+                            ))}
+                          </div>
+                        </Fragment>
+                      ))}
+                    </div>
+                    <div>
+                      {value.map(({ stat, s1, s5, stack }, i) => {
+                        const switching = trigger
+                          .map((trigger) => currentTrigger[trigger])
+                          .filter((i) => i).length
+                          ? 1
+                          : 0;
+                        return (
+                          <div className={styles.statRow} key={i}>
+                            <span
+                              style={{
+                                color: isElement(stat) ? `var(--element-${stat})` : 'white',
+                              }}
+                            >
+                              {getStatsName(stat)}
+                            </span>
+                            <span>
+                              {getPercent(
+                                switching *
+                                  (stack ? currentStack : 1) *
+                                  (s1 + ((s5 - s1) * (s - 1)) / 4)
+                              )(2)}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Fragment>
+                );
+              })}
+            </div>
+          ) : undefined}
         </div>
       </div>
     );
@@ -79,4 +160,20 @@ export const isElement = (stat: Stats) => {
     stat === 'dark'
     ? true
     : false;
+};
+
+export const triggerConvert = (x: Trigger) => {
+  return x === 'basic'
+    ? '일반 공격'
+    : x === 'heavy'
+    ? '강공격'
+    : x === 'skill'
+    ? '공명 스킬'
+    : x === 'burst'
+    ? '공명 해방'
+    : x === 'intro'
+    ? '변주 스킬'
+    : x === 'dmg'
+    ? '모든 피해'
+    : undefined;
 };
