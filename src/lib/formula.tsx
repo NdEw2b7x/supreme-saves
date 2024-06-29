@@ -69,40 +69,40 @@ export const getPercent = (x: number) => {
   };
 };
 
-export const getSkillMultiply = (x: number) => {
+export const getSkillMultiply = (lv: number) => {
   return (m0: number) =>
-    Math.floor(
+    Math.ceil(
       10000 *
         m0 *
-        (x === 1
+        (lv === 1
           ? 1
-          : x === 2
+          : lv === 2
           ? 1.082
-          : x === 3
+          : lv === 3
           ? 1.164
-          : x === 4
+          : lv === 4
           ? 1.2788
-          : x === 5
+          : lv === 5
           ? 1.3608
-          : x === 6
+          : lv === 6
           ? 1.4551
-          : x === 7
+          : lv === 7
           ? 1.5863
-          : x === 8
+          : lv === 8
           ? 1.7175
-          : x === 9
+          : lv === 9
           ? 1.8487
-          : x === 10
+          : lv === 10
           ? 1.9881
-          : x === 11
+          : lv === 11
           ? 2.1521
-          : x === 12
+          : lv === 12
           ? 2.3161
-          : x === 13
+          : lv === 13
           ? 2.4801
-          : x === 14
+          : lv === 14
           ? 2.6441
-          : x === 15
+          : lv === 15
           ? 2.8081
           : 0)
     ) / 10000;

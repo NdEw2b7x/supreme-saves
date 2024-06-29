@@ -3,16 +3,12 @@ import { WeaponData } from '.';
 
 const code = '300500002';
 const atk1 = 24;
-const subOption: WeaponSubStats = 'hp';
-// const skill: WeaponSkill = {
-//   name: '필사의 결심',
-//   condition: [{ when: ['변주 스킬'], stat: '공격력', from: 8, to: 16 }],
-// };
-
+const subOption: WeaponSubStats = 'energy';
 const result = new WeaponData({
   code,
+  name: '수행자의 증폭기 · 탐색',
   atk1,
   subOption,
-  skill: { passive: [], active: [] },
+  skill: { name: '기나긴 여정', passive: [], active: [] },
 });
 export default result;

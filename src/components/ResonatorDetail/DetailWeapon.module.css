@@ -15,9 +15,9 @@
   padding: 0.5rem;
   border-radius: 0.25rem;
   font-weight: bold;
+
   span::before {
     display: inline-block;
-    background-color: var(--theme-color);
     padding: 0.25rem;
     margin: 0 0.25rem;
     border-radius: 0.25rem;

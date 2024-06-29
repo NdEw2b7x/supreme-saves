@@ -1,32 +1,51 @@
-import { EchoPrimaryMainStats, EveryElement, EveryWeaponCategory, Name, Stats } from '../../types';
-import { Trigger } from '../Weapons';
+import { EchoPrimaryMainStats, Element, EveryWeaponCategory, Movement, Name } from '../../types';
 
 type Scale = 'HP' | 'ATK' | 'DEF';
-export const genSkill = (x: Scale) => (values: [x: number, y?: number][]) => ({
-  scale: x,
-  value: values.map(([multiply, times]) => ({ multiply, times })),
-});
-export const genNamedSkill = (x: Scale) => (values: [x: number, y?: number][], name: Name) => ({
-  scale: x,
-  value: values.map(([multiply, times]) => ({ multiply, times })),
-  name,
-});
+export const genSkill =
+  (x: Scale) =>
+  (skillType: SkillType) =>
+  (values: [x: number, y?: number][], name?: Name, dmgType?: Movement) => ({
+    name,
+    scale: x,
+    value: values.map(([multiply, times]) => ({ multiply, times })),
+    dmgType,
+    skillType,
+  });
+export const genHPSkillNode = genSkill('HP');
+export const genATKSkillNode = genSkill('ATK');
+export const genDEFSkillNode = genSkill('DEF');
 
+export type SkillType = 'atack' | 'heal' | 'replace' | 'buffSelf' | 'buffAll' | 'buffTeam';
+export type SkillNode = {
+  name?: Name;
+  skillType: SkillType;
+  scale: Scale;
+  value: { flat?: number; multiply?: number; times?: number }[];
+  dmgType?: Movement;
+};
+export type BuffNode = {
+  name?: Name;
+  value: { flat?: number; multiply?: number; times?: number }[];
+};
+export type HealNode = {};
+export type SkillCategory = keyof ResonatorSkill;
+export type SkillLine = keyof ResonatorSkill;
 export type ResonatorSkill = {
   basic: {
     name: Name;
-    basic: { scale: Scale; value: { multiply: number; times?: number }[] }[];
-    heavy: { scale: Scale; value: { multiply: number; times?: number }[]; name?: Name }[];
-    air: { scale: Scale; multiply: number; times?: number };
-    counter: { scale: Scale; multiply: number; times?: number };
+    basic: SkillNode[];
+    heavy: SkillNode[];
+    air: SkillNode[];
+    airHeavy: SkillNode[];
+    counter: SkillNode[];
   };
-  skill: { name: Name; value: { multiply: number; times?: number }[]; enhanced?: boolean }[];
+  skill: { name: Name; skill: SkillNode[] };
   circuit: {
     name: Name;
-    replace?: 'basic' | 'heavy' | 'skill' | 'burst';
-    scale: Scale;
-    multiply: number;
-    times?: number;
+    gaugeName: Name;
+    skill: SkillNode[];
+    buff?: BuffNode[];
+    coAtack?: {};
     enhanced?: {
       name?: Name;
       basic?: {
@@ -35,16 +54,12 @@ export type ResonatorSkill = {
         air?: ResonatorSkill['basic']['air'];
         counter?: ResonatorSkill['basic']['counter'];
       };
-      skill?: ResonatorSkill['skill'];
+      skill?: Omit<ResonatorSkill['skill'], 'name'>;
     };
   };
-  burst: { name: Name; multiply: number; times?: number }[];
-  intro: { name: Name; multiply: number; times?: number }[];
-  outro: ({ name: Name } & (
-    | { deepen: 'ice' | 'electro' | 'burst'; multiply: number }
-    | { scale: Scale; multiply: number }
-  ))[];
-  inherent: { trigger: Trigger; stat: Stats; value: number }[];
+  burst: { name: Name; skill: SkillNode[] };
+  intro: { name: Name; skill: SkillNode[] };
+  outro: { name: Name; skill: SkillNode[] };
 };
 
 export default class ResonatorData {
@@ -57,7 +72,7 @@ export default class ResonatorData {
     minorFortes,
   }: {
     name: Name;
-    element: EveryElement;
+    element: Element;
     weaponCategory: EveryWeaponCategory;
     base: [number, number, number];
     skill: ResonatorSkill;
@@ -73,7 +88,7 @@ export default class ResonatorData {
     this.minorFortes = minorFortes;
   }
   name: Name;
-  element: EveryElement;
+  element;
   weaponCatergory: EveryWeaponCategory;
   hp1: number;
   atk1: number;

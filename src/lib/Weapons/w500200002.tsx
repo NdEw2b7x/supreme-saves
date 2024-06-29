@@ -15,7 +15,9 @@ const result = new WeaponData({
     active: [
       {
         trigger: ['dmg'],
-        value: [{ stat: 'skill', s1: 0.04, s5: 0.08, name: '빛나는 깃털', stack: 14 }],
+        value: [{ stat: 'skill', s1: 0.04, s5: 0.08 }],
+        stackName: '빛나는 깃털',
+        stack: 14,
       },
     ],
   },

@@ -5,8 +5,9 @@ import { dispatch } from '../../store';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { MyResonator } from '../../slice/resonatorsSlice';
 import { MyEcho } from '../../slice/echoesSlice';
-import { EchoCode, EchoPrimaryMainStats, ResonatorName, getStatsAbbr } from '../../types';
+import { EchoPrimaryMainStats, ResonatorName, getStatsAbbr } from '../../types';
 import { getPercent } from '../../lib/formula';
+import { EchoCode } from '../../lib/Echoes';
 import styles from './ResonatorCard.module.css';
 
 export default function ResonatorCard({
@@ -29,7 +30,7 @@ export default function ResonatorCard({
         dispatch(changeSubPage('상세'));
       }}
     >
-      <ResonatorCardUpper resonatorName={resonatorName} info={info} />
+      <ResonatorCardUpper name={resonatorName} info={info} />
       <div className={styles.bottom}>
         <div className={styles.echoes}>
           {myEchoInfoes.map((echoInfo, i) => {

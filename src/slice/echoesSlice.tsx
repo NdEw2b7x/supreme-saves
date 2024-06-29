@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EchoCode, EchoRarity, ResonatorName, Harmony } from '../types';
-import { everyEchoData } from '../lib/Echoes';
+import { EchoRarity, ResonatorName, Harmony } from '../types';
+import { EchoCode, everyEchoData } from '../lib/Echoes';
 import { EchoPrimaryMainStats, EchoSubStats } from '../types/everyStatistics';
 
 const name = 'echoesSlice';
@@ -56,7 +56,9 @@ const save = (state: InitialState) => {
 const reducers = {
   addEcho: (
     state: InitialState,
-    action: {
+    {
+      payload: { code, rarity, level, main, harmony },
+    }: {
       payload: {
         code: EchoCode;
         rarity: EchoRarity;
@@ -66,15 +68,14 @@ const reducers = {
       };
     }
   ) => {
-    const code = action.payload.code;
     const newEcho: MyEcho = {
       코드: code,
-      이름: everyEchoData[code]?.name as string,
-      희귀: action.payload.rarity,
-      레벨: action.payload.level,
-      '메인 스텟': action.payload.main,
+      이름: everyEchoData[code]?.name,
+      희귀: rarity,
+      레벨: level,
+      '메인 스텟': main,
       '서브 스텟': {},
-      화음: action.payload.harmony,
+      화음: harmony,
       장착: { 공명자: '미장착', 슬롯: 0 },
     };
     state['에코'] = {

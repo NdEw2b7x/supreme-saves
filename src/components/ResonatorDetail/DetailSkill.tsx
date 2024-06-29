@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import styles from './ResonatorDetail.module.css';
 import {
   ResonatorName,
   SkillLevel,
@@ -16,6 +15,7 @@ import {
 } from '../../slice/resonatorsSlice';
 import { getPercent } from '../../lib/formula';
 import { useByMinorForte } from '../useByMinorForte';
+import styles from './DetailSkill.module.css';
 
 export function DetailSkill({ name }: { name: ResonatorName }) {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);

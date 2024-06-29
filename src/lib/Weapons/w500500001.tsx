@@ -13,7 +13,7 @@ const result = new WeaponData({
   skill: {
     name: '끝없는 물결',
     passive: [{ stat: 'energy', s1: 0.128, s5: 0.256 }],
-    active: [{ trigger: ['basic'], value: [{ stat: 'basic', s1: 0.032, s5: 0.064, stack: 5 }] }],
+    active: [{ trigger: ['basic'], value: [{ stat: 'basic', s1: 0.032, s5: 0.064 }], stack: 5 }],
   },
 });
 

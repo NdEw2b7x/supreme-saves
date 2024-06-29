@@ -1,7 +1,7 @@
-import { EveryElement } from '../../types';
+import { Element } from '../../types';
 import ResonatorData, { MinorForte } from './ResonatorData';
 
-let element: EveryElement = '회절';
+let element: Element = 'light';
 let [hp1, atk1, def1] = [912, 30, 112];
 let minorFortes: [MinorForte, MinorForte] = ['atk', 'light'];
 
@@ -9,7 +9,7 @@ const elementFromStorage = localStorage.getItem('방랑자_속성');
 if (elementFromStorage) {
   switch (JSON.parse(elementFromStorage)) {
     case '인멸':
-      element = '인멸';
+      element = 'dark';
       [hp1, atk1, def1] = [866, 33, 103];
       minorFortes = ['atk', 'dark'];
       break;
@@ -26,29 +26,19 @@ const result = new ResonatorData({
       name: '',
       basic: [],
       heavy: [],
-      air: {
-        multiply: 0,
-        times: undefined,
-        scale: 'ATK',
-      },
-      counter: {
-        multiply: 0,
-        times: undefined,
-        scale: 'ATK',
-      },
+      air: [],
+      counter: [],
+      airHeavy: [],
     },
-    skill: [],
+    skill: { name: '', skill: [] },
     circuit: {
       name: '',
-      replace: undefined,
-      multiply: 0,
-      times: undefined,
-      scale: 'ATK',
+      skill: [],
+      gaugeName: '',
     },
-    burst: [],
-    intro: [],
-    outro: [],
-    inherent: [],
+    burst: { name: '', skill: [] },
+    intro: { name: '', skill: [] },
+    outro: { name: '', skill: [] },
   },
   minorFortes,
 });

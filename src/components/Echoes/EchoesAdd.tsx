@@ -3,7 +3,6 @@ import { dispatch } from '../../store';
 import { changeSubPage } from '../../slice/grobalSlice';
 import { addEcho } from '../../slice/echoesSlice';
 import {
-  EchoCode,
   EchoCost,
   EchoRarity,
   Stats,
@@ -17,7 +16,7 @@ import {
   everyCost3EchoPrimaryMainStats,
   everyCost4EchoPrimaryMainStats,
 } from '../../types/everyEcho';
-import { everyEchoData, everyEchoInvertHarmony } from '../../lib/Echoes';
+import { EchoCode, everyEchoData, everyEchoInvertHarmony } from '../../lib/Echoes';
 import styles from './EchoesAdd.module.css';
 
 export default function EchoesAdd() {

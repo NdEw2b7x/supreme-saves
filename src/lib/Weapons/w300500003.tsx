@@ -3,15 +3,13 @@ import { WeaponData } from '.';
 
 const code = '300500003';
 const atk1 = 24;
-const subOption: WeaponSubStats = 'energy';
-// const skill: WeaponSkill = {
-//   name: '필사의 결심',
-//   condition: [{ when: ['변주 스킬'], stat: '공격력', from: 8, to: 16 }],
-//
+const subOption: WeaponSubStats = 'hp';
+
 const result = new WeaponData({
   code,
+  name: '원능의 증폭기 · 견습V',
   atk1,
   subOption,
-  skill: { passive: [], active: [] },
+  skill: { name: '도움의 손길', passive: [], active: [] },
 });
 export default result;

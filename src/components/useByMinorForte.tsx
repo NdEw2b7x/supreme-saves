@@ -1,6 +1,6 @@
 import { ResonatorName } from '../types';
 import { MinorForte } from '../lib/Resonators/ResonatorData';
-import { everyResonatorData } from '../lib/Resonators';
+import { everyResonatorData } from '../lib/Resonators/';
 import { useSelector } from 'react-redux';
 import { State } from '../store';
 

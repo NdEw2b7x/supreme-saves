@@ -2,6 +2,7 @@ import { ResonatorName } from '../../types';
 import ResonatorData from './ResonatorData';
 import 감심 from './r50404001';
 import 기염 from './r50401001';
+import 금희 from './r50501001';
 import 능양 from './r50104001';
 import 단근 from './r40602001';
 import 도기 from './r40601000';
@@ -21,7 +22,7 @@ import 카카루 from './r50301001';
 export const everyResonatorData: Record<ResonatorName, ResonatorData> = {
   감심,
   기염,
-  //   금희,
+  금희,
   능양,
   단근,
   도기,

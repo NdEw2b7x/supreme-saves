@@ -2,7 +2,7 @@ import ResonatorCard from './ResonatorCard';
 import { useSelector } from 'react-redux';
 import { State } from '../../store';
 import { ResonatorName } from '../../types';
-import { everyResonatorData } from '../../lib/Resonators';
+import { everyResonatorData } from '../../lib/Resonators/';
 
 export default function ResonatorsList() {
   const filters = useSelector((state: State) => state.grobalSlice.filter);

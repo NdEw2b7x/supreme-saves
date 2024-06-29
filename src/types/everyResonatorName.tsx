@@ -15,7 +15,7 @@ export const everyResonatorNameWithoutRover = [
   '도기', // 인멸
   '기염', // 1.0.1
   '음림', // 1.0.2
-  // '금희', // 1.1.1
+  '금희', // 1.1.1
   // '장리', // 1.1.2
 ] as const;
 export type EveryResonatorNameWithoutRover = (typeof everyResonatorNameWithoutRover)[number];

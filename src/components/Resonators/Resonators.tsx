@@ -1,27 +1,19 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EverySubPage, changeSubPage, changefilter } from '../../slice/grobalSlice';
-import { everyElement, everyWeaponCategory } from '../../types';
+import { changeSubPage, changefilter } from '../../slice/grobalSlice';
+import { elementStat, everyWeaponCategory, mapElement } from '../../types';
 import ResonatorsAdd from './ResonatorsAdd';
 import ResonatorsList from './ResonatorsList';
 
 export default function Resonators() {
   const subPage = useSelector((state: State) => state.grobalSlice['subPage']);
-  const filters = useSelector((state: State) => state.grobalSlice.filter);
-
-  const subPageControl = (x?: EverySubPage) => {
-    if (x === '추가') {
-      return <ResonatorsAdd />;
-    } else {
-      return <ResonatorsList />;
-    }
-  };
+  const filters = useSelector((state: State) => state.grobalSlice['filter']);
   return (
     <main id='Resonators'>
       <div className='filterContainer'>
         <div className='filter'>
           <div className='radio'>
-            {everyElement.map((i) => {
+            {elementStat.map((i) => {
               const filter = filters.element;
               return (
                 <span
@@ -31,7 +23,7 @@ export default function Resonators() {
                     dispatch(changefilter({ filter: 'element', item: i }));
                   }}
                 >
-                  {i}
+                  {mapElement[i]}
                 </span>
               );
             })}
@@ -63,8 +55,7 @@ export default function Resonators() {
         </div>
       </div>
       <hr />
-      {/* {contents} */}
-      {subPageControl(subPage)}
+      {subPage === '추가' ? <ResonatorsAdd /> : <ResonatorsList />}
     </main>
   );
 }

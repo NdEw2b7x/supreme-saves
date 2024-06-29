@@ -1,4 +1,3 @@
-import { EveryWeaponCode } from '../../types/everyWeaponCode';
 import WeaponData, { Trigger, getWeaponSubOptionValue1 } from './WeaponData';
 import w300100001 from './w300100001';
 import w300200001 from './w300200001';
@@ -36,6 +35,7 @@ import w400500004 from './w400500004';
 import w400500005 from './w400500005';
 import w500100001 from './w500100001';
 import w500100002 from './w500100002';
+import w500100003 from './w500100003';
 import w500200001 from './w500200001';
 import w500300001 from './w500300001';
 import w500400001 from './w500400001';
@@ -46,10 +46,10 @@ export { getWeaponSubOptionValue1 };
 export { WeaponData };
 export type { Trigger };
 
-export const everyWeaponData: Partial<Record<EveryWeaponCode, WeaponData>> = {
+export const everyWeaponData = {
   w500100001,
   w500100002,
-  // w500100003,
+  w500100003,
   w500200001,
   // w500200002,
   w500300001,
@@ -93,3 +93,5 @@ export const everyWeaponData: Partial<Record<EveryWeaponCode, WeaponData>> = {
   w300500002,
   w300500003,
 } as const;
+
+export type WeaponCode = keyof typeof everyWeaponData;

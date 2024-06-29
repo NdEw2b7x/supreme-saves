@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { ModalBox, RadioBtn, SelectResonator, Thumbnail } from '..';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { EchoEquipSlot, EchoId, MyEcho, changeEquip } from '../../slice/echoesSlice';
-import { EchoCode, ResonatorName } from '../../types';
-import { ModalBox, RadioBtn, SelectResonator, Thumbnail } from '..';
+import { ResonatorName } from '../../types';
+import { EchoCode } from '../../lib/Echoes';
 import styles from './EquipModal.module.css';
 
 export default function EquipModal({ id, close }: { id: EchoId; close: () => void }) {

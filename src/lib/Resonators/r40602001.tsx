@@ -1,14 +1,13 @@
-import { EveryElement, ResonatorName, EveryWeaponCategory } from '../../types';
+import { ResonatorName, EveryWeaponCategory } from '../../types';
 import ResonatorData from './ResonatorData';
 
 const name: ResonatorName = '단근';
-const element: EveryElement = '인멸';
 const weaponCategory: EveryWeaponCategory = '직검';
 const [hp1, atk1, def1] = [755, 21, 94];
 
 const result = new ResonatorData({
   name,
-  element,
+  element: 'dark',
   weaponCategory,
   base: [hp1, atk1, def1],
   skill: {
@@ -16,29 +15,19 @@ const result = new ResonatorData({
       name: '',
       basic: [],
       heavy: [],
-      air: {
-        multiply: 0,
-        times: undefined,
-        scale: 'ATK',
-      },
-      counter: {
-        multiply: 0,
-        times: undefined,
-        scale: 'ATK',
-      },
+      air: [],
+      counter: [],
+      airHeavy: [],
     },
-    skill: [],
+    skill: { name: '', skill: [] },
     circuit: {
       name: '',
-      replace: undefined,
-      multiply: 0,
-      times: undefined,
-      scale: 'ATK',
+      skill: [],
+      gaugeName: '',
     },
-    burst: [],
-    intro: [],
-    outro: [],
-    inherent: [],
+    burst: { name: '', skill: [] },
+    intro: { name: '', skill: [] },
+    outro: { name: '', skill: [] },
   },
   minorFortes: ['atk', 'dark'],
 });

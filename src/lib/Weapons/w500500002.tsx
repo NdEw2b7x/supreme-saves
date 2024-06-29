@@ -16,7 +16,7 @@ const skill: WeaponSkill = {
     { stat: 'light', s1: 0.12, s5: 0.24 },
     { stat: 'dark', s1: 0.12, s5: 0.24 },
   ],
-  active: [{ trigger: ['skill'], value: [{ stat: 'atk', s1: 0.12, s5: 0.24, stack: 2 }] }],
+  active: [{ trigger: ['skill'], value: [{ stat: 'atk', s1: 0.12, s5: 0.24 }], stack: 2 }],
   field: [{ on: false, stat: 'atk', s1: 0.12, s5: 0.24 }],
 };
 

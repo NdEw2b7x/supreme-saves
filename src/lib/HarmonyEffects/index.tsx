@@ -10,8 +10,16 @@ import he007 from './he007';
 import he008 from './he008';
 import he009 from './he009';
 
-export type Effect2 = Partial<Record<Stats, number>>;
-export type Effect5 = Partial<Record<Stats, number>>;
+export type Effect2 = { stat: Stats; value: number };
+export type Effect5 = {
+  buffType: 'self' | 'team' | 'next';
+  action: ('basic' | 'heavy' | 'skill' | 'burst' | 'intro' | 'outro' | 'heal')[];
+  onField?: boolean;
+  stat: Stats;
+  value: number;
+  stack?: number;
+}[];
+
 export const everyHarmonyEffectData: Record<Harmony, HarmonyEffectData> = {
   '야밤의 서리': he001,
   '솟구치는 용암': he002,

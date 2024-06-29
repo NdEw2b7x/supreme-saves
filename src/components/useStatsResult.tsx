@@ -2,9 +2,9 @@ import { getMyEchoValues } from '.';
 import { useSelector } from 'react-redux';
 import { State } from '../store';
 import { MyResonator } from '../slice/resonatorsSlice';
-import { EveryWeaponAtk1, Harmony, ResonatorName, Stats, WeaponSubStats } from '../types';
+import { EveryWeaponAtk1, Harmony, ResonatorName, Stats } from '../types';
 import { getATK, getDEF, getHP, getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
-import { everyResonatorData } from '../lib/Resonators';
+import { everyResonatorData } from '../lib/Resonators/';
 import { everyHarmonyEffectData } from '../lib/HarmonyEffects';
 import { WeaponData, everyWeaponData } from '../lib/Weapons';
 
@@ -12,6 +12,13 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
   resonatorName: ResonatorName
 ) => {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
+  const myWeapons = Object.fromEntries(
+    useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
+  );
+  const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
+  const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
+  const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
+
   const info = myResonators[resonatorName] as MyResonator;
   const values: Record<Stats, number> = {
     baseHp: 0,
@@ -60,18 +67,7 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
   }
   const level = info['레벨'];
   const data = everyResonatorData[resonatorName];
-
-  const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
-  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
   let weaponAtk = 0;
-  const byWeapon: Record<WeaponSubStats, number> = {
-    hp: 0,
-    atk: 0,
-    def: 0,
-    energy: 0,
-    cRate: 0,
-    cDmg: 0,
-  };
   const id = equipWeapons[resonatorName];
   if (id) {
     const myWeapon = myWeapons[id];
@@ -80,26 +76,17 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
       const level = myWeapon['레벨'];
       const s = myWeapon['공진'];
       const atk1: EveryWeaponAtk1 = data.atk1;
-      const sub = data.subOption;
+      const sub: Stats = data.subOption;
 
       data.skill.passive
-        .map(({ stat, s1, s5 }) => {
-          return [stat, s1 + ((s5 - s1) * (s - 1)) / 4] as const;
-        })
+        .map(({ stat, s1, s5 }) => [stat, s1 + ((s5 - s1) * (s - 1)) / 4] as const)
         .forEach(([stat, value]) => {
           values[stat] += value;
         });
       weaponAtk = getWeaponAtk(atk1)(level);
-      byWeapon[sub] = getWeaponSubOptionValue(atk1, sub)(level);
+      values[sub] += getWeaponSubOptionValue(atk1, sub)(level);
     }
   }
-
-  Object.entries(byWeapon).forEach(([stat, value]) => {
-    values[stat as Stat] = Math.floor(values[stat as Stat] * 100000 + value * 100000) / 100000;
-  });
-
-  const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
-  const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
   Object.entries(
     getMyEchoValues(
       ([1, 2, 3, 4, 5] as const).map((i) => {
@@ -134,16 +121,11 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
     });
 
   Object.entries(Object.fromEntries(Object.entries(countHarmony).filter(([, c]) => c >= 2)))
-    .map(([h, c]) => {
-      return c >= 2 ? everyHarmonyEffectData[h as Harmony].effect2 : undefined;
-    })
-    .map((i) => {
-      return i ? Object.entries(i) : undefined;
-    })
+    .map(([h, c]) => (c >= 2 ? everyHarmonyEffectData[h as Harmony].effect2 : undefined))
     .forEach((i) => {
-      i?.forEach(([h, c]) => {
-        values[h as unknown as Stats] += c;
-      });
+      if (i) {
+        values[i.stat] += i.value;
+      }
     });
 
   values['baseHp'] = getHP(data.hp1)(level);

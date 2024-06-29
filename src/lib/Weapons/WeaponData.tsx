@@ -1,8 +1,8 @@
+import { WeaponCode } from '.';
 import {
   EveryRarity,
   EveryWeaponAtk1,
   EveryWeaponCategory,
-  EveryWeaponCode,
   Name,
   Stats,
   WeaponSubStats,
@@ -14,7 +14,9 @@ export type WeaponSkill = {
   passive: { stat: Stats; s1: number; s5: number }[];
   active: {
     trigger: Trigger[];
-    value: { stat: Stats; s1: number; s5: number; name?: Name; stack?: number }[];
+    value: { stat: Stats; s1: number; s5: number }[];
+    stackName?: Name;
+    stack?: number;
   }[];
   field?: { on: boolean; stat: Stats; s1: number; s5: number }[];
 };
@@ -131,7 +133,7 @@ export default class WeaponData {
     subOption: WeaponSubStats;
     skill: WeaponSkill;
   }) {
-    this.code = code as EveryWeaponCode;
+    this.code = code;
     this.name = name;
     this.rarity = code[0] === '5' ? 5 : code[0] === '4' ? 4 : 3;
     this.category =
@@ -149,14 +151,14 @@ export default class WeaponData {
     this.skill = skill;
   }
   name?: Name;
-  code: EveryWeaponCode;
+  code;
   rarity: EveryRarity;
   category: EveryWeaponCategory;
   atk1;
   subOption;
   skill: WeaponSkill;
 
-  weaponPivot: Partial<Record<EveryWeaponCode, string>> = {
+  weaponPivot: Partial<Record<WeaponCode, string>> = {
     // 5성
     // 대검
     w500100001: '푸른물결의 빛', // 5성 상시
@@ -164,7 +166,6 @@ export default class WeaponData {
     w500100003: '태평성대', //5성 한정 1.1.1
     // 직검
     w500200001: '천년의 회류', // 5성 상시
-    w500200002: '솟아오르는 화염', // 5성 한정 1.1.2
     // 권총
     w500300001: '부동의 안개', // 5성 상시
     // 권갑
@@ -205,33 +206,26 @@ export default class WeaponData {
     w400500005: '25형 증폭기 · 울림의 멜로디', // 4성 단조 시리즈
     // 3성
     // 대검
-    w300100001: '흑야의 대검 · 현명',
-    w300100002: '원능의 대검 · 견습I',
-    w300100003: '수행자의 대검 · 벽로',
-    w300100004: '수호자의 대검 · 근성',
-    // 직검
-    w300200001: '흑야의 직검 · 흑뢰',
-    w300200002: '원능의 직검 · 견습II',
-    w300200003: '수행자의 직검 · 행적',
-    w300200004: '수호자의 직검 · 기민',
-    // 권총
-    w300300001: '흑야의 권총 · 흑성',
-    w300300002: '원능의 권총 · 견습III',
-    w300300003: '수행자의 권총 · 통찰',
-    w300300004: '수호자의 권총 · 용맹',
-    // 권갑
-    w300400001: '흑야의 권갑 · 흑빛',
-    w300400002: '원능의 권갑 · 견습IV',
-    w300400003: '수행자의 권갑 · 파괴',
-    w300400004: '수호자의 권갑 · 강력',
-    // 증폭기
-    w300500001: '흑야의 증폭기 · 흑광',
-    w300500002: '원능의 증폭기 · 견습V',
-    w300500003: '수행자의 증폭기 · 탐색',
-    w300500004: '수호자의 증폭기 · 모략',
+    // w300100002: '원능의 대검 · 견습I',
+    // w300100003: '수행자의 대검 · 벽로',
+    // w300100004: '수호자의 대검 · 근성',
+    // // 직검
+    // w300200002: '원능의 직검 · 견습II',
+    // w300200003: '수행자의 직검 · 행적',
+    // w300200004: '수호자의 직검 · 기민',
+    // // 권총
+    // w300300002: '원능의 권총 · 견습III',
+    // w300300003: '수행자의 권총 · 통찰',
+    // w300300004: '수호자의 권총 · 용맹',
+    // // 권갑
+    // w300400002: '원능의 권갑 · 견습IV',
+    // w300400003: '수행자의 권갑 · 파괴',
+    // w300400004: '수호자의 권갑 · 강력',
+    // // 증폭기
+    // w300500004: '수호자의 증폭기 · 모략',
   } as const;
 
   getName() {
-    return this.name ? this.name : this.weaponPivot[('w' + this.code) as EveryWeaponCode];
+    return this.name ?? (this.weaponPivot[('w' + this.code) as WeaponCode] as string);
   }
 }

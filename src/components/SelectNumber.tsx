@@ -1,10 +1,12 @@
 export default function SelectNumber({
   min,
   max,
+  defaultValue,
   onChange,
 }: {
   min: number;
   max: number;
+  defaultValue: number;
   onChange: (x: number) => void;
 }) {
   let innerOption = [];
@@ -17,6 +19,7 @@ export default function SelectNumber({
   }
   return (
     <select
+      defaultValue={defaultValue}
       onChange={(e) => {
         onChange(Number(e.target.value));
       }}

@@ -5,12 +5,11 @@ import { MyResonator } from '../../slice/resonatorsSlice';
 import { MyWeapon } from '../../slice/weaponsSlice';
 import { ResonatorName, Harmony, Stats, getStatsName } from '../../types';
 import { getPercent } from '../../lib/formula';
-import { everyResonatorData } from '../../lib/Resonators';
-import styles from './CardUpper.module.css';
+import { everyResonatorData } from '../../lib/Resonators/';
 import { MyEcho } from '../../slice/echoesSlice';
 import Chain from '../icons/Chain';
 import { useStatsResult } from '../useStatsResult';
-import { elementMap } from '../../types/everyStatistics';
+import styles from './CardUpper.module.css';
 
 export const getMyHarmony: (x: (MyEcho | undefined)[]) => Partial<Record<Harmony, number>> = (
   x: (MyEcho | undefined)[]
@@ -42,20 +41,23 @@ export const getMyHarmony: (x: (MyEcho | undefined)[]) => Partial<Record<Harmony
 };
 
 export default function ResonatorCardUpper({
-  resonatorName,
+  name,
   info,
 }: {
-  resonatorName: ResonatorName;
+  name: ResonatorName;
   info: MyResonator;
 }) {
+  const myWeapons = Object.fromEntries(
+    useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
+  );
+  const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
+
   const resonatorLevel = info['레벨'];
-  const resonatorData = everyResonatorData[resonatorName];
+  const resonatorData = everyResonatorData[name];
   const element = resonatorData.element;
 
-  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
-  const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
   let myWeapon: MyWeapon | undefined;
-  const myWeaponId = equipWeapons[resonatorName];
+  const myWeaponId = equipWeapons[name];
   if (myWeaponId) {
     myWeapon = myWeapons[myWeaponId];
   }
@@ -64,16 +66,16 @@ export default function ResonatorCardUpper({
     Stats,
     'basic' | 'heavy' | 'skill' | 'burst' | 'flatHp' | 'flatAtk' | 'flatDef'
   >;
-  const result = useStatsResult(resonatorName);
+  const result = useStatsResult(name);
   return (
     <div className={styles.top}>
       <div className={styles.intro}>
         <div className={styles.lvBadge}>Lv.{resonatorLevel}</div>
         <div className={styles.imgBox}>
-          <Thumbnail scope='Resonators' code={resonatorName} />
+          <Thumbnail scope='Resonators' code={name} />
         </div>
         <div className={styles.name} style={{ backgroundColor: 'var(--element-' + element + ')' }}>
-          {resonatorName}
+          {name}
         </div>
         <div className={styles.imgBox}>{weaponThumbnailControl(myWeapon?.코드)}</div>
       </div>
@@ -131,7 +133,7 @@ export default function ResonatorCardUpper({
                 case 'wind':
                 case 'light':
                 case 'dark':
-                  if (elementMap[i] === element) {
+                  if (i === element) {
                     return true;
                   }
                   return false;

@@ -20,8 +20,8 @@ const result = new WeaponData({
       { stat: 'dark', s1: 0.12, s5: 0.24 },
     ],
     active: [
-      { trigger: ['intro'], value: [{ stat: 'skill', s1: 0.24, s5: 0.48, name: '가호' }] },
-      { trigger: ['skill'], value: [{ stat: 'skill', s1: 0.24, s5: 0.48, name: '축복' }] },
+      { trigger: ['intro'], value: [{ stat: 'skill', s1: 0.24, s5: 0.48 }], stackName: '가호' },
+      { trigger: ['skill'], value: [{ stat: 'skill', s1: 0.24, s5: 0.48 }], stackName: '축복' },
     ],
   },
 });

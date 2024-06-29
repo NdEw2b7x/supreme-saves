@@ -11,7 +11,9 @@ import styles from './DetailWeapon.module.css';
 import { setStack, toggleTrigger } from '../../slice/triggerSlice';
 
 export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: WeaponId }) {
-  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  const myWeapons = Object.fromEntries(
+    useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
+  );
   const currentTrigger = useSelector((state: State) => state.triggerSlice);
   const currentStack = currentTrigger['stack'];
   const [weaponAtk, byWeapon] = useByWeapon(name);
@@ -66,27 +68,26 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: W
           {skill.passive.length && skill.active?.length ? <hr /> : undefined}
           {skill.active?.length ? (
             <div className={styles.active}>
-              {skill.active.map(({ trigger, value }, i) => {
-                const stat = value[0].stat;
-                const stack = value[0].stack;
-                const name = value[0].name;
+              {skill.active.map(({ trigger, value, stack, stackName }, i) => {
                 return (
                   <Fragment key={i}>
                     <div className={styles.trigger}>
-                      {name ? <div>{name}</div> : undefined}
                       {trigger.map((trigger) => (
                         <Fragment key={i}>
                           <div className={styles.name}>
                             <span key={trigger}>{triggerConvert(trigger)}</span>
                           </div>
+                          {currentStack[stackName ?? ''] > 0 && stackName ? (
+                            <div style={{ alignContent: 'center' }}>「{stackName}」</div>
+                          ) : undefined}
                           {stack && currentTrigger[trigger] ? (
                             <div className={styles.stack}>
                               <SelectNumber
                                 min={1}
                                 max={stack}
+                                defaultValue={1}
                                 onChange={(i) => {
-                                  i <= stack ? dispatch(setStack(i)) : dispatch(setStack(i));
-                                  dispatch(setStack(Math.min(i, stack)));
+                                  dispatch(setStack([stackName ?? '스택', Math.min(i, stack)]));
                                 }}
                               />
                               <span>스택</span>
@@ -96,13 +97,14 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: W
                             {[false, true].map((v, i) => (
                               <RadioBtn
                                 key={i}
-                                name={trigger + '' + stat}
-                                id={'trigger' + v + '' + i}
-                                defaultChecked={currentTrigger[trigger] === v ? true : false}
+                                name={`${trigger}`}
+                                id={`${trigger}-${v}`}
+                                defaultChecked={currentTrigger[trigger] === v}
                                 onChange={() => {
-                                  const switching = toggleTrigger(trigger);
-                                  dispatch(switching);
-                                  switching ? dispatch(setStack(1)) : dispatch(setStack(0));
+                                  dispatch(toggleTrigger(trigger));
+                                  dispatch(
+                                    setStack([stackName as string, currentTrigger[trigger] ? 0 : 1])
+                                  );
                                 }}
                               >
                                 {v ? '발동' : '미발동'}
@@ -113,12 +115,12 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: W
                       ))}
                     </div>
                     <div>
-                      {value.map(({ stat, s1, s5, stack }, i) => {
+                      {value.map(({ stat, s1, s5 }, i) => {
                         const switching = trigger
                           .map((trigger) => currentTrigger[trigger])
                           .filter((i) => i).length
-                          ? 1
-                          : 0;
+                          ? true
+                          : false;
                         return (
                           <div className={styles.statRow} key={i}>
                             <span
@@ -130,9 +132,10 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id?: W
                             </span>
                             <span>
                               {getPercent(
-                                switching *
-                                  (stack ? currentStack : 1) *
-                                  (s1 + ((s5 - s1) * (s - 1)) / 4)
+                                switching
+                                  ? (stack ? currentStack[stackName ?? '-'] : 1) *
+                                      (s1 + ((s5 - s1) * (s - 1)) / 4)
+                                  : 0
                               )(2)}
                             </span>
                           </div>

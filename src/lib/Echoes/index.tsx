@@ -1,10 +1,11 @@
-import { EchoCode, EchoCost, Harmony, everyHarmony } from '../../types';
+import { EchoCost, Harmony, everyHarmony } from '../../types';
 import EchoData from './EchoData';
 import { getEchoMainValue0 } from './EchoMainStatsValue0';
 import G01 from './G01';
 import G02 from './G02';
 import G03 from './G03';
 import G04 from './G04';
+import G05 from './G05';
 import H01 from './H01';
 import H02 from './H02';
 import H05 from './H05';
@@ -20,12 +21,16 @@ import H15 from './H15';
 // import H17 from './H17';
 // import H18 from './H18';
 import H19 from './H19';
+import H21 from './H21';
+import H22 from './H22';
 import H41 from './H41';
 import H42 from './H42';
 import H46 from './H46';
 import H48 from './H48';
 import H49 from './H49';
 import H51 from './H51';
+import H53 from './H53';
+import H54 from './H54';
 import H71 from './H71';
 import H72 from './H72';
 import H73 from './H73';
@@ -58,37 +63,37 @@ import W76 from './W76';
 import W77 from './W77';
 import X53 from './X53';
 import X54 from './X54';
+import Z01 from './Z01';
+import Z11 from './Z11';
 
 export { getEchoMainValue0 };
 export { EchoData };
-
-export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {
+export const everyEchoData = {
   G01,
   G02,
   G03,
   G04,
+  G05,
   H01,
   H02,
   H05,
   H06,
   H08,
   H09,
-  // H10,
   H11,
   H12,
-  // H13,
-  // H14,
   H15,
-  // H16,
-  // H17,
-  // H18,
   H19,
+  H21,
+  H22,
   H41,
   H42,
   H46,
   H48,
   H49,
   H51,
+  H53,
+  H54,
   H71,
   H72,
   H73,
@@ -121,8 +126,10 @@ export const everyEchoData: Partial<Record<EchoCode, EchoData>> = {
   W77,
   X53,
   X54,
+  Z01,
+  Z11,
 } as const;
-
+export type EchoCode = keyof typeof everyEchoData;
 export const everyEchoInvertHarmony: Record<
   Harmony,
   Record<EchoCost, Partial<Record<EchoCode, EchoData>>>

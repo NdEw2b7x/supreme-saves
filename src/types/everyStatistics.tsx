@@ -40,7 +40,7 @@ export const everyEchoSubStats = [
 ] as const;
 export type EchoSubStats = (typeof everyEchoSubStats)[number];
 
-export const elementMap = {
+export const mapElement = {
   ice: '응결',
   fire: '용융',
   electro: '전도',
@@ -49,7 +49,7 @@ export const elementMap = {
   dark: '인멸',
 } as const;
 
-export const getElementMap: (x: EveryElement) => keyof typeof elementMap = (x: EveryElement) => {
+export const getElementMap: (x: EveryElement) => keyof typeof mapElement = (x: EveryElement) => {
   switch (x) {
     case '응결':
       return 'ice';
@@ -65,6 +65,14 @@ export const getElementMap: (x: EveryElement) => keyof typeof elementMap = (x: E
       return 'dark';
   }
 };
+
+export const everyOutroDeepen = [
+  'iceDeepen',
+  'fireDeepen',
+  'electroDeepen',
+  'commonDeepen',
+] as const;
+export type OutroDeepen = (typeof everyOutroDeepen)[number];
 
 export type Stats =
   | BaseStats

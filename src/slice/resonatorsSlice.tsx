@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   EveryChain,
   EveryElement,
-  EveryRasonanceChain,
+  RasonanceChain,
   EveryResonatorNameWithoutRover,
   ResonatorName,
   SkillLevel,
@@ -24,7 +24,7 @@ export interface MyResonator {
   이름: ResonatorName;
   레벨: number;
   스킬: Record<EverySkillType, SkillSet>;
-  체인: EveryRasonanceChain;
+  체인: RasonanceChain;
 }
 
 const defaultRover: MyResonator = {

@@ -13,7 +13,7 @@ const result = new WeaponData({
   skill: {
     name: '무한의 소용돌이',
     passive: [{ stat: 'energy', s1: 0.128, s5: 0.256 }],
-    active: [{ trigger: ['skill'], value: [{ stat: 'atk', s1: 0.06, s5: 0.12, stack: 2 }] }],
+    active: [{ trigger: ['skill'], value: [{ stat: 'atk', s1: 0.06, s5: 0.12 }], stack: 2 }],
   },
 });
 export default result;

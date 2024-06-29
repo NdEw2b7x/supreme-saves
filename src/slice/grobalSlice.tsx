@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EchoCost, EveryElement, EveryRarity, ResonatorName, EveryWeaponCategory } from '../types';
+import { EchoCost, Element, EveryRarity, ResonatorName, EveryWeaponCategory } from '../types';
 
 // localStorage.clear();
 // sessionStorage.clear();
@@ -12,7 +12,7 @@ export const everySubPage = ['추가', '상세'] as const;
 export type EverySubPage = (typeof everySubPage)[number];
 
 interface InitialFilter {
-  element: Record<EveryElement, boolean>;
+  element: Record<Element, boolean>;
   rarity: Record<EveryRarity, boolean>;
   weaponCategory: Record<EveryWeaponCategory, boolean>;
   cost: Record<EchoCost, boolean>;
@@ -24,7 +24,7 @@ interface InitialState {
   filter: InitialFilter;
 }
 const initialFilter: InitialFilter = {
-  element: { 응결: true, 용융: true, 전도: true, 기류: true, 회절: true, 인멸: true },
+  element: { ice: true, fire: true, electro: true, wind: true, light: true, dark: true },
   rarity: { 5: true, 4: true, 3: true },
   weaponCategory: { 대검: true, 직검: true, 권총: true, 권갑: true, 증폭기: true },
   cost: { 4: true, 3: true, 1: true },
@@ -58,7 +58,7 @@ const reducers = {
     }: {
       payload: {
         filter: keyof InitialFilter;
-        item: EveryRarity | EveryWeaponCategory | EveryElement | EchoCost;
+        item: EveryRarity | EveryWeaponCategory | Element | EchoCost;
       };
     }
   ) => {
@@ -134,24 +134,24 @@ const reducers = {
           filterW[item] = !nowW;
         }
         break;
-      case '응결':
-      case '용융':
-      case '전도':
-      case '기류':
-      case '회절':
-      case '인멸':
+      case 'ice':
+      case 'fire':
+      case 'electro':
+      case 'wind':
+      case 'light':
+      case 'dark':
         const filterE = state.filter.element;
         const nowE = filterE[item];
         const countTrueE = Object.values(filterE).filter((i) => i === true).length;
         if (countTrueE === 6) {
           Object.entries(filterE).forEach(([e]) => {
-            filterE[e as EveryElement] = false;
+            filterE[e as Element] = false;
           });
           filterE[item] = true;
         } else if (countTrueE === 1) {
           if (filterE[item]) {
             Object.entries(filterE).forEach(([e]) => {
-              filterE[e as EveryElement] = true;
+              filterE[e as Element] = true;
             });
           } else {
             filterE[item] = !nowE;

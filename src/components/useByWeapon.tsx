@@ -1,12 +1,14 @@
 import { ResonatorName, EveryWeaponAtk1, WeaponSubStats } from '../types';
-import { WeaponData, everyWeaponData } from '../lib/Weapons';
+import { everyWeaponData } from '../lib/Weapons';
 import { getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
 import { useSelector } from 'react-redux';
 import { State } from '../store';
 
 export const useByWeapon = (name: ResonatorName) => {
   const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
-  const myWeapons = useSelector((state: State) => state.weaponsSlice['무기']);
+  const myWeapons = Object.fromEntries(
+    useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
+  );
   let weaponAtk = 0;
   const byWeapon: Record<WeaponSubStats, number> = {
     hp: 0,
@@ -20,7 +22,7 @@ export const useByWeapon = (name: ResonatorName) => {
   if (id) {
     const myWeapon = myWeapons[id];
     if (myWeapon) {
-      const data = everyWeaponData[myWeapon['코드']] as WeaponData;
+      const data = everyWeaponData[myWeapon['코드']];
       const level = myWeapon['레벨'];
       const atk1: EveryWeaponAtk1 = data.atk1;
       const sub = data.subOption;

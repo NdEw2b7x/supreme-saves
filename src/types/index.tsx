@@ -1,4 +1,4 @@
-import { EveryElement, everyElement } from './everyElement';
+import { EveryElement, everyElement, Element, elementStat } from './everyElement';
 import { Harmony, everyHarmony } from './everyHarmory';
 import { EveryChain, EveryRarity, everyChain, everyRarity } from './everyRarity';
 import {
@@ -14,9 +14,8 @@ import {
   everySkillLevel,
   everySkillType,
 } from './everySkillType';
-import { EveryWeaponCode } from './everyWeaponCode';
 import { EveryWeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
-import { EveryWeaponAtk1 } from './everyWeapon';
+import { EveryWeaponAtk1, Syntonize } from './everyWeapon';
 import {
   EchoMainStats,
   EchoPrimaryMainStats,
@@ -24,24 +23,27 @@ import {
   EchoSubStats,
   Stats,
   WeaponSubStats,
-  elementMap,
+  mapElement,
   getElementMap,
   getStatsAbbr,
   getStatsName,
 } from './everyStatistics';
 import {
-  EchoCode,
   EchoCost,
   EchoRarity,
   everyCost4EchoPrimaryMainStats,
   everyCost3EchoPrimaryMainStats,
   everyCost1EchoPrimaryMainStats,
 } from './everyEcho';
+import { Movement, everyMovement } from './Movement';
 
 export type Name = string;
 
 export const everyRasonanceChain = [0, 1, 2, 3, 4, 5, 6] as const;
-export type EveryRasonanceChain = (typeof everyRasonanceChain)[number];
+export type RasonanceChain = (typeof everyRasonanceChain)[number];
+
+export const everyRank = [0, 1, 2, 3, 4, 5, 6] as const;
+export type Rank = (typeof everyRank)[number];
 
 export {
   everyChain,
@@ -56,7 +58,9 @@ export {
   everyCost4EchoPrimaryMainStats,
   everyCost3EchoPrimaryMainStats,
   everyCost1EchoPrimaryMainStats,
-  elementMap,
+  everyMovement,
+  elementStat,
+  mapElement,
   getStatsName,
   getStatsAbbr,
   getElementMap,
@@ -70,6 +74,7 @@ export type {
   EchoSubStats,
   EveryChain,
   EveryElement,
+  Syntonize,
   Harmony,
   EveryRarity,
   ResonatorName,
@@ -77,10 +82,10 @@ export type {
   SkillLevel,
   EverySkillType,
   EveryWeaponAtk1,
-  EveryWeaponCode,
   EveryWeaponCategory,
-  EchoCode,
   EchoCost,
   EchoRarity,
   SkillSet,
+  Element,
+  Movement,
 };

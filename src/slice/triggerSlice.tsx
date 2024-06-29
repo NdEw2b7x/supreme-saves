@@ -2,8 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Trigger } from '../lib/Weapons';
 
 const name = 'triggerSlice';
-
-type InitialState = Record<Trigger, boolean> & { stack: number };
+type InitialState = Record<Trigger, boolean> & { stack: { [x: string]: number } };
 let initialState: InitialState = {
   basic: false,
   heavy: false,
@@ -11,15 +10,18 @@ let initialState: InitialState = {
   burst: false,
   intro: false,
   dmg: false,
-  stack: 0,
+  stack: {},
 };
 
 const reducers = {
   toggleTrigger: (state: InitialState, { payload }: { payload: Trigger }) => {
     return { ...state, [payload]: !state[payload] };
   },
-  setStack: (state: InitialState, { payload }: { payload: number }) => {
-    return { ...state, stack: payload };
+  setStack: (
+    state: InitialState,
+    { payload: [name, stack] }: { payload: [name: string, stack: number] }
+  ) => {
+    return { ...state, stack: { ...state.stack, [name]: stack } };
   },
 };
 
