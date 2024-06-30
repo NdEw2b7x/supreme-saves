@@ -1,4 +1,4 @@
-import { EchoPrimaryMainStats, Element, EveryWeaponCategory, Movement, Name } from '../../types';
+import { EchoPrimaryMainStats, Element, WeaponCategory, Movement, Name } from '../../types';
 
 type Scale = 'HP' | 'ATK' | 'DEF';
 export const genSkill =
@@ -73,7 +73,7 @@ export default class ResonatorData {
   }: {
     name: Name;
     element: Element;
-    weaponCategory: EveryWeaponCategory;
+    weaponCategory: WeaponCategory;
     base: [number, number, number];
     skill: ResonatorSkill;
     minorFortes: [MinorForte, MinorForte];
@@ -89,7 +89,7 @@ export default class ResonatorData {
   }
   name: Name;
   element;
-  weaponCatergory: EveryWeaponCategory;
+  weaponCatergory: WeaponCategory;
   hp1: number;
   atk1: number;
   def1: number;

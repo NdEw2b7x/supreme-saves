@@ -14,7 +14,7 @@ import {
   everySkillLevel,
   everySkillType,
 } from './everySkillType';
-import { EveryWeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
+import { WeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
 import { EveryWeaponAtk1, Syntonize } from './everyWeapon';
 import {
   EchoMainStats,
@@ -82,7 +82,7 @@ export type {
   SkillLevel,
   EverySkillType,
   EveryWeaponAtk1,
-  EveryWeaponCategory,
+  WeaponCategory,
   EchoCost,
   EchoRarity,
   SkillSet,

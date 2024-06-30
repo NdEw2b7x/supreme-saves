@@ -7,6 +7,7 @@ const subOption: WeaponSubStats = 'def';
 
 const result = new WeaponData({
   code,
+  name: '장야의 불빛',
   atk1,
   subOption,
   skill: { passive: [], active: [] },

@@ -22,11 +22,13 @@ export const useByWeapon = (name: ResonatorName) => {
   if (id) {
     const myWeapon = myWeapons[id];
     if (myWeapon) {
+      const code = myWeapon['코드'];
       const data = everyWeaponData[myWeapon['코드']];
       const level = myWeapon['레벨'];
+      const rank = myWeapon['돌파'];
       const atk1: EveryWeaponAtk1 = data.atk1;
       const sub = data.subOption;
-      weaponAtk = getWeaponAtk(atk1)(level);
+      weaponAtk = getWeaponAtk({ code, level, rank });
       byWeapon[sub] = getWeaponSubOptionValue(atk1, sub)(level);
     }
   }

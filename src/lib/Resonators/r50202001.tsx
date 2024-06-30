@@ -1,7 +1,7 @@
-import { EveryWeaponCategory } from '../../types';
+import { WeaponCategory } from '../../types';
 import ResonatorData from './ResonatorData';
 
-const weaponCategory: EveryWeaponCategory = '직검';
+const weaponCategory: WeaponCategory = '직검';
 const [hp1, atk1, def1] = [831, 37, 90];
 
 const result = new ResonatorData({

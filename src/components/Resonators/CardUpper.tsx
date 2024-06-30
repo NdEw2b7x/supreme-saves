@@ -143,15 +143,12 @@ export default function ResonatorCardUpper({
             }
             return false;
           })
-          .map((i) => {
-            let output = getPercent(result[i])(2);
-            return (
-              <div key={i}>
-                <span>{getStatsName(i)}</span>
-                <span>{output}</span>
-              </div>
-            );
-          })}
+          .map((i) => (
+            <div key={i}>
+              <span style={{ color: `var(--element-${i})` }}>{getStatsName(i)}</span>
+              <span>{getPercent(result[i])(2)}</span>
+            </div>
+          ))}
       </div>
     </div>
   );

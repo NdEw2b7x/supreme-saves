@@ -6,7 +6,7 @@ import { EveryWeaponAtk1, Harmony, ResonatorName, Stats } from '../types';
 import { getATK, getDEF, getHP, getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
 import { everyResonatorData } from '../lib/Resonators/';
 import { everyHarmonyEffectData } from '../lib/HarmonyEffects';
-import { WeaponData, everyWeaponData } from '../lib/Weapons';
+import { everyWeaponData } from '../lib/Weapons';
 
 export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, number> = (
   resonatorName: ResonatorName
@@ -18,6 +18,7 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
   const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
   const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
   const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
+  const triggerState = useSelector((state: State) => state.triggerSlice);
 
   const info = myResonators[resonatorName] as MyResonator;
   const values: Record<Stats, number> = {
@@ -71,21 +72,41 @@ export const useStatsResult: (resonatorName: ResonatorName) => Record<Stats, num
   const id = equipWeapons[resonatorName];
   if (id) {
     const myWeapon = myWeapons[id];
-    if (myWeapon) {
-      const data = everyWeaponData[myWeapon['코드']] as WeaponData;
-      const level = myWeapon['레벨'];
-      const s = myWeapon['공진'];
-      const atk1: EveryWeaponAtk1 = data.atk1;
-      const sub: Stats = data.subOption;
+    const code = myWeapon['코드'];
+    const level = myWeapon['레벨'];
+    const rank = myWeapon['돌파'];
+    const s = myWeapon['공진'];
+    const data = everyWeaponData[code];
+    const atk1: EveryWeaponAtk1 = data.atk1;
+    const sub: Stats = data.subOption;
 
-      data.skill.passive
-        .map(({ stat, s1, s5 }) => [stat, s1 + ((s5 - s1) * (s - 1)) / 4] as const)
-        .forEach(([stat, value]) => {
-          values[stat] += value;
-        });
-      weaponAtk = getWeaponAtk(atk1)(level);
-      values[sub] += getWeaponSubOptionValue(atk1, sub)(level);
-    }
+    data.skill.passive
+      .map(({ stat, s1, s5 }) => [stat, s1 + ((s5 - s1) * (s - 1)) / 4] as const)
+      .forEach(([stat, value]) => {
+        values[stat] += value;
+      });
+    data.skill.active.forEach(({ trigger, value, stackName }) => {
+      if (
+        trigger
+          .map((i) => {
+            return triggerState[i];
+          })
+          .filter((i) => i).length > 0
+      ) {
+        value
+          .map(({ stat, s1, s5 }) => {
+            return [
+              stat,
+              (s1 + ((s5 - s1) * (s - 1)) / 4) * (triggerState['stack'][stackName ?? '스택'] ?? 1),
+            ] as const;
+          })
+          .forEach(([stat, value]) => {
+            values[stat] += value;
+          });
+      }
+    });
+    weaponAtk = getWeaponAtk({ level, code, rank });
+    values[sub] += getWeaponSubOptionValue(atk1, sub)(level);
   }
   Object.entries(
     getMyEchoValues(

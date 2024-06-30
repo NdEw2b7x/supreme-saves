@@ -1,5 +1,5 @@
-import { EveryWeaponAtk1, WeaponSubStats } from '../types';
-import { getWeaponSubOptionValue1 } from './Weapons';
+import { EveryWeaponAtk1, Rank, WeaponSubStats } from '../types';
+import { WeaponCode, everyWeaponData, getWeaponSubOptionValue1 } from './Weapons';
 
 const getAscension = (level: number) => {
   if (level > 80) {
@@ -51,10 +51,17 @@ export const getDEF = (def0: number) => {
   };
 };
 
-export const getWeaponAtk = (atk1: EveryWeaponAtk1) => {
-  return (level: number) => {
-    return Math.floor(atk1 * (1 + (7.5 * (level - 1)) / 89 + getAscension(level) * (2 / 3)));
-  };
+export const getWeaponAtk = ({
+  level,
+  code,
+  rank,
+}: {
+  level: number;
+  code: WeaponCode;
+  rank: Rank;
+}) => {
+  const atk1 = everyWeaponData[code].atk1;
+  return Math.floor(atk1 * (1 + (7.5 * (level - 1)) / 89 + rank * (2 / 3)));
 };
 export const getWeaponSubOptionValue = (atk1: EveryWeaponAtk1, sub: WeaponSubStats) => {
   const sub1 = getWeaponSubOptionValue1(atk1, sub);

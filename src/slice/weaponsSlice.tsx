@@ -22,9 +22,20 @@ let initialState: { 무기: MyWeapon[]; 장착: Partial<Record<ResonatorName, We
 };
 type InitialState = typeof initialState;
 
+let DBversion = localStorage.getItem('버전');
 let weaponsOnDB = localStorage.getItem('무기');
-if (weaponsOnDB) {
-  initialState['무기'] = JSON.parse(weaponsOnDB) as MyWeapon[];
+if (DBversion) {
+  if (JSON.parse(DBversion) === 'A') {
+    if (weaponsOnDB) {
+      initialState['무기'] = JSON.parse(weaponsOnDB) as MyWeapon[];
+    }
+  } else {
+    localStorage.setItem('무기', '');
+    localStorage.setItem('버전', JSON.stringify('A'));
+  }
+} else {
+  localStorage.setItem('무기', '');
+  localStorage.setItem('버전', JSON.stringify('A'));
 }
 
 initialState['무기'].forEach((myWeapon) => {
@@ -56,14 +67,58 @@ const reducers = {
     state: InitialState,
     { payload: { id, level } }: { payload: { id: WeaponId; level: number } }
   ) => {
-    const nowWeapons = Object.fromEntries(state['무기'].map((i) => [i.식별, i]));
+    const nowWeapons = Object.fromEntries(state['무기'].map((i) => [i['식별'], i]));
     nowWeapons[id]['레벨'] = level;
     state['무기'] = Object.values(nowWeapons);
     save(state);
   },
+  changeWeaponRank: (
+    state: InitialState,
+    { payload: { id, rank } }: { payload: { id: WeaponId; rank: Rank } }
+  ) => {
+    const currentWeapons = Object.fromEntries(state['무기'].map((i) => [i['식별'], i]));
+    currentWeapons[id]['돌파'] = rank;
+    const level = currentWeapons[id]['레벨'];
+    currentWeapons[id]['레벨'] =
+      rank === 6
+        ? level > 80
+          ? level
+          : 80
+        : rank === 5
+        ? level > 80
+          ? 80
+          : level < 70
+          ? 70
+          : level
+        : rank === 4
+        ? level > 70
+          ? 70
+          : level < 60
+          ? 60
+          : level
+        : rank === 3
+        ? level > 60
+          ? 60
+          : level < 50
+          ? 50
+          : level
+        : rank === 2
+        ? level > 40
+          ? 40
+          : level < 20
+          ? 20
+          : level
+        : rank === 1
+        ? level > 20
+          ? 20
+          : level
+        : 1;
+    state['무기'] = Object.values(currentWeapons);
+    save(state);
+  },
   changeSyntonize: (
     state: InitialState,
-    { payload: { id, syntonize } }: { payload: { id: WeaponId; syntonize: 1 | 2 | 3 | 4 | 5 } }
+    { payload: { id, syntonize } }: { payload: { id: WeaponId; syntonize: Syntonize } }
   ) => {
     const nowWeapons = Object.fromEntries(
       state['무기'].map((myWeapon) => [myWeapon['식별'], myWeapon])
@@ -84,7 +139,6 @@ const reducers = {
     const hostOwner = targetInfo['장착'];
     const currentId = state['장착'][guestOwner];
     if (currentId) {
-      // 맞교환
       targetInfo['장착'] = guestOwner;
       currentWeapons[currentId]['장착'] = hostOwner;
       state['장착'] = { ...state['장착'], [guestOwner]: targetId };
@@ -92,7 +146,6 @@ const reducers = {
         state['장착'] = { ...state['장착'], [hostOwner]: currentId };
       }
     } else {
-      // 전달
       targetInfo['장착'] = guestOwner;
       state['장착'] = { ...state['장착'], [guestOwner]: targetId };
     }
@@ -103,5 +156,6 @@ const reducers = {
 };
 
 const weaponsSlice = createSlice({ initialState, reducers, name });
-export const { addWeapon, changeWeaponLevel, changeSyntonize, changeEquip } = weaponsSlice.actions;
+export const { addWeapon, changeWeaponLevel, changeWeaponRank, changeSyntonize, changeEquip } =
+  weaponsSlice.actions;
 export default weaponsSlice.reducer;

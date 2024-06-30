@@ -1,9 +1,9 @@
-import { ResonatorName, EveryWeaponCategory, Element } from '../../types';
+import { ResonatorName, WeaponCategory, Element } from '../../types';
 import ResonatorData, { genATKSkillNode } from './ResonatorData';
 
 const name: ResonatorName = '앙코';
 const element: Element = 'fire';
-const weaponCategory: EveryWeaponCategory = '증폭기';
+const weaponCategory: WeaponCategory = '증폭기';
 const [hp1, atk1, def1] = [841, 34, 102];
 const genNode = genATKSkillNode('atack');
 

@@ -12,7 +12,7 @@ import { RadioBtn, Thumbnail } from '..';
 import styles from './ResonatorDetail.module.css';
 import { useStatsResult } from '../useStatsResult';
 import { getSkillMultiply } from '../../lib/formula';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { ResonatorSkill, SkillCategory } from '../../lib/Resonators/ResonatorData';
 
 function DamageSkillName({
@@ -155,7 +155,7 @@ export default function ResonatorDetail() {
               <DetailStats name={name} />
             </div>
             <div className={styles.right}>
-              <DetailWeapon id={weaponId} name={name} />
+              {weaponId ? <DetailWeapon id={weaponId} name={name} /> : undefined}
               <DetailSkill name={name} />
               <DetailChain name={name} myResonator={myResonator} />
             </div>
@@ -221,8 +221,8 @@ export default function ResonatorDetail() {
                                     : '공중 강공격'}
                                 </span>
                                 <span>
-                                  {value.map(({ flat = 0, multiply = 0, times }) => (
-                                    <span>
+                                  {value.map(({ flat = 0, multiply = 0, times }, i) => (
+                                    <span key={i}>
                                       {damageTrim(
                                         product([
                                           sum([
@@ -254,8 +254,8 @@ export default function ResonatorDetail() {
                           <div key={i}>
                             <span>{name ? name + ' 피해' : '스킬 피해'}</span>
                             <span>
-                              {value.map(({ multiply = 0, times }) => (
-                                <>
+                              {value.map(({ multiply = 0, times }, i) => (
+                                <Fragment key={i}>
                                   <span>
                                     {damageTrim(
                                       product([
@@ -267,7 +267,7 @@ export default function ResonatorDetail() {
                                     ) + (times ? '*' + times : '')}
                                   </span>
                                   <br />
-                                </>
+                                </Fragment>
                               ))}
                             </span>
                           </div>
@@ -311,8 +311,8 @@ export default function ResonatorDetail() {
                           <div key={i}>
                             <span>{name ? name : '스킬 피해'}</span>
                             <span>
-                              {value.map(({ multiply = 0, times }) => (
-                                <span>
+                              {value.map(({ multiply = 0, times }, i) => (
+                                <span key={i}>
                                   {damageTrim(
                                     product([
                                       baseScale[scale],
@@ -327,8 +327,8 @@ export default function ResonatorDetail() {
                           </div>
                         ))
                       : skillCategory === 'intro'
-                      ? resonatorSkill.intro.skill.map(({ scale, value, name }) => (
-                          <div>
+                      ? resonatorSkill.intro.skill.map(({ scale, value, name }, i) => (
+                          <div key={i}>
                             <span>{name ? name : '스킬 피해'}</span>
                             <span>
                               {value.map(

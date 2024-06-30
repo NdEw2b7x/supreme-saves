@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EchoCost, Element, EveryRarity, ResonatorName, EveryWeaponCategory } from '../types';
+import { EchoCost, Element, EveryRarity, ResonatorName, WeaponCategory } from '../types';
 
 // localStorage.clear();
 // sessionStorage.clear();
@@ -14,7 +14,7 @@ export type EverySubPage = (typeof everySubPage)[number];
 interface InitialFilter {
   element: Record<Element, boolean>;
   rarity: Record<EveryRarity, boolean>;
-  weaponCategory: Record<EveryWeaponCategory, boolean>;
+  weaponCategory: Record<WeaponCategory, boolean>;
   cost: Record<EchoCost, boolean>;
 }
 interface InitialState {
@@ -58,7 +58,7 @@ const reducers = {
     }: {
       payload: {
         filter: keyof InitialFilter;
-        item: EveryRarity | EveryWeaponCategory | Element | EchoCost;
+        item: EveryRarity | WeaponCategory | Element | EchoCost;
       };
     }
   ) => {
@@ -119,13 +119,13 @@ const reducers = {
         const countTrueW = Object.values(filterW).filter((i) => i === true).length;
         if (countTrueW === 5) {
           Object.entries(filterW).forEach(([category]) => {
-            filterW[category as EveryWeaponCategory] = false;
+            filterW[category as WeaponCategory] = false;
           });
           filterW[item] = true;
         } else if (countTrueW === 1) {
           if (filterW[item]) {
             Object.entries(filterW).forEach(([category]) => {
-              filterW[category as EveryWeaponCategory] = true;
+              filterW[category as WeaponCategory] = true;
             });
           } else {
             filterW[item] = !nowW;

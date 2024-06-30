@@ -4,18 +4,15 @@ import { WeaponData } from '.';
 const code = '400400001';
 const atk1 = 27;
 const subOption: WeaponSubStats = 'def';
-// const skill: WeaponSkill = {
-//   name: '전사의 충정',
-//   afterSkill: [
-//     { stat: '공격력', from: 8, to: 16 },
-//     { stat: 'HP', from: 10, to: 20 },
-//   ],
-// };
 
 const result = new WeaponData({
   code,
   atk1,
   subOption,
-  skill: { passive: [], active: [] },
+  skill: {
+    name: '정면돌파',
+    passive: [],
+    active: [{ trigger: ['intro'], value: [{ stat: 'atk', s1: 0.15, s5: 0.3 }] }],
+  },
 });
 export default result;
