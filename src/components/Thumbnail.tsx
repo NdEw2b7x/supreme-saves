@@ -1,9 +1,10 @@
-import { EchoCode, everyEchoData } from '../lib/Echoes';
+import { ResonatorCode_ } from '../lib/Resonators';
 import { WeaponCode, everyWeaponData } from '../lib/Weapons';
-import { ResonatorName, Name } from '../types';
+import { EchoCode, everyEchoData } from '../lib/Echoes';
+import { Name } from '../types';
 
 const thumbnailControl = (scope: 'Resonators' | 'Weapons' | 'Echoes') => {
-  return (code?: ResonatorName | WeaponCode | EchoCode) => {
+  return (code?: ResonatorCode_ | WeaponCode | EchoCode) => {
     if (code) {
       return <Thumbnail scope={scope} code={code} />;
     }
@@ -18,19 +19,32 @@ export default function Thumbnail({
   code,
 }: {
   scope: 'Resonators' | 'Weapons' | 'Echoes';
-  code: ResonatorName | WeaponCode | EchoCode;
+  code: ResonatorCode_ | WeaponCode | EchoCode;
 }) {
-  let alt: string = code;
-  if (scope === 'Weapons') {
-    alt = everyWeaponData[code as unknown as WeaponCode].getName();
-  } else if (scope === 'Echoes') {
-    alt = everyEchoData[code as EchoCode]?.name as Name;
+  switch (scope) {
+    case 'Resonators':
+      return (
+        <img
+          src={`${process.env.PUBLIC_URL}/img/Resonators/${code}.png`}
+          alt={code}
+          style={{ width: '100%' }}
+        />
+      );
+    case 'Weapons':
+      return (
+        <img
+          src={`${process.env.PUBLIC_URL}/img/Weapons/${code}.png`}
+          alt={everyWeaponData[code as unknown as WeaponCode].getName()}
+          style={{ width: '100%' }}
+        />
+      );
+    case 'Echoes':
+      return (
+        <img
+          src={`${process.env.PUBLIC_URL}/img/Echoes/${code}.png`}
+          alt={everyEchoData[code as EchoCode]?.name as Name}
+          style={{ width: '100%' }}
+        />
+      );
   }
-  return (
-    <img
-      src={`${process.env.PUBLIC_URL}/img/${scope}/${code}.png`}
-      alt={alt}
-      style={{ width: '100%' }}
-    />
-  );
 }

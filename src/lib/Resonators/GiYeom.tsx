@@ -10,7 +10,7 @@ const result = new ResonatorData({
   weaponCategory,
   base: [hp1, atk1, def1],
   skill: {
-    basic: {
+    normal: {
       name: '',
       basic: [],
       heavy: [],
@@ -25,13 +25,13 @@ const result = new ResonatorData({
     circuit: {
       name: '',
       skill: [],
-      gaugeName: '',
+      circuit: { name: '', max: 0 },
     },
-    burst: { name: '', skill: [] },
+    liberation: { name: '', skill: [] },
     intro: { name: '', skill: [] },
     outro: { name: '', skill: [] },
   },
-  minorFortes: ['atk', 'cRate'],
+  statBonus: ['atk', 'cRate'],
 });
 
 export default result;

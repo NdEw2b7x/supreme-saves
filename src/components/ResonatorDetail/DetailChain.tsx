@@ -1,40 +1,30 @@
 import { dispatch } from '../../store';
-import styles from './ResonatorDetail.module.css';
-import { EveryChain, ResonatorName } from '../../types';
 import { MyResonator, changeChain } from '../../slice/resonatorsSlice';
+import { EveryChain } from '../../types';
 import Chain from '../icons/Chain';
+import styles from './ResonatorDetail.module.css';
 
-export function DetailChain({
-  name,
-  myResonator,
-}: {
-  name: ResonatorName;
-  myResonator: MyResonator;
-}) {
+export function DetailChain({ myResonator }: { myResonator: MyResonator }) {
   return (
     <div className={styles.chain}>
       <div className={styles.chainNodes}>
         {([1, 2, 3, 4, 5, 6] as const).map((i) => {
-          const chainNumber: EveryChain = myResonator.체인;
-          let s = 'chainTrue';
-          let c = 'var(--theme-color)';
-          if (chainNumber < i) {
-            s = 'chainFalse';
-            c = 'var(--theme-color-alpha-400)';
-          }
+          const chainNumber: EveryChain = myResonator['체인'];
           return (
             <div
-              className={styles[s]}
+              className={styles[chainNumber < i ? 'chainFalse' : 'chainTrue']}
               key={i}
               onClick={() => {
-                let value: EveryChain = i;
+                let chain: EveryChain = i;
                 if (i === chainNumber) {
-                  value = (chainNumber - 1) as 0 | 1 | 2 | 3 | 4 | 5;
+                  chain = (chainNumber - 1) as 0 | 1 | 2 | 3 | 4 | 5;
                 }
-                dispatch(changeChain({ name, chain: value as EveryChain }));
+                dispatch(changeChain({ code: myResonator['코드'], chain }));
               }}
             >
-              <Chain fill={c} />
+              <Chain
+                fill={chainNumber < i ? 'var(--theme-color-alpha-400)' : 'var(--theme-color)'}
+              />
             </div>
           );
         })}

@@ -1,84 +1,79 @@
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
+import { Rank, mapStatsName } from '../../types';
 import {
-  ResonatorName,
   SkillLevel,
-  everySkillLevel,
-  everySkillType,
-  getStatsName,
-} from '../../types';
-import {
-  MyResonator,
   changeSkillLevel,
-  toggleNode1,
-  toggleNode2,
+  everySkillLevel,
+  toggleNode,
 } from '../../slice/resonatorsSlice';
 import { getPercent } from '../../lib/formula';
-import { useByMinorForte } from '../useByMinorForte';
+import { ResonatorCode } from '../../lib/Resonators';
+import { useByStatBonus } from '../useByMinorForte';
 import styles from './DetailSkill.module.css';
+import { everyForteLineName } from '../../types/Movement';
 
-export function DetailSkill({ name }: { name: ResonatorName }) {
+export function DetailSkill({ code }: { code: ResonatorCode }) {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
-  const myResonator = myResonators[name] as MyResonator;
-  const [minorForte, byMinorForte] = useByMinorForte(name);
+  const myResonator = Object.fromEntries(myResonators.map((i) => [i['코드'], i]))[code];
+  const [minorForte, byMinorForte] = useByStatBonus(code);
+
   return (
     <div className={styles.skill}>
       <div className={styles.skillNodes}>
-        {everySkillType.map((type) => {
+        {everyForteLineName.map((line) => {
           return (
-            <div className={styles.skillLine} key={type}>
+            <div className={styles.skillLine} key={line}>
               <div className={styles.skillNode}>
                 <select
-                  defaultValue={Number(myResonator?.스킬[type][0])}
-                  onChange={(e) => {
-                    const level = Number(e.target.value) as SkillLevel;
-                    dispatch(changeSkillLevel({ name, type, level }));
+                  defaultValue={Number(myResonator['스킬'][line]['레벨'])}
+                  onChange={({ target: { value } }) => {
+                    const level = Number(value) as SkillLevel;
+                    dispatch(changeSkillLevel({ code, line, level }));
                   }}
                 >
                   {everySkillLevel.map((i) => {
-                    let levelCap = 1;
-                    const myLevel = myResonator?.레벨;
-                    if (myLevel) {
-                      if (myLevel > 80) {
-                        levelCap = 10;
-                      } else if (myLevel > 70) {
-                        levelCap = 8;
-                      } else if (myLevel > 60) {
-                        levelCap = 6;
-                      } else if (myLevel > 50) {
-                        levelCap = 4;
-                      } else if (myLevel > 40) {
-                        levelCap = 2;
-                      }
-                    }
-                    if (i <= levelCap) {
-                      return (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      );
-                    } else {
-                      return (
-                        <option key={i} value={i} disabled>
-                          {i}
-                        </option>
-                      );
-                    }
+                    const maxLevelByRank: Record<Rank, number> = {
+                      0: 1,
+                      1: 1,
+                      2: 2,
+                      3: 4,
+                      4: 6,
+                      5: 8,
+                      6: 10,
+                    };
+                    return i <= maxLevelByRank[myResonator['돌파']] ? (
+                      <option key={i} value={i}>
+                        {i}
+                      </option>
+                    ) : undefined;
                   })}
                 </select>
               </div>
               <div
                 className={styles.skillNode}
-                data-selected={myResonator?.스킬[type][1]}
+                data-selected={myResonator['스킬'][line]['연결점'][0]}
                 onClick={() => {
-                  dispatch(toggleNode1({ name, type }));
+                  dispatch(
+                    toggleNode({
+                      code,
+                      line,
+                      order: 1,
+                    })
+                  );
                 }}
               ></div>
               <div
                 className={styles.skillNode}
-                data-selected={myResonator?.스킬[type][2]}
+                data-selected={myResonator['스킬'][line]['연결점'][1]}
                 onClick={() => {
-                  dispatch(toggleNode2({ name, type }));
+                  dispatch(
+                    toggleNode({
+                      code,
+                      line,
+                      order: 2,
+                    })
+                  );
                 }}
               ></div>
             </div>
@@ -86,17 +81,17 @@ export function DetailSkill({ name }: { name: ResonatorName }) {
         })}
       </div>
       <div className={styles.skillTags}>
-        {everySkillType.map((i) => {
-          return <span key={i}>{i}</span>;
+        {everyForteLineName.map((line) => {
+          return <span key={line}>{line}</span>;
         })}
       </div>
       <div className={styles.minorForte}>
         <div>
-          <span>{getStatsName(minorForte[0])}</span>
+          <span>{mapStatsName[minorForte[0]]}</span>
           <span>+{getPercent(byMinorForte[minorForte[0]])(2)}</span>
         </div>
         <div>
-          <span>{getStatsName(minorForte[1])}</span>
+          <span>{mapStatsName[minorForte[1]]}</span>
           <span>+{getPercent(byMinorForte[minorForte[1]])(2)}</span>
         </div>
       </div>

@@ -1,11 +1,12 @@
-import { ResonatorName, Stats, getStatsName } from '../../types';
+import { Stats, mapStatsName } from '../../types';
 import { getPercent } from '../../lib/formula';
+import { ResonatorCode } from '../../lib/Resonators';
 import { useStatsResult } from '../useStatsResult';
 import styles from './DetailStats.module.css';
 
-export function DetailStats({ name }: { name: ResonatorName }) {
+export function DetailStats({ code }: { code: ResonatorCode }) {
   const { baseHp, baseAtk, baseDef, hp, atk, def, flatHp, flatAtk, flatDef, ...stats } =
-    useStatsResult(name);
+    useStatsResult(code);
 
   return (
     <div className={styles.stats}>
@@ -75,7 +76,7 @@ export function DetailStats({ name }: { name: ResonatorName }) {
             return (
               <div key={i}>
                 <span style={{ color }} className={styles.statName}>
-                  {getStatsName(i)}
+                  {mapStatsName[i]}
                 </span>
                 <span>{getPercent(stats[i as keyof typeof stats])(2)}</span>
               </div>
@@ -91,7 +92,7 @@ export function DetailStats({ name }: { name: ResonatorName }) {
             .map((i) => {
               return (
                 <div key={i}>
-                  <span className={styles.statName}>{getStatsName(i)}</span>
+                  <span className={styles.statName}>{mapStatsName[i]}</span>
                   <span>{getPercent(stats[i as keyof typeof stats])(2)}</span>
                 </div>
               );

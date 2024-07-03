@@ -2,26 +2,27 @@ import { useState } from 'react';
 import { ModalBox, RadioBtn, SelectResonator, Thumbnail } from '..';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
-import { EchoEquipSlot, EchoId, MyEcho, changeEquip } from '../../slice/echoesSlice';
-import { ResonatorName } from '../../types';
+import { EchoEquipSlot, EchoId, changeEquip } from '../../slice/echoesSlice';
+import { ResonatorCode, ResonatorCode_, everyResonatorData, isRover } from '../../lib/Resonators';
 import { EchoCode } from '../../lib/Echoes';
 import styles from './EquipModal.module.css';
 
 export default function EquipModal({ id, close }: { id: EchoId; close: () => void }) {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
-  const myEchoes = useSelector((state: State) => state.echoesSlice['에코']);
-  const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
-
-  const myEcho = myEchoes[id] as MyEcho;
-  const currentSlot = myEcho['장착']['슬롯'];
-  const [selectedEquip, setSelectedEquip] = useState<ResonatorName | '미장착'>(
-    myEcho['장착']['공명자']
+  const myEchoes = Object.fromEntries(
+    useSelector((state: State) => state.echoesSlice['에코']).map((i) => [i['식별'], i])
   );
+  const equipEchoes = useSelector((state: State) => state.echoesSlice['장착']);
+  const roverElement = useSelector((state: State) => state.resonatorsSlice.element);
+
+  const myEcho = myEchoes[id];
+  const currentSlot = myEcho['장착']['슬롯'];
+  const [selectedEquip, setSelectedEquip] = useState<ResonatorCode_ | ''>(myEcho['장착']['공명자']);
   const [selectedSlot, setSelectedSlot] = useState<EchoEquipSlot>(
     currentSlot !== 0 ? currentSlot : 1
   );
 
-  const equipEchoCode = (x?: ResonatorName, y?: EchoEquipSlot) => {
+  const equipEchoCode = (x?: ResonatorCode_, y?: EchoEquipSlot): EchoCode | undefined => {
     if (x && y) {
       const id = equipEchoes[x]?.[y];
       if (id) {
@@ -36,18 +37,17 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
     }
   };
 
-  let selectDefault: ResonatorName | undefined;
-  if (selectedEquip !== '미장착') {
-    selectDefault = selectedEquip;
-  }
+  const selectDefault = selectedEquip !== '' ? selectedEquip : undefined;
   return (
     <ModalBox key='EchoEquip'>
       <div className={styles.equipBody}>
         <div className={styles.title}>장착할 공명자</div>
         <SelectResonator
-          list={Object.keys(myResonators) as ResonatorName[]}
+          list={myResonators
+            .map((i) => i['코드'] as ResonatorCode)
+            .filter((code) => !isRover(code) || everyResonatorData[code].element === roverElement)}
           defaultValue={selectDefault}
-          nonEquip={selectedEquip === '미장착' ? true : false}
+          nonEquip={selectedEquip === ''}
           onChange={(name) => {
             setSelectedEquip(name);
           }}
@@ -95,10 +95,8 @@ export default function EquipModal({ id, close }: { id: EchoId; close: () => voi
           value='확인'
           onClick={() => {
             if (selectedSlot && selectedEquip) {
-              if (selectedEquip !== '미장착') {
-                dispatch(changeEquip({ id, equip: { name: selectedEquip, slot: selectedSlot } }));
-                close();
-              }
+              dispatch(changeEquip({ id, equip: { name: selectedEquip, slot: selectedSlot } }));
+              close();
             }
           }}
         />

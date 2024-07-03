@@ -1,36 +1,27 @@
-import { dispatch } from '../../store';
+import { State, dispatch } from '../../store';
+import { useSelector } from 'react-redux';
+import { changeSubPage } from '../../slice/grobalSlice';
 import { changeElement } from '../../slice/resonatorsSlice';
+import { Element, mapElement } from '../../types';
 import styles from './RoverChangeElement.module.css';
 
 export function RoverChangeElement() {
+  const element = useSelector((state: State) => state.resonatorsSlice.element);
   return (
     <section className={styles.changeElement}>
       <div>
-        {['회절', '인멸'].map((i) => {
-          switch (i) {
-            case '회절':
-            case '인멸':
-              const current = localStorage.getItem('방랑자_속성');
-              let selected = false;
-              if (current) {
-                if (i === JSON.parse(current)) {
-                  selected = true;
-                }
-              }
-              return (
-                <div
-                  key={i}
-                  data-selected={selected}
-                  onClick={() => {
-                    dispatch(changeElement(i));
-                  }}
-                >
-                  <span>{i}</span>
-                </div>
-              );
-          }
-          return null;
-        })}
+        {(['light', 'dark'] as Element[]).map((i) => (
+          <div
+            key={i}
+            data-selected={i === element}
+            onClick={() => {
+              dispatch(changeElement(i));
+              dispatch(changeSubPage(undefined));
+            }}
+          >
+            <span>{mapElement[i]}</span>
+          </div>
+        ))}
       </div>
     </section>
   );

@@ -37,8 +37,15 @@
 
     .infoBox {
       display: flex;
-      align-items: flex-end;
+      flex-direction: column;
       width: 100%;
+      gap: 0.25rem;
+    }
+    .topBox {
+      display: flex;
+    }
+    .bottomBox {
+      display: flex;
       gap: 0.25rem;
     }
   }
@@ -49,14 +56,15 @@
 
 .name {
   color: black;
+  font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  max-width: 12rem;
   align-content: center;
 }
 
+.rankBox,
 .levelBox {
-  background-color: var(--theme-color-light-200);
+  background-color: white;
   border-radius: 0.5rem;
   display: flex;
   font-size: 1rem;
@@ -65,8 +73,7 @@
   span {
     color: black;
     align-content: center;
-    padding: 0.5rem 1rem;
-    width: 3rem;
+    padding: 0.5rem;
     text-align: right;
   }
   select {
@@ -78,8 +85,7 @@
     font-size: 1rem;
 
     border-radius: 0.5rem;
-    background-color: var(--theme-color-light-200);
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
   }
 }
 .mainConatainer {
@@ -120,29 +126,18 @@ div.top,
 div.bottom,
 div.left,
 div.right {
+  flex: 1;
   display: flex;
-  scroll-snap-align: start;
-  scroll-margin-top: 5rem;
   gap: 0.5rem;
-}
-div.top,
-div.bottom {
-  width: 100%;
   flex-direction: column;
+}
+div.top {
   @media (min-width: 40rem) {
     flex-direction: row;
   }
 }
-div.left,
-div.right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
 div.left {
   max-width: 20rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .chain {
@@ -172,8 +167,16 @@ div.left {
   background-color: var(--theme-color-alpha-200);
   border-radius: 0.25rem;
   min-height: 10rem;
-}
 
+  scroll-snap-align: start;
+  scroll-margin-top: 5rem;
+}
+.material {
+  border-top-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border: 0.1rem solid var(--theme-color-alpha-800);
+  background-color: var(--theme-color-alpha-200);
+}
 .damage {
   display: flex;
   flex-direction: column;
@@ -226,18 +229,37 @@ div.left {
       flex-direction: column;
 
       > div {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+
         display: flex;
         justify-content: space-between;
         padding: 0.5rem;
+        flex: auto;
+        span {
+          span + span::before {
+            content: '+';
+          }
+        }
+        div {
+          flex: auto;
+          text-align: right;
+          display: flex;
+          justify-content: right;
+          span + span::before {
+            content: '+';
+          }
+        }
       }
-      div:nth-child(2n) {
+      > span {
+        flex: auto;
+        width: 100%;
+        display: flex;
+        justify-content: right;
+      }
+      > div:nth-child(2n) {
         background-color: var(--theme-color-alpha-200);
         border-radius: 0.5rem;
-      }
-      span {
-        span + span::before {
-          content: '+';
-        }
       }
     }
   }

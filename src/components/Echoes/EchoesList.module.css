@@ -58,14 +58,20 @@
       background-color: white;
       color: black;
     }
-    .equipThumbnail {
-      background-color: var(--theme-color-alpha-400);
+    div:last-child {
       margin-left: 0.25rem;
       width: 2.5rem;
       min-width: 2.5rem;
       height: 2.5rem;
-      border-radius: 100%;
       overflow: hidden;
+    }
+    .equipThumbnail {
+      border-radius: 100%;
+      background-color: var(--theme-color-alpha-400);
+    }
+    .delete {
+      background-color: crimson;
+      border-radius: 0.25rem;
     }
   }
 }
@@ -74,6 +80,13 @@
   justify-content: space-between;
   padding: 0.25rem 0.5rem;
   border-radius: 2rem;
+}
+.body {
+  .sub {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 .subItem {
   display: flex;

@@ -4,23 +4,30 @@ import { useByWeapon } from '../useByWeapon';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import { WeaponId } from '../../slice/weaponsSlice';
-import { ResonatorName, Stats, getStatsName } from '../../types';
+import { Stats, mapStatsName } from '../../types';
 import { getPercent } from '../../lib/formula';
 import { Trigger, everyWeaponData } from '../../lib/Weapons';
 import styles from './DetailWeapon.module.css';
 import { setStack, toggleTrigger } from '../../slice/triggerSlice';
+import { ResonatorCode } from '../../lib/Resonators';
 
-export default function DetailWeapon({ name, id }: { name: ResonatorName; id: WeaponId }) {
+export default function DetailWeapon({
+  resonatorCode,
+  id,
+}: {
+  resonatorCode: ResonatorCode;
+  id: WeaponId;
+}) {
   const myWeapons = Object.fromEntries(
     useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
   );
   const currentTrigger = useSelector((state: State) => state.triggerSlice);
   const currentStack = currentTrigger['stack'];
-  const [weaponAtk, byWeapon] = useByWeapon(name);
+  const [weaponAtk, byWeapon] = useByWeapon(resonatorCode);
   const weapon = myWeapons[id];
-  const code = weapon.코드;
+  const weaponCode = weapon['코드'];
   const syntonize = weapon['공진'];
-  const data = everyWeaponData[code];
+  const data = everyWeaponData[weaponCode];
   const weaponName = data.getName();
   const rarity = data.rarity;
   const sub = data.subOption;
@@ -30,7 +37,7 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id: We
     <div className={styles.weapon}>
       <div className={styles.body}>
         <div className={styles.imgContainer}>
-          <Thumbnail scope='Weapons' code={code} key={weaponName} />
+          <Thumbnail scope='Weapons' code={weaponCode} key={weaponName} />
         </div>
         <div className={styles.info}>
           <div className={styles.weaponName} style={{ backgroundColor: `var(--${rarity}-star)` }}>
@@ -44,7 +51,7 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id: We
               <span>{weaponAtk}</span>
             </div>
             <div>
-              <span>{getStatsName(sub)}</span>
+              <span>{mapStatsName[sub]}</span>
               <span>{getPercent(byWeapon[sub])(2)}</span>
             </div>
           </div>
@@ -61,7 +68,7 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id: We
               {skill.passive.map(({ stat, s1, s5 }) => (
                 <div key={stat} className={styles.statRow}>
                   <span style={{ color: isElement(stat) ? `var(--element-${stat})` : 'white' }}>
-                    {getStatsName(stat)}
+                    {mapStatsName[stat]}
                   </span>
                   <span>{getPercent(s1 + ((s5 - s1) * (s - 1)) / 4)(2)}</span>
                 </div>
@@ -132,7 +139,7 @@ export default function DetailWeapon({ name, id }: { name: ResonatorName; id: We
                               color: isElement(stat) ? `var(--element-${stat})` : 'white',
                             }}
                           >
-                            {getStatsName(stat)}
+                            {mapStatsName[stat]}
                           </span>
                           <span>
                             {getPercent(

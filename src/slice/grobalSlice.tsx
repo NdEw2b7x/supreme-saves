@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EchoCost, Element, EveryRarity, ResonatorName, WeaponCategory } from '../types';
+import { EchoCost, Element, EveryRarity, WeaponCategory } from '../types';
+import { ResonatorCode } from '../lib/Resonators';
 
-// localStorage.clear();
-// sessionStorage.clear();
+export const currentDBVersion = 'A';
 
 const name = 'grobalSlice';
 
@@ -20,7 +20,7 @@ interface InitialFilter {
 interface InitialState {
   page: EveryPage;
   subPage?: EverySubPage;
-  detail?: ResonatorName;
+  detail?: ResonatorCode;
   filter: InitialFilter;
 }
 const initialFilter: InitialFilter = {
@@ -46,10 +46,10 @@ const reducers = {
     return state_;
   },
   changeSubPage: (state: InitialState, { payload }: { payload: EverySubPage | undefined }) => {
-    return { ...state, subPage: payload };
+    state['subPage'] = payload;
   },
-  selectDetail: (state: InitialState, { payload }: { payload: ResonatorName }) => {
-    return { ...state, detail: payload };
+  selectDetail: (state: InitialState, { payload }: { payload: ResonatorCode }) => {
+    state['detail'] = payload;
   },
   changefilter: (
     state: InitialState,

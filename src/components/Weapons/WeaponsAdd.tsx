@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { WeaponCode, everyWeaponData, getWeaponSubOptionValue1 } from '../../lib/Weapons';
-import { EveryWeaponAtk1, WeaponCategory, WeaponSubStats, getStatsName } from '../../types';
+import { EveryWeaponAtk1, WeaponCategory, WeaponSubStats, mapStatsName } from '../../types';
 import { State, dispatch } from '../../store';
 import { addWeapon } from '../../slice/weaponsSlice';
 import { changeSubPage } from '../../slice/grobalSlice';
@@ -44,7 +44,7 @@ export default function WeaponsAdd() {
                   </span>
                 </div>
                 <div>
-                  <span>{getStatsName(subOption)}</span>
+                  <span>{mapStatsName[subOption]}</span>
                   <span>
                     {getPercent(subOption1)(1)} ~ {getPercent(subOption1 * 4.5)(1)}
                   </span>

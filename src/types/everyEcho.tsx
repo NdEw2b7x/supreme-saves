@@ -1,8 +1,5 @@
 import { EchoPrimaryMainStats } from './everyStatistics';
 
-// type n = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-// export type EchoCode = `${'G' | 'H' | 'N' | 'R' | 'S' | 'W' | 'X'}${n}${n}`;
-
 export const everyEchoRarity = [5, 4] as const;
 export type EchoRarity = (typeof everyEchoRarity)[number];
 

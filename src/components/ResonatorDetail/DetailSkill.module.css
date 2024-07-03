@@ -5,6 +5,8 @@
   background-color: var(--theme-color-alpha-200);
   padding: 0.2rem;
   border-radius: 0.25rem;
+  scroll-snap-align: start;
+  scroll-margin-top: 5rem;
 }
 .skillNodes {
   display: flex;

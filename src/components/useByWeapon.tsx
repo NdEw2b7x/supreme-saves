@@ -1,10 +1,11 @@
-import { ResonatorName, EveryWeaponAtk1, WeaponSubStats } from '../types';
-import { everyWeaponData } from '../lib/Weapons';
-import { getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
 import { useSelector } from 'react-redux';
 import { State } from '../store';
+import { EveryWeaponAtk1, WeaponSubStats } from '../types';
+import { getWeaponAtk, getWeaponSubOptionValue } from '../lib/formula';
+import { ResonatorCode, ResonatorCode_, isRover } from '../lib/Resonators';
+import { everyWeaponData } from '../lib/Weapons';
 
-export const useByWeapon = (name: ResonatorName) => {
+export const useByWeapon = (code: ResonatorCode) => {
   const equipWeapons = useSelector((state: State) => state.weaponsSlice['장착']);
   const myWeapons = Object.fromEntries(
     useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
@@ -18,7 +19,7 @@ export const useByWeapon = (name: ResonatorName) => {
     cRate: 0,
     cDmg: 0,
   };
-  const id = equipWeapons[name];
+  const id = equipWeapons[isRover(code) ? 'Rover' : (code as ResonatorCode_)];
   if (id) {
     const myWeapon = myWeapons[id];
     if (myWeapon) {

@@ -1,37 +1,35 @@
+import { Thumbnail } from '..';
 import { useSelector } from 'react-redux';
-import { addResonator } from '../../slice/resonatorsSlice';
 import { State, dispatch } from '../../store';
-import { everyResonatorNameWithoutRover } from '../../types';
 import { changeSubPage } from '../../slice/grobalSlice';
+import { addResonator } from '../../slice/resonatorsSlice';
+import { ResonatorCode, codeConverter, everyResonatorData } from '../../lib/Resonators';
 import styles from './ResonatorsAdd.module.css';
+import { mapElement } from '../../types';
 
 export default function ResonatorsAdd() {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
   return (
     <section id='ResonatorsAdd' className={styles.container}>
-      {everyResonatorNameWithoutRover
-        .filter((name) => {
-          if (!Object.keys(myResonators).includes(name)) {
-            return true;
-          }
-          return false;
-        })
-        .map((name) => {
+      {Object.keys(everyResonatorData)
+        .map((code) => code as ResonatorCode)
+        .filter((code) => !myResonators.map((i) => i['코드']).includes(code))
+        .map((code) => {
+          const name = everyResonatorData[code].name;
+          const element = everyResonatorData[code]['element'];
           return (
             <div
-              key={name}
+              key={code}
               className={styles.card}
               onClick={() => {
-                dispatch(addResonator(name));
+                dispatch(addResonator(code));
                 dispatch(changeSubPage(undefined));
               }}
             >
-              <img
-                className={styles.img}
-                src={process.env.PUBLIC_URL + '/img/Resonators/' + name + '.png'}
-                alt={name}
-              />
-              <div className={styles.name}>{name}</div>
+              <Thumbnail scope='Resonators' code={codeConverter(code)} />
+              <div className={styles.name}>
+                {/Rover\w+/.test(code) ? name + '·' + mapElement[element] : name}
+              </div>
             </div>
           );
         })}

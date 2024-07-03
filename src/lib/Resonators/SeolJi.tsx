@@ -1,17 +1,18 @@
-import { ResonatorName, WeaponCategory } from '../../types';
+import { Element, WeaponCategory } from '../../types';
 import ResonatorData from './ResonatorData';
 
-const name: ResonatorName = '도기';
-const weaponCategory: WeaponCategory = '대검';
-const [hp1, atk1, def1] = [716, 18, 128];
+const name = '설지';
+const element: Element = 'ice';
+const weaponCategory: WeaponCategory = '증폭기';
+const [hp1, atk1, def1] = [1025, 17, 82];
 
 const result = new ResonatorData({
   name,
-  element: 'dark',
+  element,
   weaponCategory,
   base: [hp1, atk1, def1],
   skill: {
-    basic: {
+    normal: {
       name: '',
       basic: [],
       heavy: [],
@@ -23,13 +24,17 @@ const result = new ResonatorData({
     circuit: {
       name: '',
       skill: [],
-      gaugeName: '',
+      circuit: { name: '', max: 0 },
     },
-    burst: { name: '', skill: [] },
+    liberation: { name: '', skill: [] },
     intro: { name: '', skill: [] },
     outro: { name: '', skill: [] },
   },
-  minorFortes: ['def', 'dark'],
+  statBonus: ['hp', 'heal'],
+  plant: 'Lanternberry',
+  normalMaterial: 'Howler',
+  bossMeterial: 'N74',
+  upgrade: 'Bell',
 });
 
 export default result;

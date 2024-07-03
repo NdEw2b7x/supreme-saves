@@ -6,18 +6,16 @@
 .modalBody {
   padding: 0 0.25rem;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
 
   .statsBox,
   .valueBox {
     display: flex;
     flex-direction: column;
   }
-  .statsBox {
-    flex: 3;
-  }
+  .statsBox,
   .valueBox {
-    flex: 2;
+    flex: auto;
     justify-content: center;
   }
 

@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { Thumbnail } from '..';
+import { ModalBox, Thumbnail } from '..';
 import { useSelector } from 'react-redux';
 import { State, dispatch } from '../../store';
 import {
   MyWeapon,
-  WeaponId,
   changeEquip,
   changeSyntonize,
   changeWeaponLevel,
   changeWeaponRank,
+  deleteWeapon,
 } from '../../slice/weaponsSlice';
-import { Rank, ResonatorName, Syntonize, getStatsName } from '../../types';
+import { Rank, Syntonize, mapStatsName, minmaxLevel } from '../../types';
 import { getPercent, getWeaponAtk, getWeaponSubOptionValue } from '../../lib/formula';
-import { everyResonatorData } from '../../lib/Resonators/';
+import { ResonatorCode_, everyResonatorData, isRover } from '../../lib/Resonators/';
 import { everyWeaponData } from '../../lib/Weapons';
 import styles from './WeaponsList.module.css';
 
@@ -22,8 +22,10 @@ function ListCard({
   myWeapon: MyWeapon;
 }) {
   const myResonators = useSelector((state: State) => state.resonatorsSlice['공명자']);
+  const roverElement = useSelector((state: State) => state.resonatorsSlice['element']);
 
   const [mode, setMode] = useState<'level' | 'rank' | 'syntonize' | 'none'>();
+  const [equipMode, setEquipMode] = useState<boolean>(false);
 
   const data = everyWeaponData[code];
   const name = data.getName();
@@ -91,7 +93,7 @@ function ListCard({
             );
           }}
         >
-          공진 {i}단계
+          {i}단계
         </span>
       );
     }
@@ -102,7 +104,13 @@ function ListCard({
       className={styles.card}
       key={id}
       data-category={category}
-      style={{ order: (6 - rarity) * 1000 + Number(code[4]) * 100 + 100 - level }}
+      style={{
+        order:
+          (6 - rarity) * 10000 +
+          (100 - level) * 100 +
+          (5 - Number(code[4])) * 10 +
+          Number(code[code.length - 1]),
+      }}
     >
       <div className={styles.body}>
         <div className={styles.imgBox}>
@@ -123,7 +131,7 @@ function ListCard({
               <span>{getWeaponAtk({ level, rank, code })}</span>
             </div>
             <div className={styles.subOption}>
-              <span>{getStatsName(subOption)}</span>
+              <span>{mapStatsName[subOption]}</span>
               <span>{getPercent(getWeaponSubOptionValue(atk1, subOption)(level))(2)}</span>
             </div>
           </div>
@@ -131,112 +139,128 @@ function ListCard({
       </div>
       <div className={styles.control}>
         <div className={styles.level}>
-          <span
+          <div
             onClick={() => {
               setMode('level');
             }}
           >
-            Lv. {level}/
-            {rank === 6
-              ? 90
-              : rank === 5
-              ? 80
-              : rank === 4
-              ? 70
-              : rank === 3
-              ? 60
-              : rank === 2
-              ? 50
-              : rank === 1
-              ? 40
-              : 20}
-          </span>
-          {mode === 'level' ? (
-            <div>
-              {genLv(
-                rank === 6
-                  ? 80
-                  : rank === 5
-                  ? 70
-                  : rank === 4
-                  ? 60
-                  : rank === 3
-                  ? 50
-                  : rank === 2
-                  ? 40
-                  : rank === 1
-                  ? 20
-                  : 1,
-                rank === 6
-                  ? 90
-                  : rank === 5
-                  ? 80
-                  : rank === 4
-                  ? 70
-                  : rank === 3
-                  ? 60
-                  : rank === 2
-                  ? 50
-                  : rank === 1
-                  ? 40
-                  : 20
-              )}
-            </div>
-          ) : undefined}
+            <span>
+              Lv. {level}/{minmaxLevel[rank]['max']}
+            </span>
+          </div>
+          <div>
+            {mode === 'level' ? (
+              <div>{genLv(minmaxLevel[rank]['min'], minmaxLevel[rank]['max'])}</div>
+            ) : undefined}
+          </div>
         </div>
         <div className={styles.rank}>
-          <span
+          <div
             onClick={() => {
               setMode('rank');
             }}
           >
-            Rank. {rank}
-          </span>
-          {mode === 'rank' ? <div>{genRank()}</div> : undefined}
+            <span>Rank. {rank}</span>
+          </div>
+          <div>{mode === 'rank' ? <div>{genRank()}</div> : undefined}</div>
         </div>
         <div className={styles.syntonize}>
-          <span
+          <div
             onClick={() => {
               setMode('syntonize');
             }}
           >
-            공진 {syntonize}단계
-          </span>
-          {mode === 'syntonize' ? <div>{genSyntonize()}</div> : undefined}
+            <span>공진 {syntonize}단계</span>
+          </div>
+          <div>{mode === 'syntonize' ? <div>{genSyntonize()}</div> : undefined}</div>
         </div>
       </div>
       <div className={styles.equip}>
-        <span>장착</span>
-        <select
-          name={id}
-          defaultValue={equipped}
-          onChange={({ target: { value } }) => {
-            if (value !== '미장착') {
-              dispatch(
-                changeEquip({
-                  id: id as WeaponId,
-                  equip: value as ResonatorName,
-                })
-              );
-            }
+        <div className={styles.equipTag}>
+          <span>장착</span>
+        </div>
+        <div
+          className={styles.equipName}
+          onClick={() => {
+            setEquipMode(true);
           }}
         >
-          {equipped === '' ? <option value='미장착'>미장착</option> : undefined}
-          {Object.keys(myResonators).map((name) => {
-            const resonatorCategory = everyResonatorData[name as ResonatorName].weaponCatergory;
-            if (resonatorCategory === category) {
-              return (
-                <option value={name} key={name}>
-                  {name}
-                </option>
-              );
-            }
-            return null;
-          })}
-        </select>
-        <div className={styles.thumbnail}>
-          {equipped !== '' ? <Thumbnail scope='Resonators' code={equipped} /> : undefined}
+          <span>
+            {equipped !== ''
+              ? equipped === 'Rover'
+                ? '방랑자'
+                : everyResonatorData[equipped]?.['name']
+              : '미장착'}
+          </span>
         </div>
+        {equipped !== '' ? (
+          <div className={styles.thumbnail}>
+            <Thumbnail scope='Resonators' code={equipped} />
+          </div>
+        ) : (
+          <div
+            className={styles.delete}
+            onClick={() => {
+              if (window.confirm('삭제 후 되돌릴 수 없습니다.')) {
+                dispatch(deleteWeapon({ id }));
+              }
+            }}
+          >
+            <span>삭제</span>
+          </div>
+        )}
+        {equipMode ? (
+          <ModalBox>
+            <div className={styles.equipModal}>
+              <div>
+                {myResonators.map((i) => {
+                  const resonatorCode = i['코드'];
+                  return everyResonatorData[resonatorCode].weaponCatergory === category ? (
+                    !isRover(resonatorCode) ||
+                    (isRover(resonatorCode) &&
+                      everyResonatorData[resonatorCode].element === roverElement) ? (
+                      <div
+                        key={resonatorCode}
+                        onClick={() => {
+                          dispatch(
+                            changeEquip({
+                              id,
+                              equip: isRover(resonatorCode)
+                                ? 'Rover'
+                                : (resonatorCode as ResonatorCode_),
+                            })
+                          );
+                          setEquipMode(false);
+                        }}
+                      >
+                        <div>
+                          <Thumbnail
+                            scope='Resonators'
+                            code={
+                              isRover(resonatorCode) ? 'Rover' : (resonatorCode as ResonatorCode_)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <span>{everyResonatorData[resonatorCode].name}</span>
+                        </div>
+                      </div>
+                    ) : undefined
+                  ) : undefined;
+                })}
+              </div>
+              <div>
+                <input
+                  type='button'
+                  value='취소'
+                  onClick={() => {
+                    setEquipMode(false);
+                  }}
+                />
+              </div>
+            </div>
+          </ModalBox>
+        ) : undefined}
       </div>
     </div>
   );
@@ -250,7 +274,7 @@ export default function WeaponsList() {
       {myWeapons.map((myWeapon) => {
         const data = everyWeaponData[myWeapon['코드']];
         return filters.rarity[data.rarity] && filters.weaponCategory[data.category] ? (
-          <ListCard myWeapon={myWeapon} />
+          <ListCard myWeapon={myWeapon} key={myWeapon['식별'] + '-' + myWeapon['이름']} />
         ) : undefined;
       })}
     </section>

@@ -9,7 +9,7 @@ import {
   Harmony,
   everyHarmony,
   EchoPrimaryMainStats,
-  getStatsName,
+  mapStatsName,
 } from '../../types';
 import {
   everyCost1EchoPrimaryMainStats,
@@ -202,7 +202,7 @@ export default function EchoesAdd() {
               {mainStats(cost).map((i) => {
                 return (
                   <option value={i} key={i}>
-                    {getStatsName(i)}
+                    {mapStatsName[i]}
                   </option>
                 );
               })}

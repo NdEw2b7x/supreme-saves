@@ -14,6 +14,8 @@
   height: 100%;
   justify-content: space-evenly;
   padding: 0.25rem;
+  scroll-snap-align: start;
+  scroll-margin-top: 5rem;
 
   border-top-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;

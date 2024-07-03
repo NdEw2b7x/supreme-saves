@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { ModalBox } from '..';
 import { dispatch } from '../../store';
-import { EchoSubStats, getStatsName } from '../../types';
-import { getPercent } from '../../lib/formula';
-import { EchoId, MyEcho, changeSubStat } from '../../slice/echoesSlice';
+import { EchoEquipSlot, EchoId, MyEcho, changeSubStat } from '../../slice/echoesSlice';
+import { EchoSubStats, mapStatsName } from '../../types';
+import { echoSubStatValues } from '../../lib/formula';
 import styles from './EchoesListSubAddModal.module.css';
 
 export default function EchoesListSubAddModal({
@@ -13,33 +13,13 @@ export default function EchoesListSubAddModal({
   close,
 }: {
   id: EchoId;
-  subSlotNumber: 1 | 2 | 3 | 4 | 5;
+  subSlotNumber: EchoEquipSlot;
   myEcho: MyEcho;
   close: () => void;
 }) {
   const [selectedSubStat, setSelectdSubStat] = useState<EchoSubStats>();
   const [selectedSubValue, setSelectdSubValue] = useState<number>(0);
 
-  const getSubValues = (x?: EchoSubStats) => {
-    switch (x) {
-      case 'flatHp':
-        return [320, 360, 390, 430, 470, 510, 540, 580];
-      case 'flatAtk':
-        return [30, 40, 50];
-      case 'flatDef':
-        return [40, 50, 60];
-      case 'def':
-        return [0.081, 0.09, 0.1, 0.109, 0.118, 0.128, 0.138, 0.147];
-      case 'energy':
-        return [0.068, 0.076, 0.084, 0.092, 0.1, 0.108, 0.116, 0.124];
-      case 'cRate':
-        return [0.063, 0.069, 0.075, 0.081, 0.087, 0.093, 0.099, 0.105];
-      case 'cDmg':
-        return [0.126, 0.138, 0.15, 0.162, 0.174, 0.186, 0.198, 0.21];
-      default:
-        return [0.064, 0.071, 0.079, 0.086, 0.094, 0.101, 0.109, 0.116];
-    }
-  };
   return (
     <ModalBox>
       <div className={styles.modalHeader}>{subSlotNumber}번 서브 속성</div>
@@ -59,7 +39,7 @@ export default function EchoesListSubAddModal({
               'basic',
               'heavy',
               'skill',
-              'burst',
+              'liberation',
             ] as EchoSubStats[]
           ).map((stat) => {
             const defaultcheck = (x: EchoSubStats) => {
@@ -88,7 +68,7 @@ export default function EchoesListSubAddModal({
             if (show) {
               return (
                 <label htmlFor={'new' + stat} key={stat}>
-                  <span>{getStatsName(stat)}</span>
+                  <span>{mapStatsName[stat]}</span>
                   <input
                     type='radio'
                     name='newSub'
@@ -106,27 +86,29 @@ export default function EchoesListSubAddModal({
           })}
         </div>
         <div className={styles.valueBox}>
-          {getSubValues(selectedSubStat).map((v) => {
-            const n = Number(v);
-            let output = n.toString();
-            if (n < 1) {
-              output = getPercent(n)(1);
-            }
-            return (
-              <label htmlFor={'new' + v} key={v}>
-                <span>{output}</span>
-                <input
-                  type='radio'
-                  name={'newSubValue'}
-                  id={'new' + v}
-                  value={v}
-                  onChange={(e) => {
-                    setSelectdSubValue(Number(e.target.value));
-                  }}
-                />
-              </label>
-            );
-          })}
+          {selectedSubStat
+            ? echoSubStatValues[selectedSubStat].map((v) => {
+                const n = Number(v);
+                let output = n.toString();
+                if (n < 1) {
+                  output = Math.ceil(n * 1000) / 10 + '%';
+                }
+                return (
+                  <label htmlFor={'new' + v} key={v}>
+                    <span>{output}</span>
+                    <input
+                      type='radio'
+                      name={'newSubValue'}
+                      id={'new' + v}
+                      value={v}
+                      onChange={(e) => {
+                        setSelectdSubValue(Number(e.target.value));
+                      }}
+                    />
+                  </label>
+                );
+              })
+            : undefined}
         </div>
       </div>
       <div className={styles.modalFooter}>
@@ -140,7 +122,7 @@ export default function EchoesListSubAddModal({
                 dispatch(
                   changeSubStat({
                     id,
-                    order: `s${subSlotNumber}`,
+                    order: subSlotNumber,
                     stat: selectedSubStat,
                     value: selectedSubValue,
                   })

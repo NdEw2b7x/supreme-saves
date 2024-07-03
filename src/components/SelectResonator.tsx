@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import { ResonatorName } from '../types';
-import Thumbnail from './Thumbnail';
+import { Thumbnail } from '.';
+import {
+  ResonatorCode,
+  ResonatorCode_,
+  codeConverter,
+  everyResonatorData,
+} from '../lib/Resonators';
 
 export default function SelectResonator({
   list,
@@ -8,39 +13,31 @@ export default function SelectResonator({
   nonEquip,
   onChange,
 }: {
-  list: ResonatorName[];
-  defaultValue?: ResonatorName;
+  list: ResonatorCode[];
+  defaultValue?: ResonatorCode_;
   nonEquip: boolean;
-  onChange: (name: ResonatorName) => void;
+  onChange: (name: ResonatorCode_) => void;
 }) {
-  const [thumbnailOwner, setThumbnailOwner] = useState<ResonatorName | undefined>(defaultValue);
-  let thumbnail = <img alt='' />;
-  if (thumbnailOwner) {
-    thumbnail = <Thumbnail scope='Resonators' code={thumbnailOwner} />;
-  }
-  let nonEquipOption = <></>;
-  if (nonEquip) {
-    nonEquipOption = <option value='미장착'>미장착</option>;
-  }
+  const [thumbnailOwner, setThumbnailOwner] = useState<ResonatorCode_ | undefined>(defaultValue);
   return (
     <div className='SelectResonatorContainer'>
       <select
         defaultValue={defaultValue}
         onChange={({ target: { value } }) => {
-          setThumbnailOwner(value as ResonatorName);
-          onChange(value as ResonatorName);
+          setThumbnailOwner(value as ResonatorCode_);
+          onChange(value as ResonatorCode_);
         }}
       >
-        {nonEquipOption}
-        {list.map((name) => {
-          return (
-            <option value={name} key={name}>
-              {name}
-            </option>
-          );
-        })}
+        {nonEquip ? <option value='미장착'>미장착</option> : undefined}
+        {(list as ResonatorCode[]).map((code) => (
+          <option value={codeConverter(code)} key={code}>
+            {everyResonatorData[code].name}
+          </option>
+        ))}
       </select>
-      <div className='ThumbnailContainer'>{thumbnail}</div>
+      <div className='ThumbnailContainer'>
+        {thumbnailOwner ? <Thumbnail scope='Resonators' code={thumbnailOwner} /> : <img alt='' />}
+      </div>
     </div>
   );
 }

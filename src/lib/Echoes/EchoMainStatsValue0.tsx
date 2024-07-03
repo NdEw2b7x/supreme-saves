@@ -12,7 +12,7 @@ export const getEchoMainValue0 = (r: EchoRarity) => {
         def: 0.083,
         cRate: 0.044,
         cDmg: 0.088,
-        heal: 0.052,
+        heal: 0.0528,
       },
       3: {
         hp: 0.06,

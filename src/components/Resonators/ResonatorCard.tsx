@@ -1,45 +1,46 @@
 import { echoThumbnailControl } from '..';
 import ResonatorCardUpper, { getMyHarmony } from './CardUpper';
 import { useMyEchoInfoSet } from '../useMyEchoInfoSet';
-import { dispatch } from '../../store';
+import { State, dispatch } from '../../store';
 import { changeSubPage, selectDetail } from '../../slice/grobalSlice';
 import { MyResonator } from '../../slice/resonatorsSlice';
-import { MyEcho } from '../../slice/echoesSlice';
-import { EchoPrimaryMainStats, ResonatorName, getStatsAbbr } from '../../types';
+import { EchoEquipSlot, MyEcho } from '../../slice/echoesSlice';
+import { mapStatsNameAbbr } from '../../types';
 import { getPercent } from '../../lib/formula';
 import { EchoCode } from '../../lib/Echoes';
 import styles from './ResonatorCard.module.css';
+import { everyResonatorData, isRover } from '../../lib/Resonators';
+import { useSelector } from 'react-redux';
 
-export default function ResonatorCard({
-  resonatorName,
-  info,
-}: {
-  resonatorName: ResonatorName;
-  info: MyResonator;
-}) {
-  const myEchoInfoes = useMyEchoInfoSet(resonatorName);
+export default function ResonatorCard({ myResonator }: { myResonator: MyResonator }) {
+  const roverElement = useSelector((state: State) => state.resonatorsSlice['element']);
+  const code = myResonator['코드'];
+  const level = myResonator['레벨'];
+  const data = everyResonatorData[code];
+  const element = data.element;
+  const myEchoInfoes = useMyEchoInfoSet(code);
   const myHarmony = getMyHarmony(myEchoInfoes);
-  const resonatorLevel = info['레벨'];
-  return (
+
+  return !isRover(code) || (isRover(code) && element === roverElement) ? (
     <div
       className={styles.card}
-      style={{ order: Number(100 - resonatorLevel) }}
-      key={resonatorName}
+      style={{ order: Number(100 - level) }}
+      key={code}
       onClick={() => {
-        dispatch(selectDetail(resonatorName));
+        dispatch(selectDetail(code));
         dispatch(changeSubPage('상세'));
       }}
     >
-      <ResonatorCardUpper name={resonatorName} info={info} />
+      <ResonatorCardUpper myResonator={myResonator} />
       <div className={styles.bottom}>
         <div className={styles.echoes}>
           {myEchoInfoes.map((echoInfo, i) => {
             let c: EchoCode | undefined;
-            let m: EchoPrimaryMainStats | undefined;
+            let m: string = '';
             let s: MyEcho['서브 스텟'] = {};
             if (echoInfo) {
               c = echoInfo['코드'];
-              m = getStatsAbbr(echoInfo['메인 스텟']) as EchoPrimaryMainStats;
+              m = mapStatsNameAbbr[echoInfo['메인 스텟']];
               s = echoInfo['서브 스텟'];
             }
             return (
@@ -49,13 +50,13 @@ export default function ResonatorCard({
                   <div className={styles.main}>
                     <span>{m}</span>
                   </div>
-                  {(['s1', 's2', 's3', 's4', 's5'] as const)
+                  {([1, 2, 3, 4, 5] as EchoEquipSlot[])
                     .filter((i) => s[i])
                     .map((i) => {
                       const subOpt = s[i];
                       return (
                         <div className={styles.sub} key={i}>
-                          <span>{subOpt ? getStatsAbbr(subOpt.stat) : ''}</span>
+                          <span>{subOpt ? mapStatsNameAbbr[subOpt.stat] : ''}</span>
                           <span>
                             {subOpt
                               ? subOpt.value < 1
@@ -83,5 +84,5 @@ export default function ResonatorCard({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }

@@ -1,53 +1,69 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  EveryChain,
-  EveryElement,
-  RasonanceChain,
-  EveryResonatorNameWithoutRover,
-  ResonatorName,
-  SkillLevel,
-  EverySkillType,
-  SkillSet,
-} from '../types';
+import { EveryChain, Element, RasonanceChain, Name, Rank } from '../types';
+import { ResonatorCode, everyResonatorData, isRover } from '../lib/Resonators';
+import { ForteLineName } from '../types/Movement';
 
 const name = 'resonatorsSlice';
 
-let roverElement: EveryElement = '인멸';
-const savedElement = localStorage.getItem('방랑자_속성');
-if (savedElement) {
-  roverElement = JSON.parse(savedElement);
-} else {
-  localStorage.setItem('방랑자_속성', JSON.stringify(roverElement));
+let roverElement: Element = 'dark';
+const elementOnDB = localStorage.getItem('방랑자');
+try {
+  if (elementOnDB) {
+    roverElement = JSON.parse(elementOnDB);
+  } else {
+    localStorage.setItem('방랑자', JSON.stringify(roverElement));
+  }
+} catch (error) {
+  console.log(error);
+  localStorage.removeItem('방랑자');
 }
 
+export const everySkillLevel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+export type SkillLevel = (typeof everySkillLevel)[number];
+export type SkillSet = { level: SkillLevel; subNode: [boolean, boolean] };
+
 export interface MyResonator {
-  이름: ResonatorName;
+  코드: ResonatorCode;
+  이름: Name;
   레벨: number;
-  스킬: Record<EverySkillType, SkillSet>;
+  돌파: Rank;
+  스킬: Record<ForteLineName, { 레벨: SkillLevel; 연결점: [boolean, boolean] }>;
   체인: RasonanceChain;
 }
 
 const defaultRover: MyResonator = {
+  코드: 'RoverDark',
   이름: '방랑자',
   레벨: 1,
+  돌파: 0,
   스킬: {
-    '일반 공격': [1, false, false],
-    '공명 스킬': [1, false, false],
-    '공명 회로': [1, false, false],
-    '공명 해방': [1, false, false],
-    '변주 스킬': [1, false, false],
+    '일반 공격': { 레벨: 1, 연결점: [false, false] },
+    '공명 스킬': { 레벨: 1, 연결점: [false, false] },
+    '공명 회로': { 레벨: 1, 연결점: [false, false] },
+    '공명 해방': { 레벨: 1, 연결점: [false, false] },
+    '변주 스킬': { 레벨: 1, 연결점: [false, false] },
   },
   체인: 0,
 };
 
-export type MyResonators = Partial<Record<ResonatorName, MyResonator>>;
-
-let initialState: { 공명자: MyResonators } = { 공명자: { 방랑자: defaultRover } };
+let initialState: { 공명자: MyResonator[]; element: Element } = {
+  공명자: [defaultRover],
+  element: 'dark',
+};
 type InitialState = typeof initialState;
 
-let myResonators = localStorage.getItem('공명자');
-if (myResonators) {
-  initialState['공명자'] = JSON.parse(myResonators) as MyResonators;
+// let DBversion = localStorage.getItem('버전');
+let resonatorsOnDB = localStorage.getItem('공명자');
+try {
+  if (resonatorsOnDB) {
+    if (Array.isArray(JSON.parse(resonatorsOnDB))) {
+      initialState['공명자'] = JSON.parse(resonatorsOnDB);
+    } else {
+      localStorage.removeItem('공명자');
+    }
+  }
+} catch (error) {
+  console.log(error);
 }
 
 const save = (state: InitialState) => {
@@ -55,140 +71,109 @@ const save = (state: InitialState) => {
 };
 
 const reducers = {
-  addResonator: (state: InitialState, action: { payload: EveryResonatorNameWithoutRover }) => {
-    const getResonators = state['공명자'];
-    const newResonator: MyResonator = {
-      이름: action.payload,
+  addResonator: (state: InitialState, { payload }: { payload: ResonatorCode }) => {
+    state['공명자'].push({
+      코드: payload,
+      이름: everyResonatorData[payload].name,
       레벨: 1,
+      돌파: 0,
       스킬: {
-        '일반 공격': [1, false, false],
-        '공명 스킬': [1, false, false],
-        '공명 회로': [1, false, false],
-        '공명 해방': [1, false, false],
-        '변주 스킬': [1, false, false],
+        '일반 공격': { 레벨: 1, 연결점: [false, false] },
+        '공명 스킬': { 레벨: 1, 연결점: [false, false] },
+        '공명 회로': { 레벨: 1, 연결점: [false, false] },
+        '공명 해방': { 레벨: 1, 연결점: [false, false] },
+        '변주 스킬': { 레벨: 1, 연결점: [false, false] },
       },
       체인: 0,
-    };
-    state['공명자'] = { ...getResonators, [action.payload]: newResonator };
+    } as MyResonator);
     save(state);
   },
-  changeElement: (state: InitialState, action: { payload: EveryElement }) => {
-    localStorage.setItem('방랑자_속성', JSON.stringify(action.payload));
-    window.location.reload();
+  changeElement: (state: InitialState, { payload }: { payload: Element }) => {
+    localStorage.setItem('방랑자', JSON.stringify(payload));
+    state['element'] = payload;
+  },
+  changeRank: (
+    state: InitialState,
+    { payload: { code, rank } }: { payload: { code: ResonatorCode; rank: Rank } }
+  ) => {
+    const current = Object.fromEntries(state['공명자'].map((i) => [i['코드'], i]));
+    const getResonator = current[code];
+    getResonator['돌파'] = rank;
+    if (isRover(code)) {
+      (['RoverLight', 'RoverDark'] as ResonatorCode[]).forEach((code) => {
+        if (current[code]) {
+          current[code]['돌파'] = rank;
+        }
+      });
+    }
+    state['공명자'] = Object.values(current);
+    save(state);
   },
   changeLevel: (
     state: InitialState,
-    action: { payload: { name: ResonatorName; level: number } }
+    { payload: { code, level } }: { payload: { code: ResonatorCode; level: number } }
   ) => {
-    const getResonators = state['공명자'];
-    const getResonator = getResonators[action.payload.name];
-    if (getResonator?.레벨) {
-      getResonator.레벨 = action.payload.level;
+    const current = Object.fromEntries(state['공명자'].map((i) => [i['코드'], i]));
+    const getResonator = current[code];
+    getResonator['레벨'] = level;
+    if (isRover(code)) {
+      (['RoverLight', 'RoverDark'] as ResonatorCode[]).forEach((code) => {
+        if (current[code]) {
+          current[code]['레벨'] = level;
+        }
+      });
     }
+    state['공명자'] = Object.values(current);
     save(state);
   },
   changeSkillLevel: (
     state: InitialState,
-    action: {
+    {
+      payload: { code, line, level },
+    }: {
       payload: {
-        name: ResonatorName;
-        type: EverySkillType;
+        code: ResonatorCode;
+        line: ForteLineName;
         level: SkillLevel;
       };
     }
   ) => {
-    const getResonator = state['공명자'][action.payload.name];
-    if (getResonator) {
-      state['공명자'] = {
-        ...state['공명자'],
-        [action.payload.name]: {
-          ...getResonator,
-          스킬: {
-            ...getResonator.스킬,
-            [action.payload.type]: [
-              action.payload.level,
-              getResonator['스킬'][action.payload.type][1],
-              getResonator['스킬'][action.payload.type][2],
-            ],
-          },
-        },
-      };
-    }
+    const current = Object.fromEntries(state['공명자'].map((i) => [i['코드'], i]));
+    current[code]['스킬'][line]['레벨'] = level;
+    state['공명자'] = Object.values(current);
     save(state);
   },
-  toggleNode1: (
+  toggleNode: (
     state: InitialState,
-    action: { payload: { name: ResonatorName; type: EverySkillType } }
+    {
+      payload: { code, line, order },
+    }: { payload: { code: ResonatorCode; line: ForteLineName; order: 1 | 2 } }
   ) => {
-    const getResonator = state['공명자'][action.payload.name];
-    if (getResonator) {
-      if (getResonator['스킬'][action.payload.type][1]) {
-        state['공명자'] = {
-          ...state['공명자'],
-          [action.payload.name]: {
-            ...getResonator,
-            스킬: {
-              ...getResonator.스킬,
-              [action.payload.type]: [getResonator['스킬'][action.payload.type][0], false, false],
-            },
-          },
-        };
+    const current = Object.fromEntries(state['공명자'].map((i) => [i['코드'], i]));
+    const getResonator = current[code];
+    if (order === 1) {
+      if (getResonator['스킬'][line]['연결점'][0]) {
+        getResonator['스킬'][line]['연결점'] = [false, false];
       } else {
-        state['공명자'] = {
-          ...state['공명자'],
-          [action.payload.name]: {
-            ...getResonator,
-            스킬: {
-              ...getResonator.스킬,
-              [action.payload.type]: [getResonator['스킬'][action.payload.type][0], true, false],
-            },
-          },
-        };
+        getResonator['스킬'][line]['연결점'] = [true, false];
+      }
+    } else {
+      if (getResonator['스킬'][line]['연결점'][1]) {
+        getResonator['스킬'][line]['연결점'] = [true, false];
+      } else {
+        getResonator['스킬'][line]['연결점'] = [true, true];
       }
     }
-    save(state);
-  },
-  toggleNode2: (
-    state: InitialState,
-    action: { payload: { name: ResonatorName; type: EverySkillType } }
-  ) => {
-    const getResonator = state['공명자'][action.payload.name];
-    if (getResonator) {
-      if (getResonator['스킬'][action.payload.type][2]) {
-        state['공명자'] = {
-          ...state['공명자'],
-          [action.payload.name]: {
-            ...getResonator,
-            스킬: {
-              ...getResonator.스킬,
-              [action.payload.type]: [getResonator['스킬'][action.payload.type][0], true, false],
-            },
-          },
-        };
-      } else {
-        state['공명자'] = {
-          ...state['공명자'],
-          [action.payload.name]: {
-            ...getResonator,
-            스킬: {
-              ...getResonator.스킬,
-              [action.payload.type]: [getResonator['스킬'][action.payload.type][0], true, true],
-            },
-          },
-        };
-      }
-    }
+    state['공명자'] = Object.values(current);
     save(state);
   },
   changeChain: (
     state: InitialState,
-    action: { payload: { name: ResonatorName; chain: EveryChain } }
+    { payload: { code, chain } }: { payload: { code: ResonatorCode; chain: EveryChain } }
   ) => {
-    const getResonators = state['공명자'];
-    const getResonator = getResonators[action.payload.name];
-    if (getResonator) {
-      getResonator['체인'] = action.payload.chain;
-    }
+    const current = Object.fromEntries(state['공명자'].map((i) => [i['코드'], i]));
+    current[code]['체인'] = chain;
+    state['공명자'] = Object.values(current);
     save(state);
   },
 };
@@ -197,10 +182,10 @@ const resonatorsSlice = createSlice({ initialState, reducers, name });
 export const {
   addResonator,
   changeElement,
+  changeRank,
   changeLevel,
   changeSkillLevel,
-  toggleNode1,
-  toggleNode2,
+  toggleNode,
   changeChain,
 } = resonatorsSlice.actions;
 export default resonatorsSlice.reducer;

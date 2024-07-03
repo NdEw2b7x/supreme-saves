@@ -2,20 +2,12 @@ import { EveryElement, everyElement, Element, elementStat } from './everyElement
 import { Harmony, everyHarmony } from './everyHarmory';
 import { EveryChain, EveryRarity, everyChain, everyRarity } from './everyRarity';
 import {
-  EveryResonatorNameWithoutRover,
-  ResonatorName,
-  everyResonatorNameWithoutRover,
-  everyResonatorName,
-} from './everyResonatorName';
-import {
-  SkillLevel,
-  EverySkillType,
-  SkillSet,
-  everySkillLevel,
-  everySkillType,
-} from './everySkillType';
-import { WeaponCategory, everyWeaponCategory } from './everyWeaponCategory';
-import { EveryWeaponAtk1, Syntonize } from './everyWeapon';
+  EveryWeaponAtk1,
+  Syntonize,
+  WeaponCategory,
+  everyWeaponCategory,
+  minmaxLevel,
+} from './everyWeapon';
 import {
   EchoMainStats,
   EchoPrimaryMainStats,
@@ -24,9 +16,9 @@ import {
   Stats,
   WeaponSubStats,
   mapElement,
-  getElementMap,
-  getStatsAbbr,
-  getStatsName,
+  getEchoSecondaryMainStats,
+  mapStatsName,
+  mapStatsNameAbbr,
 } from './everyStatistics';
 import {
   EchoCost,
@@ -50,10 +42,6 @@ export {
   everyElement,
   everyHarmony,
   everyRarity,
-  everyResonatorName,
-  everyResonatorNameWithoutRover,
-  everySkillLevel,
-  everySkillType,
   everyWeaponCategory,
   everyCost4EchoPrimaryMainStats,
   everyCost3EchoPrimaryMainStats,
@@ -61,9 +49,10 @@ export {
   everyMovement,
   elementStat,
   mapElement,
-  getStatsName,
-  getStatsAbbr,
-  getElementMap,
+  mapStatsName,
+  mapStatsNameAbbr,
+  minmaxLevel,
+  getEchoSecondaryMainStats,
 };
 export type {
   Stats,
@@ -77,15 +66,10 @@ export type {
   Syntonize,
   Harmony,
   EveryRarity,
-  ResonatorName,
-  EveryResonatorNameWithoutRover,
-  SkillLevel,
-  EverySkillType,
   EveryWeaponAtk1,
   WeaponCategory,
   EchoCost,
   EchoRarity,
-  SkillSet,
   Element,
   Movement,
 };
