@@ -49,7 +49,9 @@ export const mapEpicMaterial = {
   Helix2: 'eorja',
 } as const;
 export type EpicMaterial = keyof typeof mapEpicMaterial;
-export const mapNormalMeterial = {
+export const mapNormalMeterial: {
+  [x in `${'Whisperin' | 'Howler' | 'Ring' | 'Mask'}${5 | 4 | 3 | 2}`]: string;
+} = {
   Whisperin5: '전주파수 의음 성핵',
   Whisperin4: '고주파수 의음 성핵',
   Whisperin3: '중주파수 의음 성핵',

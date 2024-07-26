@@ -1,10 +1,16 @@
-import { Rank } from '.';
+import { Rank } from '.'
 
-export const everyWeaponCategory = ['대검', '직검', '권총', '권갑', '증폭기'] as const;
-export type WeaponCategory = (typeof everyWeaponCategory)[number];
+export const everyWeaponCategory = [
+  '대검',
+  '직검',
+  '권총',
+  '권갑',
+  '증폭기',
+] as const
+export type WeaponCategory = (typeof everyWeaponCategory)[number]
 
-export type EveryWeaponAtk1 = 24 | 26 | 27 | 31 | 33 | 40 | 47;
-export type Syntonize = 1 | 2 | 3 | 4 | 5;
+export type EveryWeaponAtk1 = 24 | 26 | 27 | 31 | 33 | 40 | 47
+export type Syntonize = 1 | 2 | 3 | 4 | 5
 
 export const minmaxLevel: Record<Rank, { min: number; max: number }> = {
   0: {
@@ -35,4 +41,4 @@ export const minmaxLevel: Record<Rank, { min: number; max: number }> = {
     min: 80,
     max: 90,
   },
-};
+}

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 
 export default function FlexBox({
   children,
@@ -7,15 +7,15 @@ export default function FlexBox({
   alignItems,
   alpha,
 }: {
-  children: ReactNode;
-  vertical: boolean;
-  gap: 0.25 | 0.5 | 0.75 | 1;
-  alignItems: 'center' | 'space-between';
-  alpha: 2 | 4 | 6 | 8;
+  children: ReactNode
+  vertical: boolean
+  gap: 0.25 | 0.5 | 0.75 | 1
+  alignItems: 'center' | 'space-between'
+  alpha: 2 | 4 | 6 | 8
 }) {
-  let direction: 'row' | 'column' = 'row';
+  let direction: 'row' | 'column' = 'row'
   if (vertical) {
-    direction = 'column';
+    direction = 'column'
   }
   return (
     <div
@@ -30,5 +30,5 @@ export default function FlexBox({
     >
       {children}
     </div>
-  );
+  )
 }

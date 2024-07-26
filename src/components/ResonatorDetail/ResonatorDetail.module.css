@@ -236,12 +236,8 @@ div.left {
         justify-content: space-between;
         padding: 0.5rem;
         flex: auto;
-        span {
-          span + span::before {
-            content: '+';
-          }
-        }
-        div {
+
+        div:last-child {
           flex: auto;
           text-align: right;
           display: flex;
@@ -250,12 +246,6 @@ div.left {
             content: '+';
           }
         }
-      }
-      > span {
-        flex: auto;
-        width: 100%;
-        display: flex;
-        justify-content: right;
       }
       > div:nth-child(2n) {
         background-color: var(--theme-color-alpha-200);

@@ -1,10 +1,15 @@
-import { useState } from 'react';
-import { ModalBox } from '..';
-import { dispatch } from '../../store';
-import { EchoEquipSlot, EchoId, MyEcho, changeSubStat } from '../../slice/echoesSlice';
-import { EchoSubStats, mapStatsName } from '../../types';
-import { echoSubStatValues } from '../../lib/formula';
-import styles from './EchoesListSubAddModal.module.css';
+import { useState } from 'react'
+import { ModalBox } from '..'
+import { dispatch } from '../../store'
+import {
+  EchoEquipSlot,
+  EchoId,
+  MyEcho,
+  changeSubStat,
+} from '../../slice/echoesSlice'
+import { EchoSubStats, mapStatsName } from '../../types'
+import { echoSubStatValues } from '../../libs/formula'
+import styles from './EchoesListSubAddModal.module.css'
 
 export default function EchoesListSubAddModal({
   id,
@@ -12,13 +17,13 @@ export default function EchoesListSubAddModal({
   myEcho,
   close,
 }: {
-  id: EchoId;
-  subSlotNumber: EchoEquipSlot;
-  myEcho: MyEcho;
-  close: () => void;
+  id: EchoId
+  subSlotNumber: EchoEquipSlot
+  myEcho: MyEcho
+  close: () => void
 }) {
-  const [selectedSubStat, setSelectdSubStat] = useState<EchoSubStats>();
-  const [selectedSubValue, setSelectdSubValue] = useState<number>(0);
+  const [selectedSubStat, setSelectdSubStat] = useState<EchoSubStats>()
+  const [selectedSubValue, setSelectdSubValue] = useState<number>(0)
 
   return (
     <ModalBox>
@@ -41,30 +46,30 @@ export default function EchoesListSubAddModal({
               'skill',
               'liberation',
             ] as EchoSubStats[]
-          ).map((stat) => {
+          ).map(stat => {
             const defaultcheck = (x: EchoSubStats) => {
               if (selectedSubStat === x) {
-                return true;
+                return true
               } else {
-                return false;
+                return false
               }
-            };
-            let show = true;
+            }
+            let show = true
             const exclude: EchoSubStats[] = Object.values(myEcho['서브 스텟'])
-              .filter((i) => {
+              .filter(i => {
                 if (i) {
-                  return true;
+                  return true
                 }
-                return false;
+                return false
               })
-              .map((i) => {
-                return i.stat;
-              });
-            exclude.forEach((i) => {
+              .map(i => {
+                return i.stat
+              })
+            exclude.forEach(i => {
               if (i === stat) {
-                show = false;
+                show = false
               }
-            });
+            })
             if (show) {
               return (
                 <label htmlFor={'new' + stat} key={stat}>
@@ -75,23 +80,23 @@ export default function EchoesListSubAddModal({
                     id={'new' + stat}
                     defaultChecked={defaultcheck(stat)}
                     value={stat}
-                    onChange={(e) => {
-                      setSelectdSubStat(e.target.value as EchoSubStats);
+                    onChange={e => {
+                      setSelectdSubStat(e.target.value as EchoSubStats)
                     }}
                   />
                 </label>
-              );
+              )
             }
-            return null;
+            return null
           })}
         </div>
         <div className={styles.valueBox}>
           {selectedSubStat
-            ? echoSubStatValues[selectedSubStat].map((v) => {
-                const n = Number(v);
-                let output = n.toString();
+            ? echoSubStatValues[selectedSubStat].map(v => {
+                const n = Number(v)
+                let output = n.toString()
                 if (n < 1) {
-                  output = Math.ceil(n * 1000) / 10 + '%';
+                  output = Math.ceil(n * 1000) / 10 + '%'
                 }
                 return (
                   <label htmlFor={'new' + v} key={v}>
@@ -101,12 +106,12 @@ export default function EchoesListSubAddModal({
                       name={'newSubValue'}
                       id={'new' + v}
                       value={v}
-                      onChange={(e) => {
-                        setSelectdSubValue(Number(e.target.value));
+                      onChange={e => {
+                        setSelectdSubValue(Number(e.target.value))
                       }}
                     />
                   </label>
-                );
+                )
               })
             : undefined}
         </div>
@@ -126,12 +131,12 @@ export default function EchoesListSubAddModal({
                     stat: selectedSubStat,
                     value: selectedSubValue,
                   })
-                );
+                )
               }
-              setSelectdSubStat(undefined);
-              close();
+              setSelectdSubStat(undefined)
+              close()
             } else {
-              alert('값을 선택해주세요.');
+              alert('값을 선택해주세요.')
             }
           }}
         />
@@ -140,10 +145,10 @@ export default function EchoesListSubAddModal({
           type='button'
           value='취소'
           onClick={() => {
-            close();
+            close()
           }}
         />
       </div>
     </ModalBox>
-  );
+  )
 }

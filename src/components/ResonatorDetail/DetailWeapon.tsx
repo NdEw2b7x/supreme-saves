@@ -1,38 +1,42 @@
-import { Fragment } from 'react/jsx-runtime';
-import { RadioBtn, SelectNumber, Thumbnail } from '..';
-import { useByWeapon } from '../useByWeapon';
-import { useSelector } from 'react-redux';
-import { State, dispatch } from '../../store';
-import { WeaponId } from '../../slice/weaponsSlice';
-import { Stats, mapStatsName } from '../../types';
-import { getPercent } from '../../lib/formula';
-import { Trigger, everyWeaponData } from '../../lib/Weapons';
-import styles from './DetailWeapon.module.css';
-import { setStack, toggleTrigger } from '../../slice/triggerSlice';
-import { ResonatorCode } from '../../lib/Resonators';
+import { Fragment } from 'react/jsx-runtime'
+import { RadioBtn, SelectNumber, Thumbnail } from '..'
+import { useByWeapon } from '../useByWeapon'
+import { useSelector } from 'react-redux'
+import { State, dispatch } from '../../store'
+import { WeaponId } from '../../slice/weaponsSlice'
+import { getPercent } from '../../libs/formula'
+
+import styles from './DetailWeapon.module.css'
+import { setStack, toggleTrigger } from '../../slice/triggerSlice'
+import { ResonatorCode } from '../../libs/Resonators'
+import { everyWeaponData } from 'libs/Weapons'
+import { mapStatsName, Stats, Trigger } from 'types'
 
 export default function DetailWeapon({
   resonatorCode,
   id,
 }: {
-  resonatorCode: ResonatorCode;
-  id: WeaponId;
+  resonatorCode: ResonatorCode
+  id: WeaponId
 }) {
   const myWeapons = Object.fromEntries(
-    useSelector((state: State) => state.weaponsSlice['무기']).map((i) => [i['식별'], i])
-  );
-  const currentTrigger = useSelector((state: State) => state.triggerSlice);
-  const currentStack = currentTrigger['stack'];
-  const [weaponAtk, byWeapon] = useByWeapon(resonatorCode);
-  const weapon = myWeapons[id];
-  const weaponCode = weapon['코드'];
-  const syntonize = weapon['공진'];
-  const data = everyWeaponData[weaponCode];
-  const weaponName = data.getName();
-  const rarity = data.rarity;
-  const sub = data.subOption;
-  const skill = data.skill;
-  const s = weapon['공진'];
+    useSelector((state: State) => state.weaponsSlice['무기']).map(i => [
+      i['식별'],
+      i,
+    ])
+  )
+  const currentTrigger = useSelector((state: State) => state.triggerSlice)
+  const currentStack = currentTrigger['stack']
+  const [weaponAtk, byWeapon] = useByWeapon(resonatorCode)
+  const weapon = myWeapons[id]
+  const weaponCode = weapon['코드']
+  const syntonize = weapon['공진']
+  const data = everyWeaponData[weaponCode]
+  const weaponName = data.getName()
+  const rarity = data.rarity
+  const sub = data.subOption
+  const skill = data.skill
+  const s = weapon['공진']
   return (
     <div className={styles.weapon}>
       <div className={styles.body}>
@@ -40,7 +44,10 @@ export default function DetailWeapon({
           <Thumbnail scope='Weapons' code={weaponCode} key={weaponName} />
         </div>
         <div className={styles.info}>
-          <div className={styles.weaponName} style={{ backgroundColor: `var(--${rarity}-star)` }}>
+          <div
+            className={styles.weaponName}
+            style={{ backgroundColor: `var(--${rarity}-star)` }}
+          >
             <span>
               {'Lv. ' + weapon['레벨']} {weaponName}
             </span>
@@ -67,7 +74,13 @@ export default function DetailWeapon({
             <div>
               {skill.passive.map(({ stat, s1, s5 }) => (
                 <div key={stat} className={styles.statRow}>
-                  <span style={{ color: isElement(stat) ? `var(--element-${stat})` : 'white' }}>
+                  <span
+                    style={{
+                      color: isElement(stat)
+                        ? `var(--element-${stat})`
+                        : 'white',
+                    }}
+                  >
                     {mapStatsName[stat]}
                   </span>
                   <span>{getPercent(s1 + ((s5 - s1) * (s - 1)) / 4)(2)}</span>
@@ -83,13 +96,15 @@ export default function DetailWeapon({
               return (
                 <Fragment key={i}>
                   <div className={styles.trigger}>
-                    {trigger.map((trigger) => (
+                    {trigger.map(trigger => (
                       <Fragment key={i}>
                         <div className={styles.name}>
                           <span key={trigger}>{triggerConvert(trigger)}</span>
                         </div>
                         {currentStack[stackName ?? ''] > 0 && stackName ? (
-                          <div style={{ alignContent: 'center' }}>「{stackName}」</div>
+                          <div style={{ alignContent: 'center' }}>
+                            「{stackName}」
+                          </div>
                         ) : undefined}
                         {stack && currentTrigger[trigger] ? (
                           <div className={styles.stack}>
@@ -97,8 +112,13 @@ export default function DetailWeapon({
                               min={1}
                               max={stack}
                               defaultValue={1}
-                              onChange={(i) => {
-                                dispatch(setStack([stackName ?? '스택', Math.min(i, stack)]));
+                              onChange={i => {
+                                dispatch(
+                                  setStack([
+                                    stackName ?? '스택',
+                                    Math.min(i, stack),
+                                  ])
+                                )
                               }}
                             />
                             <span>스택</span>
@@ -112,10 +132,13 @@ export default function DetailWeapon({
                               id={`${trigger}-${v}`}
                               defaultChecked={currentTrigger[trigger] === v}
                               onChange={() => {
-                                dispatch(toggleTrigger(trigger));
+                                dispatch(toggleTrigger(trigger))
                                 dispatch(
-                                  setStack([stackName ?? '스택', currentTrigger[trigger] ? 0 : 1])
-                                );
+                                  setStack([
+                                    stackName ?? '스택',
+                                    currentTrigger[trigger] ? 0 : 1,
+                                  ])
+                                )
                               }}
                             >
                               {v ? '발동' : '미발동'}
@@ -128,15 +151,17 @@ export default function DetailWeapon({
                   <div>
                     {value.map(({ stat, s1, s5 }, i) => {
                       const switching = trigger
-                        .map((trigger) => currentTrigger[trigger])
-                        .filter((i) => i).length
+                        .map(trigger => currentTrigger[trigger])
+                        .filter(i => i).length
                         ? true
-                        : false;
+                        : false
                       return (
                         <div className={styles.statRow} key={i}>
                           <span
                             style={{
-                              color: isElement(stat) ? `var(--element-${stat})` : 'white',
+                              color: isElement(stat)
+                                ? `var(--element-${stat})`
+                                : 'white',
                             }}
                           >
                             {mapStatsName[stat]}
@@ -144,23 +169,25 @@ export default function DetailWeapon({
                           <span>
                             {getPercent(
                               switching
-                                ? (stack ? currentStack[stackName ?? '스택'] : 1) *
+                                ? (stack
+                                    ? currentStack[stackName ?? '스택']
+                                    : 1) *
                                     (s1 + ((s5 - s1) * (s - 1)) / 4)
                                 : 0
                             )(2)}
                           </span>
                         </div>
-                      );
+                      )
                     })}
                   </div>
                 </Fragment>
-              );
+              )
             })}
           </div>
         ) : undefined}
       </div>
     </div>
-  );
+  )
 }
 
 export const isElement = (stat: Stats) => {
@@ -171,8 +198,8 @@ export const isElement = (stat: Stats) => {
     stat === 'light' ||
     stat === 'dark'
     ? true
-    : false;
-};
+    : false
+}
 
 export const triggerConvert = (x: Trigger) => {
   return x === 'basic'
@@ -187,5 +214,5 @@ export const triggerConvert = (x: Trigger) => {
     ? '변주 스킬'
     : x === 'dmg'
     ? '모든 피해'
-    : undefined;
-};
+    : undefined
+}

@@ -1,31 +1,35 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { currentDBVersion } from './grobalSlice';
-import { Name, Syntonize, Rank } from '../types';
-import { ResonatorCode_ } from '../lib/Resonators';
-import { WeaponCode, everyWeaponData } from '../lib/Weapons';
+import { createSlice } from '@reduxjs/toolkit'
+import { currentDBVersion } from './grobalSlice'
+import { Name, Syntonize, Rank } from 'types'
+import { ResonatorCode_ } from 'libs/Resonators'
+import { everyWeaponData } from 'libs/Weapons'
+import type { WeaponCode } from 'libs/Weapons'
 
-const name = 'weaponsSlice';
+const name = 'weaponsSlice'
 
-export type WeaponId = `weapon_${number}`;
+export type WeaponId = `weapon_${number}`
 export interface MyWeapon {
-  식별: WeaponId;
-  코드: WeaponCode;
-  이름: Name;
-  레벨: number;
-  돌파: Rank;
-  공진: Syntonize;
-  스킬: {};
-  장착: ResonatorCode_ | '';
+  식별: WeaponId
+  코드: WeaponCode
+  이름: Name
+  레벨: number
+  돌파: Rank
+  공진: Syntonize
+  스킬: {}
+  장착: ResonatorCode_ | ''
 }
 
-let initialState: { 무기: MyWeapon[]; 장착: Partial<Record<ResonatorCode_, WeaponId>> } = {
+let initialState: {
+  무기: MyWeapon[]
+  장착: Partial<Record<ResonatorCode_, WeaponId>>
+} = {
   무기: [],
   장착: {},
-};
-type InitialState = typeof initialState;
+}
+type InitialState = typeof initialState
 
-let DBversion = localStorage.getItem('버전');
-let weaponsOnDB = localStorage.getItem('무기');
+let DBversion = localStorage.getItem('버전')
+let weaponsOnDB = localStorage.getItem('무기')
 try {
   if (
     DBversion &&
@@ -33,23 +37,26 @@ try {
     weaponsOnDB &&
     Array.isArray(JSON.parse(weaponsOnDB))
   ) {
-    initialState['무기'] = JSON.parse(weaponsOnDB) as MyWeapon[];
+    initialState['무기'] = JSON.parse(weaponsOnDB) as MyWeapon[]
   }
 } catch (error) {
-  console.log(error);
-  localStorage.removeItem('무기');
+  console.log(error)
+  localStorage.removeItem('무기')
 }
 
-initialState['무기'].forEach((myWeapon) => {
+initialState['무기'].forEach(myWeapon => {
   if (myWeapon['장착'] !== '') {
-    initialState['장착'] = { ...initialState['장착'], [myWeapon['장착']]: myWeapon['식별'] };
+    initialState['장착'] = {
+      ...initialState['장착'],
+      [myWeapon['장착']]: myWeapon['식별'],
+    }
   }
-});
+})
 
 const save = (state: InitialState) => {
-  localStorage.setItem('무기', JSON.stringify(state['무기']));
-  localStorage.setItem('버전', JSON.stringify(currentDBVersion));
-};
+  localStorage.setItem('무기', JSON.stringify(state['무기']))
+  localStorage.setItem('버전', JSON.stringify(currentDBVersion))
+}
 
 const reducers = {
   addWeapon: (state: InitialState, { payload }: { payload: WeaponCode }) => {
@@ -62,26 +69,30 @@ const reducers = {
       공진: 1,
       장착: '',
       스킬: {},
-    };
-    state['무기'].push(newWeapon);
-    save(state);
+    }
+    state['무기'].push(newWeapon)
+    save(state)
   },
   changeWeaponLevel: (
     state: InitialState,
     { payload: { id, level } }: { payload: { id: WeaponId; level: number } }
   ) => {
-    const nowWeapons = Object.fromEntries(state['무기'].map((i) => [i['식별'], i]));
-    nowWeapons[id]['레벨'] = level;
-    state['무기'] = Object.values(nowWeapons);
-    save(state);
+    const nowWeapons = Object.fromEntries(
+      state['무기'].map(i => [i['식별'], i])
+    )
+    nowWeapons[id]['레벨'] = level
+    state['무기'] = Object.values(nowWeapons)
+    save(state)
   },
   changeWeaponRank: (
     state: InitialState,
     { payload: { id, rank } }: { payload: { id: WeaponId; rank: Rank } }
   ) => {
-    const currentWeapons = Object.fromEntries(state['무기'].map((i) => [i['식별'], i]));
-    currentWeapons[id]['돌파'] = rank;
-    const level = currentWeapons[id]['레벨'];
+    const currentWeapons = Object.fromEntries(
+      state['무기'].map(i => [i['식별'], i])
+    )
+    currentWeapons[id]['돌파'] = rank
+    const level = currentWeapons[id]['레벨']
     currentWeapons[id]['레벨'] =
       rank === 6
         ? level > 80
@@ -115,20 +126,22 @@ const reducers = {
         ? level > 20
           ? 20
           : level
-        : 1;
-    state['무기'] = Object.values(currentWeapons);
-    save(state);
+        : 1
+    state['무기'] = Object.values(currentWeapons)
+    save(state)
   },
   changeSyntonize: (
     state: InitialState,
-    { payload: { id, syntonize } }: { payload: { id: WeaponId; syntonize: Syntonize } }
+    {
+      payload: { id, syntonize },
+    }: { payload: { id: WeaponId; syntonize: Syntonize } }
   ) => {
     const nowWeapons = Object.fromEntries(
-      state['무기'].map((myWeapon) => [myWeapon['식별'], myWeapon])
-    );
-    nowWeapons[id]['공진'] = syntonize;
-    state['무기'] = Object.values(nowWeapons);
-    save(state);
+      state['무기'].map(myWeapon => [myWeapon['식별'], myWeapon])
+    )
+    nowWeapons[id]['공진'] = syntonize
+    state['무기'] = Object.values(nowWeapons)
+    save(state)
   },
   changeEquip: (
     state: InitialState,
@@ -136,34 +149,36 @@ const reducers = {
       payload: { id: targetId, equip: guestOwner },
     }: { payload: { id: WeaponId; equip: ResonatorCode_ } }
   ) => {
-    const currentWeapons = Object.fromEntries(state['무기'].map((i) => [i['식별'], i]));
-    const targetInfo = currentWeapons[targetId];
+    const currentWeapons = Object.fromEntries(
+      state['무기'].map(i => [i['식별'], i])
+    )
+    const targetWeapon = currentWeapons[targetId]
 
-    const hostOwner = targetInfo['장착'];
-    const currentId = state['장착'][guestOwner];
+    const hostOwner = targetWeapon['장착']
+    const currentId = state['장착'][guestOwner]
     if (currentId) {
-      targetInfo['장착'] = guestOwner;
-      currentWeapons[currentId]['장착'] = hostOwner;
-      state['장착'] = { ...state['장착'], [guestOwner]: targetId };
+      currentWeapons[currentId]['장착'] = hostOwner
       if (hostOwner !== '') {
-        state['장착'] = { ...state['장착'], [hostOwner]: currentId };
+        state['장착'][hostOwner] = currentId
       }
-    } else {
-      targetInfo['장착'] = guestOwner;
-      state['장착'] = { ...state['장착'], [guestOwner]: targetId };
     }
-    state['무기'] = Object.values(currentWeapons);
-    save(state);
+    state['장착'][guestOwner] = targetId
+    targetWeapon['장착'] = guestOwner
+    state['무기'] = Object.values(currentWeapons)
+    save(state)
   },
-  deleteWeapon: (state: InitialState, { payload: { id } }: { payload: { id: WeaponId } }) => {
-    const current = Object.fromEntries(state['무기'].map((i) => [i['식별'], i]));
-    delete current[id];
-    state['무기'] = Object.values(current);
-    save(state);
+  deleteWeapon: (
+    state: InitialState,
+    { payload: { id } }: { payload: { id: WeaponId } }
+  ) => {
+    const current = Object.fromEntries(state['무기'].map(i => [i['식별'], i]))
+    delete current[id]
+    state['무기'] = Object.values(current)
+    save(state)
   },
-};
+}
 
-const weaponsSlice = createSlice({ initialState, reducers, name });
+const weaponsSlice = createSlice({ initialState, reducers, name })
 export const {
   addWeapon,
   changeWeaponLevel,
@@ -171,5 +186,5 @@ export const {
   changeSyntonize,
   changeEquip,
   deleteWeapon,
-} = weaponsSlice.actions;
-export default weaponsSlice.reducer;
+} = weaponsSlice.actions
+export default weaponsSlice.reducer

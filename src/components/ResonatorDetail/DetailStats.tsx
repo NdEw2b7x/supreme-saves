@@ -1,12 +1,22 @@
-import { Stats, mapStatsName } from '../../types';
-import { getPercent } from '../../lib/formula';
-import { ResonatorCode } from '../../lib/Resonators';
-import { useStatsResult } from '../useStatsResult';
-import styles from './DetailStats.module.css';
+import { Stats, mapStatsName } from '../../types'
+import { getPercent } from '../../libs/formula'
+import { ResonatorCode } from '../../libs/Resonators'
+import { useStatsResult } from '../useStatsResult'
+import styles from './DetailStats.module.css'
 
 export function DetailStats({ code }: { code: ResonatorCode }) {
-  const { baseHp, baseAtk, baseDef, hp, atk, def, flatHp, flatAtk, flatDef, ...stats } =
-    useStatsResult(code);
+  const {
+    baseHp,
+    baseAtk,
+    baseDef,
+    hp,
+    atk,
+    def,
+    flatHp,
+    flatAtk,
+    flatDef,
+    ...stats
+  } = useStatsResult(code)
 
   return (
     <div className={styles.stats}>
@@ -57,9 +67,9 @@ export function DetailStats({ code }: { code: ResonatorCode }) {
             'heal',
           ] as Stats[]
         )
-          .filter((i) => stats[i as keyof typeof stats] > 0)
-          .map((i) => {
-            let color = 'white';
+          .filter(i => stats[i as keyof typeof stats] > 0)
+          .map(i => {
+            let color = 'white'
             switch (i) {
               case 'ice':
               case 'fire':
@@ -67,10 +77,10 @@ export function DetailStats({ code }: { code: ResonatorCode }) {
               case 'wind':
               case 'light':
               case 'dark':
-                color = `var(--element-${i})`;
-                break;
+                color = `var(--element-${i})`
+                break
               default:
-                break;
+                break
             }
 
             return (
@@ -80,25 +90,25 @@ export function DetailStats({ code }: { code: ResonatorCode }) {
                 </span>
                 <span>{getPercent(stats[i as keyof typeof stats])(2)}</span>
               </div>
-            );
+            )
           })}
       </div>
       {(['basic', 'heavy', 'skill', 'burst'] as Stats[]).some(
-        (i) => stats[i as keyof typeof stats] > 0
+        i => stats[i as keyof typeof stats] > 0
       ) ? (
         <div className={styles.group}>
           {(['basic', 'heavy', 'skill', 'burst'] as Stats[])
-            .filter((i) => stats[i as keyof typeof stats] > 0)
-            .map((i) => {
+            .filter(i => stats[i as keyof typeof stats] > 0)
+            .map(i => {
               return (
                 <div key={i}>
                   <span className={styles.statName}>{mapStatsName[i]}</span>
                   <span>{getPercent(stats[i as keyof typeof stats])(2)}</span>
                 </div>
-              );
+              )
             })}
         </div>
       ) : undefined}
     </div>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { dispatch } from '../../store';
-import { changeSubPage } from '../../slice/grobalSlice';
-import { addEcho } from '../../slice/echoesSlice';
+import { useState } from 'react'
+import { dispatch } from '../../store'
+import { changeSubPage } from '../../slice/grobalSlice'
+import { addEcho } from '../../slice/echoesSlice'
 import {
   EchoCost,
   EchoRarity,
@@ -10,22 +10,26 @@ import {
   everyHarmony,
   EchoPrimaryMainStats,
   mapStatsName,
-} from '../../types';
+} from '../../types'
 import {
   everyCost1EchoPrimaryMainStats,
   everyCost3EchoPrimaryMainStats,
   everyCost4EchoPrimaryMainStats,
-} from '../../types/everyEcho';
-import { EchoCode, everyEchoData, everyEchoInvertHarmony } from '../../lib/Echoes';
-import styles from './EchoesAdd.module.css';
+} from '../../types/everyEcho'
+import {
+  EchoCode,
+  everyEchoData,
+  everyEchoInvertHarmony,
+} from '../../libs/Echoes'
+import styles from './EchoesAdd.module.css'
 
 export default function EchoesAdd() {
-  const [rarity, setRarity] = useState<EchoRarity>(5);
-  const [cost, setCost] = useState<EchoCost>(3);
-  const [harmony, setHarmony] = useState<Harmony>(everyHarmony[0]);
-  const [code, setCode] = useState<EchoCode | undefined>();
-  const [level, setLevel] = useState<number>(0);
-  const [main, setMain] = useState<EchoPrimaryMainStats | undefined>();
+  const [rarity, setRarity] = useState<EchoRarity>(5)
+  const [cost, setCost] = useState<EchoCost>(3)
+  const [harmony, setHarmony] = useState<Harmony>(everyHarmony[0])
+  const [code, setCode] = useState<EchoCode | undefined>()
+  const [level, setLevel] = useState<number>(0)
+  const [main, setMain] = useState<EchoPrimaryMainStats | undefined>()
 
   const echoImg = (echoCode?: EchoCode) => {
     if (echoCode) {
@@ -34,59 +38,59 @@ export default function EchoesAdd() {
           src={`${process.env.PUBLIC_URL}/img/Echoes/${echoCode}.png`}
           alt={everyEchoData[echoCode]?.name}
         />
-      );
+      )
     }
-    return undefined;
-  };
+    return undefined
+  }
   const echoLevel = () => {
-    let output = [];
+    let output = []
     for (let i = 0; i <= 25; i++) {
       output.push(
         <option key={i} value={i}>
           {i}
         </option>
-      );
+      )
     }
-    return output;
-  };
+    return output
+  }
   const mainStats = (x: EchoCost) => {
     switch (x) {
       case 4:
-        return everyCost4EchoPrimaryMainStats;
+        return everyCost4EchoPrimaryMainStats
       case 3:
-        return everyCost3EchoPrimaryMainStats;
+        return everyCost3EchoPrimaryMainStats
       default:
-        return everyCost1EchoPrimaryMainStats;
+        return everyCost1EchoPrimaryMainStats
     }
-  };
+  }
   const submitBtn = (code?: EchoCode, main?: Stats) => {
     if (code && main) {
       return (
         <section>
           <input type='submit' value='저장' id={styles.echoAddSubmit} />
         </section>
-      );
+      )
     }
-  };
+  }
   return (
     <form
       className={styles.container}
       style={{ maxWidth: '20rem', margin: 'auto' }}
-      onSubmit={(e) => {
-        e.preventDefault();
+      onSubmit={e => {
+        e.preventDefault()
         if (code && main) {
-          dispatch(addEcho({ code, rarity, level, main, harmony }));
-          dispatch(changeSubPage(undefined));
+          dispatch(addEcho({ code, rarity, level, main, harmony }))
+          dispatch(changeSubPage(undefined))
         }
       }}
     >
       <section className={styles.radio}>
         <div className={styles.rarity}>
-          {['★★★★★', '★★★★'].map((i) => {
-            const star = i.length;
-            let checked = false;
+          {['★★★★★', '★★★★'].map(i => {
+            const star = i.length
+            let checked = false
             if (star === rarity) {
-              checked = true;
+              checked = true
             }
             return (
               <label htmlFor={'rarity' + star} key={i}>
@@ -97,19 +101,19 @@ export default function EchoesAdd() {
                   name='rarity'
                   id={'rarity' + star}
                   value={star}
-                  onChange={(e) => {
-                    setRarity(Number(e.target.value) as 5 | 4);
+                  onChange={e => {
+                    setRarity(Number(e.target.value) as 5 | 4)
                   }}
                 />
               </label>
-            );
+            )
           })}
         </div>
         <div className={styles.cost}>
-          {[4, 3, 1].map((i) => {
-            let checked = false;
+          {[4, 3, 1].map(i => {
+            let checked = false
             if (i === cost) {
-              checked = true;
+              checked = true
             }
             return (
               <label htmlFor={'cost' + i} key={i}>
@@ -119,15 +123,15 @@ export default function EchoesAdd() {
                   name='cost'
                   id={'cost' + i}
                   value={i}
-                  onChange={(e) => {
-                    setCost(Number(e.target.value) as EchoCost);
-                    setCode(undefined);
-                    setMain(undefined);
+                  onChange={e => {
+                    setCost(Number(e.target.value) as EchoCost)
+                    setCode(undefined)
+                    setMain(undefined)
                   }}
                 />
                 <span>{i} COST</span>
               </label>
-            );
+            )
           })}
         </div>
       </section>
@@ -136,12 +140,12 @@ export default function EchoesAdd() {
           <span>화음</span>
           <select
             className={styles.select}
-            onChange={(e) => {
-              setHarmony(e.target.value as Harmony);
-              setCode(undefined);
+            onChange={e => {
+              setHarmony(e.target.value as Harmony)
+              setCode(undefined)
             }}
           >
-            {everyHarmony.map((i) => (
+            {everyHarmony.map(i => (
               <option value={i} key={i}>
                 {i}
               </option>
@@ -151,18 +155,18 @@ export default function EchoesAdd() {
         <div className={styles.name}>
           <span>이름</span>
           <select
-            onChange={(e) => {
-              setCode(e.target.value as EchoCode);
+            onChange={e => {
+              setCode(e.target.value as EchoCode)
             }}
           >
             <option value=''>에코 선택</option>
-            {Object.values(everyEchoInvertHarmony[harmony][cost]).map((data) => {
-              const name = data.name;
+            {Object.values(everyEchoInvertHarmony[harmony][cost]).map(data => {
+              const name = data.name
               return (
                 <option key={name} value={data.code}>
                   {name}
                 </option>
-              );
+              )
             })}
           </select>
         </div>
@@ -171,7 +175,8 @@ export default function EchoesAdd() {
         <div
           className={styles.echoThumbnail}
           style={{
-            backgroundColor: 'color-mix(in srgb, var(--' + rarity + '-star) 80%, transparent)',
+            backgroundColor:
+              'color-mix(in srgb, var(--' + rarity + '-star) 80%, transparent)',
           }}
         >
           {echoImg(code)}
@@ -182,8 +187,8 @@ export default function EchoesAdd() {
             <select
               name='level'
               defaultValue={level}
-              onChange={(e) => {
-                setLevel(Number(e.target.value));
+              onChange={e => {
+                setLevel(Number(e.target.value))
               }}
             >
               {echoLevel()}
@@ -194,17 +199,17 @@ export default function EchoesAdd() {
             <select
               name='main'
               defaultValue={main}
-              onChange={(e) => {
-                setMain(e.target.value as EchoPrimaryMainStats);
+              onChange={e => {
+                setMain(e.target.value as EchoPrimaryMainStats)
               }}
             >
               <option value=''>-</option>
-              {mainStats(cost).map((i) => {
+              {mainStats(cost).map(i => {
                 return (
                   <option value={i} key={i}>
                     {mapStatsName[i]}
                   </option>
-                );
+                )
               })}
             </select>
           </div>
@@ -212,5 +217,5 @@ export default function EchoesAdd() {
       </section>
       {submitBtn(code, main)}
     </form>
-  );
+  )
 }

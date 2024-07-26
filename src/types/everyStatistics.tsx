@@ -1,5 +1,5 @@
-import { Element } from '.';
-import { EchoCost } from './everyEcho';
+import { ResonatorElement } from '.'
+import { EchoCost } from './everyEcho'
 
 export const everyBaseStats = [
   'baseHp',
@@ -7,11 +7,18 @@ export const everyBaseStats = [
   'weaponAtk',
   'baseAtk',
   'baseDef',
-] as const;
-export type BaseStats = (typeof everyBaseStats)[number];
+] as const
+export type BaseStats = (typeof everyBaseStats)[number]
 
-export const eveyrWeaponSubStats = ['hp', 'atk', 'def', 'energy', 'cRate', 'cDmg'] as const;
-export type WeaponSubStats = (typeof eveyrWeaponSubStats)[number];
+export const eveyrWeaponSubStats = [
+  'hp',
+  'atk',
+  'def',
+  'energy',
+  'cRate',
+  'cDmg',
+] as const
+export type WeaponSubStats = (typeof eveyrWeaponSubStats)[number]
 
 export const everyEchoPrimaryMainStats = [
   ...eveyrWeaponSubStats,
@@ -22,15 +29,17 @@ export const everyEchoPrimaryMainStats = [
   'light',
   'dark',
   'heal',
-] as const;
-export type EchoPrimaryMainStats = (typeof everyEchoPrimaryMainStats)[number];
+] as const
+export type EchoPrimaryMainStats = (typeof everyEchoPrimaryMainStats)[number]
 
-export const everyEchoSecondaryMainStats = ['flatHp', 'flatAtk'] as const;
-export type EchoSecondaryMainStats = (typeof everyEchoSecondaryMainStats)[number];
-export const getEchoSecondaryMainStats = (cost: EchoCost): EchoSecondaryMainStats =>
-  cost === 1 ? 'flatHp' : 'flatAtk';
+export const everyEchoSecondaryMainStats = ['flatHp', 'flatAtk'] as const
+export type EchoSecondaryMainStats =
+  (typeof everyEchoSecondaryMainStats)[number]
+export const getEchoSecondaryMainStats = (
+  cost: EchoCost
+): EchoSecondaryMainStats => (cost === 1 ? 'flatHp' : 'flatAtk')
 
-export type EchoMainStats = EchoPrimaryMainStats | EchoSecondaryMainStats;
+export type EchoMainStats = EchoPrimaryMainStats | EchoSecondaryMainStats
 
 export const everyEchoSubStats = [
   ...eveyrWeaponSubStats,
@@ -41,17 +50,17 @@ export const everyEchoSubStats = [
   'flatHp',
   'flatAtk',
   'flatDef',
-] as const;
-export type EchoSubStats = (typeof everyEchoSubStats)[number];
+] as const
+export type EchoSubStats = (typeof everyEchoSubStats)[number]
 
-export const mapElement: Record<Element, string> = {
+export const mapElement: Record<ResonatorElement, string> = {
   ice: '응결',
   fire: '용융',
   electro: '전도',
   wind: '기류',
   light: '회절',
   dark: '인멸',
-} as const;
+} as const
 
 // export const getElementMap: (x: EveryElement) => keyof typeof mapElement = (x: EveryElement) => {
 //   switch (x) {
@@ -75,15 +84,15 @@ export const everyOutroDeepen = [
   'fireDeepen',
   'electroDeepen',
   'commonDeepen',
-] as const;
-export type OutroDeepen = (typeof everyOutroDeepen)[number];
+] as const
+export type OutroDeepen = (typeof everyOutroDeepen)[number]
 
 export type Stats =
   | BaseStats
   | WeaponSubStats
   | EchoPrimaryMainStats
   | EchoSecondaryMainStats
-  | EchoSubStats;
+  | EchoSubStats
 
 export const mapStatsName: Record<Stats, string> = {
   resonatorAtk: '공명자 공격력',
@@ -111,7 +120,7 @@ export const mapStatsName: Record<Stats, string> = {
   heavy: '강공격 피해 보너스',
   skill: '공명 스킬 피해 보너스',
   liberation: '공명 해방 피해 보너스',
-} as const;
+} as const
 
 export const mapStatsNameAbbr: Record<Stats, string> = {
   baseHp: 'HP',
@@ -139,4 +148,4 @@ export const mapStatsNameAbbr: Record<Stats, string> = {
   heavy: '강공',
   skill: '스킬',
   liberation: '해방',
-} as const;
+} as const

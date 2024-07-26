@@ -1,25 +1,25 @@
-import { ResonatorCode_ } from '../lib/Resonators';
-import { WeaponCode, everyWeaponData } from '../lib/Weapons';
-import { EchoCode, everyEchoData } from '../lib/Echoes';
-import { Name } from '../types';
+import { ResonatorCode_ } from '../libs/Resonators'
+import { WeaponCode, everyWeaponData } from '../libs/Weapons'
+import { EchoCode, everyEchoData } from '../libs/Echoes'
+import { Name } from '../types'
 
 const thumbnailControl = (scope: 'Resonators' | 'Weapons' | 'Echoes') => {
   return (code?: ResonatorCode_ | WeaponCode | EchoCode) => {
     if (code) {
-      return <Thumbnail scope={scope} code={code} />;
+      return <Thumbnail scope={scope} code={code} />
     }
-  };
-};
+  }
+}
 
-export const weaponThumbnailControl = thumbnailControl('Weapons');
-export const echoThumbnailControl = thumbnailControl('Echoes');
+export const weaponThumbnailControl = thumbnailControl('Weapons')
+export const echoThumbnailControl = thumbnailControl('Echoes')
 
 export default function Thumbnail({
   scope,
   code,
 }: {
-  scope: 'Resonators' | 'Weapons' | 'Echoes';
-  code: ResonatorCode_ | WeaponCode | EchoCode;
+  scope: 'Resonators' | 'Weapons' | 'Echoes'
+  code: ResonatorCode_ | WeaponCode | EchoCode
 }) {
   switch (scope) {
     case 'Resonators':
@@ -29,7 +29,7 @@ export default function Thumbnail({
           alt={code}
           style={{ width: '100%' }}
         />
-      );
+      )
     case 'Weapons':
       return (
         <img
@@ -37,7 +37,7 @@ export default function Thumbnail({
           alt={everyWeaponData[code as unknown as WeaponCode].getName()}
           style={{ width: '100%' }}
         />
-      );
+      )
     case 'Echoes':
       return (
         <img
@@ -45,6 +45,6 @@ export default function Thumbnail({
           alt={everyEchoData[code as EchoCode]?.name as Name}
           style={{ width: '100%' }}
         />
-      );
+      )
   }
 }

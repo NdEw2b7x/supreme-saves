@@ -1,10 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import grobalSlice from './slice/grobalSlice';
-import resonatorsSlice from './slice/resonatorsSlice';
-import weaponsSlice from './slice/weaponsSlice';
-import echoesSlice from './slice/echoesSlice';
-import triggerSlice from './slice/triggerSlice';
-import enemySlice from './slice/enemySlice';
+import { configureStore } from '@reduxjs/toolkit'
+import enemySlice from './slice/enemySlice'
+import {
+  echoesSlice,
+  grobalSlice,
+  resonatorsSlice,
+  weaponsSlice,
+  triggerSlice,
+} from './slice'
 
 const reducer = {
   grobalSlice,
@@ -13,9 +15,9 @@ const reducer = {
   echoesSlice,
   triggerSlice,
   enemySlice,
-};
-const store = configureStore({ reducer });
+}
+const store = configureStore({ reducer })
 
-export const { dispatch } = store;
-export type State = ReturnType<typeof store.getState>;
-export default store;
+export const { dispatch } = store
+export type State = ReturnType<typeof store.getState>
+export default store
